@@ -63,7 +63,7 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Purpose
 
-2-5 sentences describing what the system does
+The system provides a recipe sharing platform. People can post recipes on the site. Publishers (i.e., those who post recipes) can offer fixed-price instructional courses that provide specific instructions on how to properly cook the posted dishes. The courses can be physical or remote. The system provides a social platform for chefs or foodies since they can interact in person.
 
 ### Pages
 
