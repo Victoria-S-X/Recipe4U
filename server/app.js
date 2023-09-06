@@ -1,23 +1,16 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var morgan = require('morgan');
 var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
+require("./db")
+const userHandler = require("./items/user")
+
+
 // Variables
-var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
 var port = process.env.PORT || 3000;
 
-// Connect to MongoDB
-mongoose.connect(mongoURI).catch(function(err) {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-});
 
 // Create Express app
 var app = express();
@@ -73,3 +66,9 @@ app.listen(port, function(err) {
 });
 
 module.exports = app;
+
+
+//userHandler.createUser("john@example.com", "john_the_smith", "Passwd123", "John", "Smith", 378)
+userHandler.findUser("john_the_smith").then((user) => {
+    console.log(user)
+})
