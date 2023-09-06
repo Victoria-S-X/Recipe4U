@@ -1,4 +1,4 @@
-const mongoose = require("../DBhandler").mongoose
+const mongoose = require("../db").mongoose
 
 
 // ====== OBS! TEMPORARY, NO SECURITY ETC =======

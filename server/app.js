@@ -4,7 +4,7 @@ var path = require('path');
 var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
-require("./DBhandler")
+require("./db")
 const userHandler = require("./items/user")
 
 
