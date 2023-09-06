@@ -5,6 +5,8 @@ var cors = require('cors');
 var history = require('connect-history-api-fallback');
 
 require("./DBhandler")
+const userHandler = require("./items/user")
+
 
 // Variables
 var port = process.env.PORT || 3000;
@@ -64,3 +66,9 @@ app.listen(port, function(err) {
 });
 
 module.exports = app;
+
+
+//userHandler.createUser("john@example.com", "john_the_smith", "Passwd123", "John", "Smith", 378)
+userHandler.findUser("john_the_smith").then((user) => {
+    console.log(user)
+})
