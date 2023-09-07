@@ -2,19 +2,22 @@ const app = require("../expressApp")
 const userItem = require("../../items/user")
 const auth = require("../../auth")
 
+
 app.post("/api/users", async (req, res) => {
     const email = req.body?.email
     const username = req.body?.username
     const password = req.body?.password
-    const firstName = req.body?.firstName
-    const lastName = req.body?.lastName
-    const age = req.body?.age
 
     if(username && password && email){
         const hash = await auth.hash(password)
 
         const resCode = await userItem.create(
-            email, username, hash, firstName, lastName, age 
+            email, 
+            username, 
+            hash, 
+            req.body?.firstName, 
+            req.body?.lastName, 
+            req.body?.age 
         )
 
         switch (resCode) {
@@ -36,14 +39,27 @@ app.post("/api/users", async (req, res) => {
     }
 })
 
-//obviously a bad idea in production
+
 app.get("/api/users/:username", async (req, res) => {
+
+    //provided password?
+    if(!req.body?.password){
+        res.status(400).json({message: "Password missing"})
+        return
+    }
+
+    //user exists?
     const username = req.params.username
     const user = await userItem.find(username)
+    if(!user){
+        res.status(404).json({message: "User does not exist"})
+        return
+    }
 
+    //right password?
     const authenticated = await auth.match(req.body.password, user.password)
-
     if(authenticated){
+        //return data
         res.status(200).json({
             email: user.email,
             username: user.username,
@@ -57,24 +73,21 @@ app.get("/api/users/:username", async (req, res) => {
     
 })
 
-//also a bad idea in production
-app.patch("/api/users/:username", async (req, res) => {
-    const username = req.params.username
 
-    const email = req.body?.email
-    const password = req.body?.password
-    const firstName = req.body?.firstName
-    const lastName = req.body?.lastName
-    const age = req.body?.age
+app.patch("/api/users/:username", async (req, res) => {
 
     const success = await userItem.update(
-        email, username, password, firstName, lastName, age 
+        req.body?.email, 
+        req.params.username, 
+        req.body?.password, 
+        req.body?.firstName, 
+        req.body?.lastName, 
+        req.body?.age 
     )
 
     if(success){
         res.status(200).json({message: "User updated successfully"})
     } else {
-        res.status(400).json({message: "Failed to update user"}) //TODO: more specific
+        res.status(404).json({message: "User does not exist"})
     }
-
 })

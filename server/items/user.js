@@ -5,21 +5,24 @@ const ERROR = 1
 const DUPLICATE_USER = 2
 
 const schema = new mongoose.Schema({
-    email: String,
-    username: {
-      type: String,
-      unique: true
-    },
-    password: String, 
-    firstName: String,
-    lastName: String,
-    age: Number
-  });
+  email: String,
+  username: {
+    type: String,
+    unique: true
+  },
+  password: String, 
+  firstName: String,
+  lastName: String,
+  age: Number
+});
   
 const User = mongoose.model('User', schema);
 
 
 
+/**
+ * @returns {number} Result code indicating success or type of error
+ */
 const create = async (email, username, password, firstName, lastName, age) => {
   const user = new User({
     email: email,
@@ -32,6 +35,7 @@ const create = async (email, username, password, firstName, lastName, age) => {
 
   try{
     await user.save()
+
     return SUCCESS
   } catch (err){
     if(err.code == 11000) return DUPLICATE_USER
@@ -39,9 +43,11 @@ const create = async (email, username, password, firstName, lastName, age) => {
   }
 }
 
+
 const find = async (username) => {
   return await User.findOne({ username:username })
 }
+
 
 const update = async (email, username, password, firstName, lastName, age) => {
   const update = {}
@@ -55,10 +61,10 @@ const update = async (email, username, password, firstName, lastName, age) => {
   const filter = {username: username}
   const result = await User.updateOne(filter, { $set: update })
 
-  console.log(result.modifiedCount + " " + result.matchedCount)
-
   return result.modifiedCount === 1
 }
+
+
 
 module.exports = {
   SUCCESS,
