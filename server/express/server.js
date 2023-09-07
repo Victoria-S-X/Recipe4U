@@ -1,6 +1,9 @@
+
+// THE ORDER OF REQUIRES IS VERY IMPORTANT
 const app = require("./expressApp")
 require("./routes/user")
-require("./routes/error") //needs to be required last!!
+//require("./routes/frontend")
+require("./routes/error")
 
 const port = process.env.PORT || 3000;
 const env = app.get("env")
