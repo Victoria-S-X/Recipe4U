@@ -13,11 +13,24 @@ app.post("/api/users", async (req, res) => {
     if(username && password && email){
         const hash = await auth.hash(password)
 
-        userItem.create(
+        const resCode = await userItem.create(
             email, username, hash, firstName, lastName, age 
         )
 
-        res.status(201).json({message: "User created"})
+        switch (resCode) {
+            case userItem.SUCCESS:
+                res.status(201).json({message: "User created"})
+                break
+            case userItem.DUPLICATE_USER:
+                res.status(400).json({message: "Username is already taken"})
+                break
+        
+            default:
+                res.status(500).json({message: "Failed to create account"})
+                break
+        }
+
+        
     } else {
         res.status(400).json({message: "Missing parameters"})
     }
@@ -26,7 +39,7 @@ app.post("/api/users", async (req, res) => {
 //obviously a bad idea in production
 app.get("/api/users/:username", async (req, res) => {
     const username = req.params.username
-    const user = await userItem.findUser(username)
+    const user = await userItem.find(username)
 
     const authenticated = await auth.match(req.body.password, user.password)
 

@@ -1,7 +1,8 @@
 const mongoose = require("../db").mongoose
 
-
-// ====== OBS! TEMPORARY, NO SECURITY ETC =======
+const SUCCESS = 0
+const ERROR = 1
+const DUPLICATE_USER = 2
 
 const schema = new mongoose.Schema({
     email: String,
@@ -18,23 +19,31 @@ const schema = new mongoose.Schema({
 const User = mongoose.model('User', schema);
 
 
-//throws when dupplicate username
-exports.create = (email, username, password, firstName, lastName, age) => {
-  new User({
+
+const create = async (email, username, password, firstName, lastName, age) => {
+  const user = new User({
     email: email,
     username: username,
     password: password, 
     firstName: firstName,
     lastName: lastName,
     age: age
-  }).save()
+  })
+
+  try{
+    await user.save()
+    return SUCCESS
+  } catch (err){
+    if(err.code == 11000) return DUPLICATE_USER
+    return ERROR
+  }
 }
 
-exports.findUser = async (username) => {
+const find = async (username) => {
   return await User.findOne({ username:username })
 }
 
-exports.update = async (email, username, password, firstName, lastName, age) => {
+const update = async (email, username, password, firstName, lastName, age) => {
   const update = {}
 
   if(email !== undefined) update["email"] = email
@@ -49,4 +58,13 @@ exports.update = async (email, username, password, firstName, lastName, age) => 
   console.log(result.modifiedCount + " " + result.matchedCount)
 
   return result.modifiedCount === 1
+}
+
+module.exports = {
+  SUCCESS,
+  ERROR,
+  DUPLICATE_USER,
+  create,
+  find,
+  update
 }
