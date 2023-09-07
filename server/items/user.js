@@ -19,7 +19,7 @@ const User = mongoose.model('User', schema);
 
 
 //throws when dupplicate username
-exports.createUser = (email, username, password, firstName, lastName, age) => {
+exports.create = (email, username, password, firstName, lastName, age) => {
   new User({
     email: email,
     username: username,
@@ -32,4 +32,21 @@ exports.createUser = (email, username, password, firstName, lastName, age) => {
 
 exports.findUser = async (username) => {
   return await User.findOne({ username:username })
+}
+
+exports.update = async (email, username, password, firstName, lastName, age) => {
+  const update = {}
+
+  if(email !== undefined) update["email"] = email
+  if(password !== undefined) update["password"] = password
+  if(firstName !== undefined) update["firstName"] = firstName
+  if(lastName !== undefined) update["lastName"] = lastName
+  if(age !== undefined) update["age"] = age
+
+  const filter = {username: username}
+  const result = await User.updateOne(filter, { $set: update })
+
+  console.log(result.modifiedCount + " " + result.matchedCount)
+
+  return result.modifiedCount === 1
 }
