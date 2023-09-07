@@ -1,7 +1,8 @@
 const app = require("../expressApp")
 const userItem = require("../../items/user")
+const auth = require("../../auth")
 
-app.post("/api/users", (req, res) => {
+app.post("/api/users", async (req, res) => {
     const email = req.body?.email
     const username = req.body?.username
     const password = req.body?.password
@@ -10,8 +11,10 @@ app.post("/api/users", (req, res) => {
     const age = req.body?.age
 
     if(username && password && email){
+        const hash = await auth.hash(password)
+
         userItem.create(
-            email, username, password, firstName, lastName, age 
+            email, username, hash, firstName, lastName, age 
         )
 
         res.status(201).json({message: "User created"})
@@ -24,16 +27,24 @@ app.post("/api/users", (req, res) => {
 app.get("/api/users/:username", async (req, res) => {
     const username = req.params.username
     const user = await userItem.findUser(username)
+
+    const authenticated = await auth.match(req.body.password, user.password)
+
+    if(authenticated){
+        res.status(200).json({
+            email: user.email,
+            username: user.username,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            age: user?.age
+        })
+    } else {
+        res.status(401).json({message: "Wrong password"})
+    }
     
-    res.status(200).json({
-        email: user.email,
-        username: user.username,
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        age: user?.age
-    })
 })
 
+//also a bad idea in production
 app.patch("/api/users/:username", async (req, res) => {
     const username = req.params.username
 
