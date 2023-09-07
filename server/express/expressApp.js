@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const path = require('path');
 const history = require('connect-history-api-fallback');
 
-const port = process.env.PORT || 3000;
 
 
 // Create Express app
@@ -23,10 +22,6 @@ app.get('/api', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
 });
 
-// Catch all non-error handler for api (i.e., 404 Not Found)
-app.use('/api/*', function (req, res) {
-    res.status(404).json({ 'message': 'Not Found' });
-});
 
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode
@@ -54,14 +49,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-// starts server
-exports.start = () => {
-    app.listen(port, function(err) {
-        if (err) throw err;
-        console.log(`Express server listening on port ${port}, in ${env} mode`);
-        console.log(`Backend: http://localhost:${port}/api/`);
-        console.log(`Frontend (production): http://localhost:${port}/`);
-    })
-}
-
-exports.app = app
+module.exports = app

@@ -2,7 +2,7 @@
 
 require("./db")
 const userHandler = require("./items/user")
-const server = require("./server")
+const server = require("./express/server")
 
 server.start()
 
