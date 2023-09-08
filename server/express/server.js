@@ -1,6 +1,7 @@
 
 // THE ORDER OF REQUIRES IS VERY IMPORTANT
 const app = require("./expressApp")
+require("./routes/auth")
 require("./routes/user")
 require("./routes/frontend")
 require("./routes/error")
@@ -12,7 +13,7 @@ exports.start = () => {
     app.listen(port, function(err) {
         if (err) throw err;
         console.log(`Express server listening on port ${port}, in ${env} mode`);
-        console.log(`Backend: http://localhost:${port}/api/`);
+        console.log(`Backend: http://localhost:${port}/api/v1`);
         console.log(`Frontend (production): http://localhost:${port}/`);
     })
 }

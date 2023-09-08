@@ -3,7 +3,7 @@ const userItem = require("../../items/user")
 const auth = require("../../auth")
 
 
-app.post("/api/users", async (req, res) => {
+app.post("/api/v1/users", async (req, res) => {
     const email = req.body?.email
     const username = req.body?.username
     const password = req.body?.password
@@ -40,7 +40,7 @@ app.post("/api/users", async (req, res) => {
 })
 
 
-app.get("/api/users/:username", async (req, res) => {
+app.get("/api/v1/users/:username", async (req, res) => {
 
     //provided password?
     if(!req.body?.password){
@@ -74,7 +74,7 @@ app.get("/api/users/:username", async (req, res) => {
 })
 
 
-app.patch("/api/users/:username", async (req, res) => {
+app.patch("/api/v1/users/:username", async (req, res) => {
 
     const success = await userItem.update(
         req.body?.email, 
