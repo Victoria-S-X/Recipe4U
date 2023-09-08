@@ -23,3 +23,7 @@ exports.match = async (password, hash) => {
 exports.getJWT = (userID) => {
     return jwt.sign({ userID: userID }, jwtSecret)
 }
+
+exports.verifyJWT = (token) => {
+    return jwt.verify(token, jwtSecret)
+}

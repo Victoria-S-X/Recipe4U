@@ -1,6 +1,7 @@
 const app = require("../expressApp")
 const userItem = require("../../items/user")
 const auth = require("../../auth")
+const authMiddleware = require("./auth")
 
 
 app.post("/api/v1/users", async (req, res) => {
@@ -40,37 +41,22 @@ app.post("/api/v1/users", async (req, res) => {
 })
 
 
-app.get("/api/v1/users/:username", async (req, res) => {
+app.get("/api/v1/users/:username", authMiddleware, async (req, res) => {
 
-    //provided password?
-    if(!req.body?.password){
-        res.status(400).json({message: "Password missing"})
+    const user = await userItem.get(req.userID)
+    if(!user) {
+        res.status(404).json({message: "User not found"})
         return
     }
 
-    //user exists?
-    const username = req.params.username
-    const user = await userItem.find(username)
-    if(!user){
-        res.status(404).json({message: "User does not exist"})
-        return
-    }
-
-    //right password?
-    const authenticated = await auth.match(req.body.password, user.password)
-    if(authenticated){
-        //return data
-        res.status(200).json({
-            email: user.email,
-            username: user.username,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            age: user?.age
-        })
-    } else {
-        res.status(401).json({message: "Wrong password"})
-    }
     
+    res.status(200).json({
+        email: user.email,
+        username: user.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        age: user?.age
+    })
 })
 
 

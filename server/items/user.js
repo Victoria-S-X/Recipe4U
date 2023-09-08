@@ -48,6 +48,12 @@ const find = async (username) => {
   return await User.findOne({ username:username })
 }
 
+const get = async (strID) => {
+  const id = new mongoose.Types.ObjectId(strID)
+
+  return User.findById(id)
+}
+
 
 const update = async (email, username, password, firstName, lastName, age) => {
   const update = {}
@@ -72,5 +78,6 @@ module.exports = {
   DUPLICATE_USER,
   create,
   find,
+  get,
   update
 }

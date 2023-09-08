@@ -3,38 +3,20 @@ const userItem = require("../../items/user")
 const auth = require("../../auth")
 
 
-// make this more aestheticalcejalfieay pleasing - chain of responsibility pattern?
-app.post("/api/v1/login", async (req, res) => {
-    //provided password?
-    const password = req.body?.password
-    if(password === undefined){
-        res.status(400).json({message: "Password missing"})
-        return
-    }
 
-    //provided username?
-    const username = req.body?.username
-    if(username === undefined){
-        res.status(400).json({message: "Username missing"})
-        return
-    }
+module.exports = (req, res, next) => {
 
-    //does user exist?
-    const user = await userItem.find(username)
-    if(!user){
-        res.status(404).json({message: "User does not exist"})
-        return
-    }
+    //provided token?
+    const token = req.header('Authorization')?.split(' ')[1]
+    if (!token) return res.status(401).json({ message: 'Authentication token missing' })
+  
+    try {
+        //valid token?
+        const data = auth.verifyJWT(token)
 
-    //right password?
-    const authenticated = await auth.match(password, user.password)
-    if(!authenticated){
-        res.status(401).json({message: "Wrong password"})
-        return
+        req.userID = data.userID
+        next()
+    } catch (error) {
+      return res.status(401).json({ message: 'Invalid token' });
     }
-
-    const jwt = auth.getJWT(user._id)
-    res.status(200).json({
-        jwt
-    })
-})
+}
