@@ -4,6 +4,7 @@ const auth = require("../../auth")
 const authMiddleware = require("./auth")
 
 
+// CREATE user
 app.post("/api/v1/users", async (req, res) => {
     const email = req.body?.email
     const username = req.body?.username
@@ -41,6 +42,7 @@ app.post("/api/v1/users", async (req, res) => {
 })
 
 
+// READ user info
 app.get("/api/v1/users/:username", authMiddleware, async (req, res) => {
 
     const user = await userItem.get(req.userID)
@@ -60,7 +62,8 @@ app.get("/api/v1/users/:username", authMiddleware, async (req, res) => {
 })
 
 
-app.patch("/api/v1/users/:username", async (req, res) => {
+// UPDATE user info 
+app.patch("/api/v1/users/:username", authMiddleware, async (req, res) => {
 
     const success = await userItem.update(
         req.body?.email, 
