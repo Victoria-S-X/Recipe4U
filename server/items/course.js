@@ -59,6 +59,13 @@ const getFromUser = async (strUserID) => {
 	return Course.find({userID: userID})
 }
 
+const deleteCourses = async (strUserID) => {
+	const userID = helpers.idToObj(strUserID)
+    if(!userID) return
+
+	return Course.deleteMany({userID: userID})
+}
+
 
 module.exports = {
     SUCCESS,
@@ -66,5 +73,6 @@ module.exports = {
     MISSING_ARGUMENT,
     create,
     get,
-	getFromUser
+	getFromUser,
+	deleteCourses
 }
