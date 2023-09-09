@@ -60,7 +60,7 @@ const get = async (strID) => {
 /**
  * @returns {number} Result code indicating success or type of error
  */
-const update = async (strID, email, username, password, firstName, lastName, age) => {
+const update = async (strID, email, password, firstName, lastName, age) => {
   const id = idToObj(strID)
   const update = {}
 

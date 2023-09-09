@@ -35,14 +35,13 @@ app.post("/api/v1/users", async (req, res) => {
                 break
         }
 
-        
     } else {
         res.status(400).json({message: "Missing parameters"})
     }
 })
 
 
-// READ user info
+// READ user info (for the logged in user)
 app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 
     const user = await userItem.get(req.userID)
@@ -61,13 +60,12 @@ app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 })
 
 
-// UPDATE user info 
+// UPDATE user info (for the logged in user)
 app.patch("/api/v1/users/", authMiddleware, async (req, res) => {
 
     const resCode = await userItem.update(
         req.userID,
         req.body?.email, 
-        req.params.username, 
         req.body?.password, 
         req.body?.firstName, 
         req.body?.lastName, 
