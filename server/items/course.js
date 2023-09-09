@@ -1,4 +1,5 @@
 const mongoose = require("../db").mongoose
+const helpers = require("./helpers")
 
 
 const SUCCESS = 0
@@ -42,9 +43,18 @@ const create = async (postID, meetingLink, start, duration, city, address) => {
 }
 
 
+const get = async (strID) => {
+    const id = helpers.idToObj(strID)
+    if(!id) return
+
+    return Course.findById(id)
+}
+
+
 module.exports = {
     SUCCESS,
     ERROR,
     MISSING_ARGUMENT,
-    create
+    create,
+    get
 }

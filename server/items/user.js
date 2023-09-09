@@ -1,4 +1,5 @@
 const mongoose = require("../db").mongoose
+const helpers = require("./helpers")
 
 const SUCCESS = 0
 const ERROR = 1
@@ -19,8 +20,6 @@ const schema = new mongoose.Schema({
 })
   
 const User = mongoose.model('User', schema)
-
-const idToObj = (strID) => new mongoose.Types.ObjectId(strID)
 
 
 /**
@@ -54,7 +53,8 @@ const find = async (username) => {
 }
 
 const get = async (strID) => {
-  const id = idToObj(strID)
+  const id = helpers.idToObj(strID)
+  if(!id) return
 
   return User.findById(id)
 }
