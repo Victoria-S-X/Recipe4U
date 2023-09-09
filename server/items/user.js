@@ -4,6 +4,7 @@ const SUCCESS = 0
 const ERROR = 1
 const DUPLICATE_USER = 2
 const USER_NOT_FOUND = 3
+const MISSING_ARGUMENT = 4
 
 const schema = new mongoose.Schema({
   email: String,
@@ -26,6 +27,8 @@ const idToObj = (strID) => new mongoose.Types.ObjectId(strID)
  * @returns {number} Result code indicating success or type of error
  */
 const create = async (email, username, password, firstName, lastName, age) => {
+  if(!email || !username || !password) return MISSING_ARGUMENT
+
   const user = new User({
     email: email,
     username: username,
@@ -89,6 +92,7 @@ module.exports = {
   ERROR,
   DUPLICATE_USER,
   USER_NOT_FOUND,
+  MISSING_ARGUMENT,
   create,
   find,
   get,

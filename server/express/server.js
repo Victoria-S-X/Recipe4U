@@ -2,6 +2,7 @@
 // THE ORDER OF REQUIRES IS VERY IMPORTANT
 const app = require("./expressApp")
 require("./routes/login")
+require("./routes/course")
 require("./routes/user")
 require("./routes/frontend")
 require("./routes/error")
