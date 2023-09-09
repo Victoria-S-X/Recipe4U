@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const jwtSecret = "Ag66gcrZI4fdEQ5wQpWtadhFZfPwpi"
+const jwtSecret = "Ag66gcrZI4fdEQ5wQpWtadhFZfPwpi" //obviously a bad idea in production
+
 
 exports.hash = async (password) => {
     const salt = await bcrypt.genSalt(15)

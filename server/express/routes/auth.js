@@ -1,7 +1,4 @@
-const app = require("../expressApp")
-const userItem = require("../../items/user")
 const auth = require("../../auth")
-
 
 
 module.exports = (req, res, next) => {
