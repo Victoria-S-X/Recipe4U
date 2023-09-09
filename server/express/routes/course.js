@@ -23,7 +23,21 @@ app.get("/api/v1/courses/:id", async (req, res) => {
 
 //GET courses posted by logged in user
 app.get("/api/v1/courses", auth, async (req, res) => {
-    
+    const courses = await courseItem.getFromUser(req.userID)
+
+    const result = []
+
+    for(let course of courses){
+        result.push({
+            meetingLink: course?.meetingLink,
+            start: course?.start,
+            duration: course?.duration,
+            city: course?.city,
+            address: course?.address 
+        })
+    }
+
+    res.status(200).json(result)
 })
 
 
@@ -32,6 +46,7 @@ app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
     //TODO: get post - verify user is owner of post
 
     const resCode = await courseItem.create(
+        req.userID,
         req.params.id,
         req.body?.meetingLink,
         req.body?.start,

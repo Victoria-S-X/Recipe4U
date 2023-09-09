@@ -8,6 +8,7 @@ const MISSING_ARGUMENT = 2
 
 
 const schema = new mongoose.Schema({
+    userID: String,
     postID: String,
     meetingLink: String,
     start: Date,
@@ -20,26 +21,27 @@ const Course = mongoose.model("Course", schema)
 
 
 
-const create = async (postID, meetingLink, start, duration, city, address) => {
-    if(!postID) return MISSING_ARGUMENT
+const create = async (userID, postID, meetingLink, start, duration, city, address) => {
+	if(!userID || !postID) return MISSING_ARGUMENT
 
-    const course = new Course({
-        postID: postID,
-        meetingLink: meetingLink,
-        start: start,
-        duration: duration,
-        city: city,
-        address: address
-      })
-    
-      try{
-        await course.save()
-    
-        return SUCCESS
-      } catch (err){
-        console.log(err)
-        return ERROR
-      }
+	const course = new Course({
+		userID: userID,
+		postID: postID,
+		meetingLink: meetingLink,
+		start: start,
+		duration: duration,
+		city: city,
+		address: address
+	})
+
+	try{
+		await course.save()
+
+		return SUCCESS
+	} catch (err){
+		console.log(err)
+		return ERROR
+	}
 }
 
 
@@ -50,11 +52,19 @@ const get = async (strID) => {
     return Course.findById(id)
 }
 
+const getFromUser = async (strUserID) => {
+	const userID = helpers.idToObj(strUserID)
+    if(!userID) return
+
+	return Course.find({userID: userID})
+}
+
 
 module.exports = {
     SUCCESS,
     ERROR,
     MISSING_ARGUMENT,
     create,
-    get
+    get,
+	getFromUser
 }
