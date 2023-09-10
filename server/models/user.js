@@ -48,6 +48,7 @@ exports.create = async (email, username, password, firstName, lastName, age) => 
 	return await User.findOne({ username:username })
 }
 
+
 exports.get = async (strID) => {
 	const id = helpers.idToObj(strID)
 	if(!id) return
@@ -78,6 +79,7 @@ exports.patch = async (strID, email, password, firstName, lastName, age) => {
 	}
 }
 
+
 exports.addAttendance = async (userID, courseID) => {
 	const affected = await User.findByIdAndUpdate(userID, {
 		$push: { attends: courseID }
@@ -86,6 +88,7 @@ exports.addAttendance = async (userID, courseID) => {
 	if(affected) return ResCode.SUCCESS
 	else return ResCode.ERROR //TODO: remove item from course list
 }
+
 
 exports.removeAttendance = async (userID, courseID) => {
 	const affected = await User.findByIdAndUpdate(userID, {

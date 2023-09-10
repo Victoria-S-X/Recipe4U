@@ -51,7 +51,14 @@ app.get("/api/v1/courses/:id", async (req, res) => {
 
 //GET courses posted by logged in user
 app.get("/api/v1/courses", auth, async (req, res) => {
+
+    //should not return null as req.userID is verified as valid in the authentication
     const courses = await courseModel.getFromUser(req.userID)
+
+    if(!courses){
+        res.status(500).json({message: "Something went wrong"})
+        return
+    }
 
     const result = []
 
@@ -82,7 +89,31 @@ app.put("/api/v1/courses/:id", auth, async (req, res) => {
     
 })
 
-//REMOVES courses
+
+//REMOVES all courses created by the logged in user
+app.delete("/api/v1/courses", auth, async (req, res) => {
+    const resCode = await courseModel.deleteCourses(req.userID)
+
+    switch(resCode) {
+        case ResCode.SUCCESS:
+            res.status(200).json({message: `Successful deletion`})
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({message: "Bad input"})
+            break
+        case ResCode.NOT_FOUND:
+            res.status(200).json({message: "No courses to delete"})
+            break
+
+        default:
+            res.status(500).json({message: "Internal server error"})
+            break
+    }
+
+})
+
+
+//REMOVES course
 app.delete("/api/v1/courses/:id", auth, async (req, res) => {
     const resCode = await courseModel.deleteCourse(req.params.id, req.userID)
 
@@ -107,25 +138,3 @@ app.delete("/api/v1/courses/:id", auth, async (req, res) => {
 })
 
 
-
-//REMOVES all courses created by the logged in user
-app.delete("/api/v1/courses", auth, async (req, res) => {
-    const resCode = await courseModel.deleteCourses(req.userID)
-
-    switch(resCode) {
-        case ResCode.SUCCESS:
-            res.status(200).json({message: `Successful deletion`})
-            break
-        case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
-            break
-        case ResCode.NOT_FOUND:
-            res.status(200).json({message: "No courses to delete"})
-            break
-
-        default:
-            res.status(500).json({message: "Internal server error"})
-            break
-    }
-
-})

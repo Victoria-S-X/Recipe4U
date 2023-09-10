@@ -92,6 +92,7 @@ exports.addAttendee = async (courseID, userID) => {
 	}
 }
 
+
 exports.removeAttendee = async (courseID, userID) => {
 	const course = await Course.findByIdAndUpdate(
 		courseID, 
@@ -100,9 +101,9 @@ exports.removeAttendee = async (courseID, userID) => {
 
 	if(course){
 		if(course.attendees.includes(userID)) return ResCode.SUCCESS
-		else return ResCode.NOT_FOUND_1
+		else return ResCode.NOT_FOUND_1 //user was never attending the course
 	}
-	else return ResCode.NOT_FOUND
+	else return ResCode.NOT_FOUND //course not found
 }
 
 
@@ -151,6 +152,7 @@ exports.deleteCourses = async (strUserID) => {
 	return resCodeResult
 }
 
+
 exports.deleteCourse = async (strCourseID, strUserID) => {
 
 	//valid courseID?
@@ -170,6 +172,7 @@ exports.deleteCourse = async (strCourseID, strUserID) => {
 
 	return exports.deleteCourseObjID(courseID)
 }
+
 
 exports.deleteCourseObjID = async (courseID) => {
 
