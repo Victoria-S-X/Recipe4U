@@ -79,19 +79,19 @@ exports.patch = async (strID, email, password, firstName, lastName, age) => {
 }
 
 exports.addAttendance = async (userID, courseID) => {
-	const success = await User.findByIdAndUpdate(userID, {
+	const affected = await User.findByIdAndUpdate(userID, {
 		$push: { attends: courseID }
 	})
 
-	if(success) return ResCode.SUCCESS
+	if(affected) return ResCode.SUCCESS
 	else return ResCode.ERROR //TODO: remove item from course list
 }
 
-exports.removeAttandance = async (userID, courseID) => {
-	const success = await User.findByIdAndUpdate(userID, {
+exports.removeAttendance = async (userID, courseID) => {
+	const affected = await User.findByIdAndUpdate(userID, {
 		$pull: { attends: courseID }
 	})
 
-	if(success) return ResCode.SUCCESS
+	if(affected) return ResCode.SUCCESS
 	else return ResCode.ERROR
 }

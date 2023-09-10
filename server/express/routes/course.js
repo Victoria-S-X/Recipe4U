@@ -55,7 +55,7 @@ app.get("/api/v1/courses", auth, async (req, res) => {
 
     const result = []
 
-    for(let course of courses){
+    for(const course of courses){
         result.push(
             publicParams(course)
         )
@@ -77,18 +77,31 @@ function publicParams(course){
 }
 
 
+//UPDATES the specified course
+app.put("/api/v1/courses/:id", auth, async (req, res) => {
+    
+})
+
+
 
 //REMOVES all courses created by the logged in user
 app.delete("/api/v1/courses", auth, async (req, res) => {
-    const courses = await courseModel.getFromUser(req.userID)
+    const resCode = await courseModel.deleteCourses(req.userID)
 
-    for(let course of courses){
-        for(let attendee of course.attendees){
+    switch(resCode) {
+        case ResCode.SUCCESS:
+            res.status(200).json({message: `Successful deletion`})
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({message: "Bad input"})
+            break
+        case ResCode.NOT_FOUND:
+            res.status(200).json({message: "No courses to delete"})
+            break
 
-        }
+        default:
+            res.status(500).json({message: "Internal server error"})
+            break
     }
 
-    const result = await courseModel.deleteCourses(req.userID + "REMOVE ME AFTER TESTING")
-
-    res.status(200).json({message: `Success. ${result.deletedCount} courses deleted`})
 })

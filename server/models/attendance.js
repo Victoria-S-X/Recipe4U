@@ -1,8 +1,9 @@
-const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
 const userModel = require("./user")
 const courseModel = require("./course")
+
+
 
 exports.attend = async (strUserID, strCourseID) => {
 
@@ -20,16 +21,21 @@ exports.attend = async (strUserID, strCourseID) => {
 }
 
 
-exports.leave = async (strUserID, strCourseID) => {
 
+
+exports.leave = async (strUserID, strCourseID) => {
     const userID = helpers.idToObj(strUserID)
     const courseID = helpers.idToObj(strCourseID)
     if(!userID || !courseID) return ResCode.MISSING_ARGUMENT
 
+    return await exports.leave(userID, courseID)
+}
+
+exports.leaveObjID = async (userID, courseID) => {
     const resCodeCourse = await courseModel.removeAttendee(courseID, userID)
     if(resCodeCourse === ResCode.ERROR) return resCodeCourse
 
-    const resCodeUser = await userModel.removeAttandance(userID, courseID)
+    const resCodeUser = await userModel.removeAttendance(userID, courseID)
     if(resCodeUser === ResCode.SUCCESS) return resCodeCourse
     else return resCodeUser
 }

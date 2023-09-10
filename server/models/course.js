@@ -1,6 +1,7 @@
 const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
+const removeAttendance = require("./user").removeAttendance
 
 
 const schema = new mongoose.Schema({
@@ -105,9 +106,52 @@ exports.removeAttendee = async (courseID, userID) => {
 }
 
 
+exports.update = async (strID, meetingLink, start, duration, city, address, maxAttendees) => {
+	const id = helpers.idToObj(strID)
+    if(!id) return ResCode.MISSING_ARGUMENT
+
+	const update = {
+        meetingLink: meetingLink,
+        start: start,
+        duration: duration,
+        city: city,
+        address: address,
+        maxAttendees: maxAttendees
+    }
+
+	try{
+		const item = await Course.findOneAndUpdate(id, update, { new: true })
+
+		if(item) return ResCode.SUCCESS
+		else return ResCode.NOT_FOUND
+
+	} catch(err){
+		console.error(err)
+		return ResCode.ERROR
+	}
+}
+
+
 exports.deleteCourses = async (strUserID) => {
 	const userID = helpers.idToObj(strUserID)
-    if(!userID) return
+    if(!userID) return ResCode.BAD_INPUT
 
-	return Course.deleteMany({userID: userID})
+	const courses = await Course.find({userID: userID})
+	if(!courses) return ResCode.NOT_FOUND
+
+	let resCode = ResCode.SUCCESS
+	for(const course of courses){
+
+		//complete deletion FIRST so that ALL users will be removed AFTER course it deleted
+		//response code does not need to be saved, if it is fails, the course has already been deleted
+		await Course.findByIdAndDelete(course._id)
+
+		//removes attendance from the users´ profiles
+		for(const attendee of course.attendees){
+			const attendanceRmResCode = await removeAttendance(attendee, course._id)
+			if(attendanceRmResCode != ResCode.SUCCESS) resCode = attendanceRmResCode
+		}
+	}
+
+	return resCode
 }
