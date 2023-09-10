@@ -5,7 +5,8 @@ exports.ResCode = {
     ERROR: 1,
     MISSING_ARGUMENT: 2,
     NOT_FOUND: 3,
-    ITEM_ALREADY_EXISTS: 4
+    ITEM_ALREADY_EXISTS: 4,
+    ALREADY_FULL: 5
 }
 
 exports.idToObj = (strID) => {

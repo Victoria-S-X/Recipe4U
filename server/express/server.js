@@ -4,6 +4,7 @@ const app = require("./expressApp")
 require("./routes/login")
 require("./routes/course")
 require("./routes/user")
+require("./routes/attendance")
 require("./routes/frontend")
 require("./routes/error")
 

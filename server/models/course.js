@@ -20,7 +20,7 @@ const Course = mongoose.model("Course", schema)
 
 
 exports.create = async (userID, postID, meetingLink, start, duration, city, address, maxAttendees) => {
-	if(!userID || !postID) return ResCode.MISSING_ARGUMENT
+	if(!userID || !postID || !maxAttendees) return ResCode.MISSING_ARGUMENT
 
 	const course = new Course({
 		userID: userID,
@@ -61,7 +61,27 @@ exports.getFromUser = async (strUserID) => {
 
 
 exports.addAttendee = async (courseID, userID) => {
-	
+	const criteria = {
+		_id: courseID,
+		$expr: { $lt: [{ $size: '$attendees' }, '$maxAttendees'] } //inspired by ChatGPT
+	}
+	const operation = {
+		$push: { attendees: userID }
+	}
+
+	try{
+		const success = await Course.findOneAndUpdate(criteria, operation, { new: true })
+
+		if(success) return ResCode.SUCCESS
+		else{
+			if(Course.findById(courseID)) return ResCode.ALREADY_FULL
+			else return ResCode.NOT_FOUND
+		}
+
+	} catch(err){
+		console.error(err)
+		return ResCode.ERROR
+	}
 }
 
 
