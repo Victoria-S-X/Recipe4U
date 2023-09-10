@@ -1,11 +1,7 @@
 const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
+const ResCode = helpers.ResCode
 
-const SUCCESS = 0
-const ERROR = 1
-const DUPLICATE_USER = 2
-const USER_NOT_FOUND = 3
-const MISSING_ARGUMENT = 4
 
 const schema = new mongoose.Schema({
   email: String,
@@ -16,17 +12,16 @@ const schema = new mongoose.Schema({
   password: String, 
   firstName: String,
   lastName: String,
-  age: Number
+  age: Number,
+  attends: [mongoose.Schema.Types.ObjectId]
 })
   
 const User = mongoose.model('User', schema)
 
 
-/**
- * @returns {number} Result code indicating success or type of error
- */
-const create = async (email, username, password, firstName, lastName, age) => {
-  if(!email || !username || !password) return MISSING_ARGUMENT
+
+exports.create = async (email, username, password, firstName, lastName, age) => {
+  if(!email || !username || !password) return ResCode.MISSING_ARGUMENT
 
   const user = new User({
     email: email,
@@ -34,25 +29,26 @@ const create = async (email, username, password, firstName, lastName, age) => {
     password: password, 
     firstName: firstName,
     lastName: lastName,
-    age: age
+    age: age,
+    attends: []
   })
 
   try{
     await user.save()
 
-    return SUCCESS
+    return ResCode.SUCCESS
   } catch (err){
-    if(err.code == 11000) return DUPLICATE_USER
-    return ERROR
+    if(err.code == 11000) return ResCode.ITEM_ALREADY_EXISTS
+    return ResCode.ERROR
   }
 }
 
 
-const find = async (username) => {
+exports.find = async (username) => {
   return await User.findOne({ username:username })
 }
 
-const get = async (strID) => {
+exports.get = async (strID) => {
   const id = helpers.idToObj(strID)
   if(!id) return
 
@@ -60,10 +56,7 @@ const get = async (strID) => {
 }
 
 
-/**
- * @returns {number} Result code indicating success or type of error
- */
-const update = async (strID, email, password, firstName, lastName, age) => {
+exports.patch = async (strID, email, password, firstName, lastName, age) => {
   const id = idToObj(strID)
   const update = {}
 
@@ -77,24 +70,10 @@ const update = async (strID, email, password, firstName, lastName, age) => {
   try{
     const item = await User.findOneAndUpdate(id, update, { new: true })
 
-    if(item) return SUCCESS
-    else return USER_NOT_FOUND
+    if(item) return ResCode.SUCCESS
+    else return ResCode.NOT_FOUND
 
   } catch(_){
-    return ERROR
+    return ResCode.ERROR
   }
-}
-
-
-
-module.exports = {
-  SUCCESS,
-  ERROR,
-  DUPLICATE_USER,
-  USER_NOT_FOUND,
-  MISSING_ARGUMENT,
-  create,
-  find,
-  get,
-  update
 }
