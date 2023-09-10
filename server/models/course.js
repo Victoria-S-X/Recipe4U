@@ -63,7 +63,8 @@ exports.getFromUser = async (strUserID) => {
 exports.addAttendee = async (courseID, userID) => {
 	const criteria = {
 		_id: courseID,
-		$expr: { $lt: [{ $size: '$attendees' }, '$maxAttendees'] } //inspired by ChatGPT
+		$expr: { $lt: [{ $size: '$attendees' }, '$maxAttendees'] }, //attendees not full (inspired by ChatGPT)
+		attendees: { $not: { $elemMatch: { $eq: userID } } } //user has not already signed up to course (inspired by ChatGPT)
 	}
 	const operation = {
 		$push: { attendees: userID }
@@ -74,7 +75,13 @@ exports.addAttendee = async (courseID, userID) => {
 
 		if(success) return ResCode.SUCCESS
 		else{
-			if(Course.findById(courseID)) return ResCode.ALREADY_FULL
+			const course = await Course.findById(courseID)
+
+			if(course) {
+				if(course.attendees.length == course.maxAttendees) return ResCode.ALREADY_FULL
+				else if(course.attendees.includes(userID)) return ResCode.ITEM_ALREADY_EXISTS
+				else return ResCode.ERROR
+			}
 			else return ResCode.NOT_FOUND
 		}
 

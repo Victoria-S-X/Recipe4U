@@ -14,6 +14,7 @@ exports.attend = async (strUserID, strCourseID) => {
     const resCode = await courseModel.addAttendee(courseID, userID)
     if(resCode != ResCode.SUCCESS) return resCode
 
+    userModel.addAttendance(userID, courseID)
 
 
     return ResCode.SUCCESS

@@ -20,6 +20,10 @@ app.patch("/api/v1/attend/:courseID", auth, async (req, res) => {
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "Course not found"})
+            break
+        case ResCode.ITEM_ALREADY_EXISTS:
+            res.status(403).json({message: "Already signed up to course"})
+            break
 
         default:
             res.status(500).json({message: `Server error. Code ${resCode}`})
