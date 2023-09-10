@@ -74,7 +74,7 @@ exports.addAttendee = async (courseID, userID) => {
 		const success = await Course.findOneAndUpdate(criteria, operation, { new: true })
 
 		if(success) return ResCode.SUCCESS
-		else{
+		else {
 			const course = await Course.findById(courseID)
 
 			if(course) {
@@ -89,6 +89,19 @@ exports.addAttendee = async (courseID, userID) => {
 		console.error(err)
 		return ResCode.ERROR
 	}
+}
+
+exports.removeAttendee = async (courseID, userID) => {
+	const course = await Course.findByIdAndUpdate(
+		courseID, 
+		{ $pull: { attendees: userID } }
+	)
+
+	if(course){
+		if(course.attendees.includes(userID)) return ResCode.SUCCESS
+		else return ResCode.NOT_FOUND_1
+	}
+	else return ResCode.NOT_FOUND
 }
 
 

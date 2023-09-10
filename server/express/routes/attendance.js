@@ -30,3 +30,27 @@ app.patch("/api/v1/attend/:courseID", auth, async (req, res) => {
             break
     }
 })
+
+//UPDATES attendance status for logged in user to leave provided course
+app.patch("/api/v1/leave/:courseID", auth, async (req, res) => {
+    const resCode = await attendanceModel.leave(req.userID, req.params.courseID)
+
+    switch(resCode) {
+        case ResCode.SUCCESS: 
+            res.status(200).json({message: `Removed from course`})
+            break
+        case ResCode.MISSING_ARGUMENT:
+            res.status(400).json({message: "Missing parameters"})
+            break
+        case ResCode.NOT_FOUND:
+            res.status(404).json({message: "Course not found"})
+            break
+        case ResCode.NOT_FOUND_1:
+            res.status(200).json({message: "Already removed"})
+            break
+
+        default:
+            res.status(500).json({message: `Server error. Code ${resCode}`})
+            break
+    }
+})

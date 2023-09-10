@@ -86,3 +86,12 @@ exports.addAttendance = async (userID, courseID) => {
 	if(success) return ResCode.SUCCESS
 	else return ResCode.ERROR //TODO: remove item from course list
 }
+
+exports.removeAttandance = async (userID, courseID) => {
+	const success = await User.findByIdAndUpdate(userID, {
+		$pull: { attends: courseID }
+	})
+
+	if(success) return ResCode.SUCCESS
+	else return ResCode.ERROR
+}
