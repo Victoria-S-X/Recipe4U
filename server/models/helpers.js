@@ -8,7 +8,8 @@ exports.ResCode = {
     ITEM_ALREADY_EXISTS: 4,
     ALREADY_FULL: 5,
     NOT_FOUND_1: 6,
-    BAD_INPUT: 7
+    BAD_INPUT: 7,
+    UNAUTHORIZED: 8
 }
 
 exports.idToObj = (strID) => {

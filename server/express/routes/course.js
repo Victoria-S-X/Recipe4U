@@ -82,6 +82,30 @@ app.put("/api/v1/courses/:id", auth, async (req, res) => {
     
 })
 
+//REMOVES courses
+app.delete("/api/v1/courses/:id", auth, async (req, res) => {
+    const resCode = await courseModel.deleteCourse(req.params.id, req.userID)
+
+    switch(resCode) {
+        case ResCode.SUCCESS:
+            res.status(200).json({message: `Successful deletion`})
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({message: "Bad input"})
+            break
+        case ResCode.NOT_FOUND:
+            res.status(404).json({message: "Course does not exist"})
+            break
+        case ResCode.UNAUTHORIZED:
+            res.status(403).json({message: "User is not authorized to delete course"})
+            break
+
+        default:
+            res.status(500).json({message: "Internal server error"})
+            break
+    }
+})
+
 
 
 //REMOVES all courses created by the logged in user

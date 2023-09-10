@@ -133,25 +133,58 @@ exports.update = async (strID, meetingLink, start, duration, city, address, maxA
 
 
 exports.deleteCourses = async (strUserID) => {
+
+	//finds all courses created by user
 	const userID = helpers.idToObj(strUserID)
     if(!userID) return ResCode.BAD_INPUT
-
 	const courses = await Course.find({userID: userID})
 	if(!courses) return ResCode.NOT_FOUND
 
-	let resCode = ResCode.SUCCESS
+
+	let resCodeResult = ResCode.SUCCESS
 	for(const course of courses){
-
-		//complete deletion FIRST so that ALL users will be removed AFTER course it deleted
-		//response code does not need to be saved, if it is fails, the course has already been deleted
-		await Course.findByIdAndDelete(course._id)
-
-		//removes attendance from the users´ profiles
-		for(const attendee of course.attendees){
-			const attendanceRmResCode = await removeAttendance(attendee, course._id)
-			if(attendanceRmResCode != ResCode.SUCCESS) resCode = attendanceRmResCode
-		}
+		const resCode = exports.deleteCourseObjID(course._id)
+		if(resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND) //ResCode.NOT_FOUND does not indicate error
+			resCode = resCode 
 	}
 
-	return resCode
+	return resCodeResult
+}
+
+exports.deleteCourse = async (strCourseID, strUserID) => {
+
+	//valid courseID?
+	const courseID = helpers.idToObj(strCourseID)
+	if(!courseID) return ResCode.BAD_INPUT
+
+	//valid userID?
+	const userID = helpers.idToObj(strUserID)
+    if(!userID) return ResCode.BAD_INPUT
+
+	//course exists?
+	const course = await Course.findById(courseID)
+	if(!course) return ResCode.NOT_FOUND
+	
+	//course belongs to user?
+	if(course.userID !== strUserID) return ResCode.UNAUTHORIZED
+
+	return exports.deleteCourseObjID(courseID)
+}
+
+exports.deleteCourseObjID = async (courseID) => {
+
+	//complete deletion FIRST so that ALL users will be removed AFTER course it deleted
+	//response code does not need to be saved, if it is fails, the course has already been deleted
+	const course = await Course.findByIdAndDelete(courseID)
+	if(!course) return ResCode.NOT_FOUND
+
+
+	//removes attendance from the users´ profiles
+	let resCodeResult = ResCode.SUCCESS
+	for(const attendee of course.attendees){
+		const resCode = await removeAttendance(attendee, course._id)
+		if(resCode != ResCode.SUCCESS) resCode = resCode
+	}
+
+	return resCodeResult
 }
