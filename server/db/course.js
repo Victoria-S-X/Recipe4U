@@ -1,7 +1,7 @@
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
 const removeAttendance = require("./models/user").removeAttendance
-const doesUserOwnPost = require("./post").doesUserOwnPost
+const getPost = require("./post").getPost
 const Course = require("./models/course")
 
 
@@ -21,7 +21,9 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 	if(!postID) return ResCode.BAD_INPUT
 
 	//user owns post?
-	if(!doesUserOwnPost(userID, postID)) return ResCode.UNAUTHORIZED
+	const post = await getPost(postID)
+	if(!post) return ResCode.NOT_FOUND
+	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
 
 
 	const course = new Course({
