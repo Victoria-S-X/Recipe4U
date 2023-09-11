@@ -31,16 +31,12 @@ exports.create = async (email, username, password, firstName, lastName, age) => 
 }
 
 
-exports.get = async (strID) => {
-	const id = helpers.idToObj(strID)
-	if(!id) return
-
+exports.get = async (id) => {
 	return User.findById(id)
 }
 
 
-exports.patch = async (strID, email, password, firstName, lastName, age) => {
-	const id = idToObj(strID)
+exports.patch = async (id, email, password, firstName, lastName, age) => {
 	const update = {}
 
 	if(email !== undefined) update["email"] = email

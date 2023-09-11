@@ -50,7 +50,7 @@ app.post("/api/v1/users", async (req, res) => {
 // READ user info (for the logged in user)
 app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 
-    const user = await userData.get(req.strUserID)
+    const user = await userData.get(req.userID)
     if(!user) {
         res.status(404).json({message: "User not found"})
         return
@@ -70,7 +70,7 @@ app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 app.patch("/api/v1/users/", authMiddleware, async (req, res) => {
 
     const resCode = await userData.update(
-        req.strUserID,
+        req.userID,
         req.body?.email, 
         req.body?.password, 
         req.body?.firstName, 

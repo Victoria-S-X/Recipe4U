@@ -5,11 +5,11 @@ const courseModel = require("./models/course")
 
 
 
-exports.attend = async (strUserID, strCourseID) => {
+exports.attend = async (userID, strCourseID) => {
 
     //valid IDs?
-    const [userID, courseID] = helpers.idsToObjs([strUserID, strCourseID])
-    if(!userID) return ResCode.BAD_INPUT
+    const courseID = helpers.idToObj(strCourseID)
+    if(!courseID) return ResCode.BAD_INPUT
 
     //adds to attendance list in course
     let resCode = await courseModel.addAttendee(courseID, userID)
@@ -24,10 +24,10 @@ exports.attend = async (strUserID, strCourseID) => {
 }
 
 
-exports.leave = async (strUserID, strCourseID) => {
+exports.leave = async (userID, strCourseID) => {
 
     //valid IDs?
-    const [userID, courseID] = helpers.idsToObjs([strUserID, strCourseID])
+    const courseID = helpers.idToObj(strCourseID)
     if(!userID) return ResCode.BAD_INPUT
 
     return await exports.leaveObjID(userID, courseID)

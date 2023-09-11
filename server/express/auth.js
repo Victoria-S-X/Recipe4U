@@ -13,18 +13,18 @@ module.exports = async (req, res, next) => {
         //valid token?
         const data = auth.verifyJWT(token)
 
-        //valid user?
-        if(!await userData.get(data.userID)) return res.status(401).json({ message: "Can't authenticate, user has been deleted" })
-
         //set user id
         req.strUserID = data.userID
         req.userID = idToObj(data.userID) 
 
         //valid userID?
         if(!req.userID){
-          res.status(400).json({message: "Invalid username"})
+          res.status(400).json({message: "Invalid userID"})
           return
         }
+
+        //valid user?
+        if(!await userData.get(req.userID)) return res.status(401).json({ message: "Can't authenticate, user has been deleted" })
 
         next()
     } catch (error) {

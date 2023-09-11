@@ -27,7 +27,7 @@ router.post('/', upload.single('postImage'), auth, async (req, res) => {
         description: req.body.description,
         recipe: req.body.recipe,
         postImageName: fileName,
-        user: req.strUserID
+        user: req.userID
     })
     try {
         const newPost = await post.save()
@@ -50,7 +50,7 @@ router.get('/', async (req, res) => {
 // Delete all posts of a specific user
 router.delete('/', auth, async (req, res) => {
     try {
-        const query = { user: req.strUserID }
+        const query = { user: req.userID }
         await Post.deleteMany(query)
         return res.status(200).json({ message: 'Deleted' })
     } catch (err) {
@@ -66,8 +66,8 @@ router.get('/:id', getPost, (req, res) => {
 
 // Update partially one post
 router.patch('/:id', getPost, auth, async (req, res) => {
-    const userID = helpers.idToObj(req.strUserID)
-    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
+    if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
+
     if (req.body.postName != null) {
         res.post.postName = req.body.postName
     }
@@ -96,8 +96,8 @@ router.patch('/:id', getPost, auth, async (req, res) => {
 
 // Delete a post
 router.delete('/:id', getPost, auth, async (req, res) => {
-    const userID = helpers.idToObj(req.strUserID)
-    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
+    if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
+    
     try {
         await res.post.deleteOne()
         return res.status(200).json({ message: 'The post is deleted.' })

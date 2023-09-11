@@ -8,12 +8,8 @@ const auth = require("../auth")
 //CREATE course
 app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
 
-    
-
-    //TODO: get post - verify user is owner of post
-
     const resCode = await courseData.create(
-        req.strUserID,
+        req.userID,
         req.params.id,
         req.body?.meetingLink,
         req.body?.start,
@@ -33,6 +29,8 @@ app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Bad input"})
             break
+        case ResCode.UNAUTHORIZED:
+            res.status(403).json({message: "User does not own post"})
     
         default:
             res.status(500).json({message: "Failed to create course"})
@@ -58,8 +56,7 @@ app.get("/api/v1/courses/:id", async (req, res) => {
 //GET courses posted by logged in user
 app.get("/api/v1/courses", auth, async (req, res) => {
 
-    //should not return null as req.strUserID is verified as valid in the authentication
-    const courses = await courseData.getFromUser(req.strUserID)
+    const courses = await courseData.getFromUser(req.userID)
 
     if(!courses){
         res.status(500).json({message: "Something went wrong"})
@@ -98,7 +95,7 @@ app.put("/api/v1/courses/:id", auth, async (req, res) => {
 
 //REMOVES all courses created by the logged in user
 app.delete("/api/v1/courses", auth, async (req, res) => {
-    const resCode = await courseData.deleteCourses(req.strUserID)
+    const resCode = await courseData.deleteCourses(req.userID)
 
     switch(resCode) {
         case ResCode.SUCCESS:
@@ -121,7 +118,7 @@ app.delete("/api/v1/courses", auth, async (req, res) => {
 
 //REMOVES course
 app.delete("/api/v1/courses/:id", auth, async (req, res) => {
-    const resCode = await courseData.deleteCourse(req.params.id, req.strUserID)
+    const resCode = await courseData.deleteCourse(req.params.id, req.userID)
 
     switch(resCode) {
         case ResCode.SUCCESS:
