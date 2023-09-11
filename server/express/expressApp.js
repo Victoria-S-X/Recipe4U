@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const postRouter = require("./routes/post")
+const postRouter = require('./routes/post')
 
 // Create Express app
 const app = express();

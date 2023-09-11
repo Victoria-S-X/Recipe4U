@@ -1,15 +1,29 @@
 const express = require('express')
 const router = express.Router()
-const Post = require('../../items/post')
 
+const Post = require('../../items/post')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
+const uploadPath = path.join('public', Post.postImageBasePath)
+const imageMimeTypes = ['image/jpeg', 'image/png']
+const upload = multer({
+    dest: uploadPath,
+    fileFilter: (req, file, callback) => {
+        callback(null, imageMimeTypes.includes(file.mimetype))
+    }
+})
 // Create a new post
-router.post('/', async (req, res) => {
+router.post('/', upload.single('postImage'), async (req, res) => {
+    const fileName = req.file != null ? req.file.filename : null
     const post = new Post({
         postName: req.body.postName,
         cookTime: req.body.cookTime,
-        ingredient: req.body.ingredient,
+        ingredients: req.body.ingredients,
         description: req.body.description,
-        recipe: req.body.recipe
+        recipe: req.body.recipe,
+        postImageName: fileName,
+        user: req.body.user
     })
     try {
         const newPost = await post.save()
@@ -29,9 +43,12 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Delete all posts of a specific user
 router.delete('/', async (req, res) => {
     try {
-        // TO DO
+        const query = { user: req.body.user }
+        await Post.deleteMany(query)
+        return res.status(200).json({ message: 'Deleted' })
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }
@@ -60,6 +77,9 @@ router.patch('/:id', getPost, async (req, res) => {
     if (req.body.recipe != null) {
         res.post.recipe = req.body.recipe
     }
+    if (req.body.postImageName != null) {
+        res.post.postImageName = req.body.postImageName
+    }
     try {
         const updatedPost = await res.post.save()
         return res.status(200).json(updatedPost)
@@ -78,6 +98,7 @@ router.delete('/:id', getPost, async (req, res) => {
     }
 })
 
+// Function to get a specific post by Id
 async function getPost(req, res, next) {
     let post
     try {
