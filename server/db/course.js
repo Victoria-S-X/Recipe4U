@@ -2,6 +2,7 @@ const helpers = require("./helpers")
 const ResCode = helpers.ResCode
 const removeAttendance = require("./models/user").removeAttendance
 const doesUserOwnPost = require("./post").doesUserOwnPost
+const Course = require("./models/course")
 
 
 
@@ -53,8 +54,17 @@ exports.get = async (strID) => {
     return Course.findById(id)
 }
 
+
 exports.getFromUser = async (userID) => {
 	return Course.find({userID: userID})
+}
+
+
+exports.getFromPost = async (strPostID) => {
+	const postID = helpers.idToObj(strPostID)
+	if(!postID) return ResCode.BAD_INPUT
+
+	return Course.find({postID: postID})
 }
 
 

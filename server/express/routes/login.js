@@ -1,9 +1,11 @@
+const router = require("../expressApp").Router("/api/v1/login")
+
 const app = require("../expressApp")
 const userData = require("../../db/user")
 const auth = require("../../auth")
 
 
-app.post("/api/v1/login", async (req, res) => {
+router.post("/", async (req, res) => {
     //provided password?
     const password = req.body?.password
     if(password === undefined){

@@ -1,3 +1,5 @@
+const router = require("../expressApp").Router("/api/v1/users")
+
 const app = require("../expressApp")
 const userData = require("../../db/user")
 const ResCode = require("../../db/helpers").ResCode
@@ -6,7 +8,7 @@ const authMiddleware = require("../auth")
 
 
 // CREATE user
-app.post("/api/v1/users", async (req, res) => {
+router.post("/", async (req, res) => {
 
     //hashes password
     const password = req.body?.password
@@ -48,7 +50,7 @@ app.post("/api/v1/users", async (req, res) => {
 
 
 // READ user info (for the logged in user)
-app.get("/api/v1/users/", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
 
     const user = await userData.get(req.userID)
     if(!user) {
@@ -67,7 +69,7 @@ app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 
 
 // UPDATE user info (for the logged in user)
-app.patch("/api/v1/users/", authMiddleware, async (req, res) => {
+router.patch("/", authMiddleware, async (req, res) => {
 
     const resCode = await userData.update(
         req.userID,

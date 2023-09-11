@@ -1,7 +1,6 @@
-const express = require('express')
-const router = express.Router()
+const router = require("../expressApp").Router("/api/v1/posts")
+
 const auth = require('../auth')
-const helpers = require('../../db/helpers')
 
 const Post = require('../../db/models/post')
 const multer = require('multer')

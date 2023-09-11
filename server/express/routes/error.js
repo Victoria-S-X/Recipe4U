@@ -1,4 +1,4 @@
-const app = require("../expressApp")
+const app = require("../expressApp").app
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/v1/*', function (req, res) {
