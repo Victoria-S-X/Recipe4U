@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../auth')
+const helpers = require('../../models/helpers')
 
-const Post = require('../../items/post')
+const Post = require('../../models/post')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -14,7 +16,7 @@ const upload = multer({
     }
 })
 // Create a new post
-router.post('/', upload.single('postImage'), async (req, res) => {
+router.post('/', upload.single('postImage'), auth, async (req, res) => {
     const fileName = req.file != null ? req.file.filename : null
     const post = new Post({
         postName: req.body.postName,
@@ -23,7 +25,7 @@ router.post('/', upload.single('postImage'), async (req, res) => {
         description: req.body.description,
         recipe: req.body.recipe,
         postImageName: fileName,
-        user: req.body.user
+        user: req.userID
     })
     try {
         const newPost = await post.save()
@@ -44,9 +46,9 @@ router.get('/', async (req, res) => {
 })
 
 // Delete all posts of a specific user
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
     try {
-        const query = { user: req.body.user }
+        const query = { user: req.userID }
         await Post.deleteMany(query)
         return res.status(200).json({ message: 'Deleted' })
     } catch (err) {
@@ -61,15 +63,17 @@ router.get('/:id', getPost, (req, res) => {
 })
 
 // Update partially one post
-router.patch('/:id', getPost, async (req, res) => {
+router.patch('/:id', getPost, auth, async (req, res) => {
+    const userID = helpers.idToObj(req.userID)
+    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
     if (req.body.postName != null) {
         res.post.postName = req.body.postName
     }
     if (req.body.cookTime != null) {
         res.post.cookTime = req.body.cookTime
     }
-    if (req.body.ingredient != null) {
-        res.post.ingredient = req.body.ingredient
+    if (req.body.ingredients != null) {
+        res.post.ingredients = req.body.ingredients
     }
     if (req.body.description != null) {
         res.post.description = req.body.description
@@ -89,7 +93,9 @@ router.patch('/:id', getPost, async (req, res) => {
 })
 
 // Delete a post
-router.delete('/:id', getPost, async (req, res) => {
+router.delete('/:id', getPost, auth, async (req, res) => {
+    const userID = helpers.idToObj(req.userID)
+    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
     try {
         await res.post.deleteOne()
         return res.status(200).json({ message: 'The post is deleted.' })
