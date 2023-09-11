@@ -5,8 +5,8 @@ const removeAttendance = require("./user").removeAttendance
 
 
 const schema = new mongoose.Schema({
-    userID: String,
-    postID: String,
+    userID: mongoose.Schema.Types.ObjectId,
+    postID: mongoose.Schema.Types.ObjectId,
     meetingLink: String,
     start: Date,
     duration: Number,
@@ -20,8 +20,22 @@ const Course = mongoose.model("Course", schema)
 
 
 
-exports.create = async (userID, postID, meetingLink, start, duration, city, address, maxAttendees) => {
-	if(!userID || !postID || !maxAttendees) return ResCode.MISSING_ARGUMENT
+function missingField(strUserID, strPostID, maxAttendees, start){
+	return !strUserID || !strPostID || !maxAttendees //TODO: || !start
+}
+
+
+
+
+exports.create = async (strUserID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+
+	//has needed data?
+	if(missingField(strUserID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
+
+	//valid reference IDs?
+	const [userID, postID] = helpers.idsToObjs([strUserID, strPostID])
+	if(!userID) return ResCode.BAD_INPUT
+
 
 	const course = new Course({
 		userID: userID,
@@ -107,9 +121,14 @@ exports.removeAttendee = async (courseID, userID) => {
 }
 
 
-exports.update = async (strID, meetingLink, start, duration, city, address, maxAttendees) => {
-	const id = helpers.idToObj(strID)
-    if(!id) return ResCode.MISSING_ARGUMENT
+exports.update = async (strCourseID, strUserID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+
+	//has mandatory fields?
+	if(missingField(strUserID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
+
+	//valid IDs?
+	const [courseID, userID, postID] = helpers.idsToObjs([strCourseID, strUserID, strPostID])
+    if(!courseID) return ResCode.BAD_INPUT
 
 	const update = {
         meetingLink: meetingLink,
@@ -135,9 +154,11 @@ exports.update = async (strID, meetingLink, start, duration, city, address, maxA
 
 exports.deleteCourses = async (strUserID) => {
 
-	//finds all courses created by user
+	//valid userID?
 	const userID = helpers.idToObj(strUserID)
     if(!userID) return ResCode.BAD_INPUT
+
+	//has courses?
 	const courses = await Course.find({userID: userID})
 	if(!courses) return ResCode.NOT_FOUND
 

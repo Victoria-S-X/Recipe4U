@@ -7,9 +7,9 @@ const courseModel = require("./course")
 
 exports.attend = async (strUserID, strCourseID) => {
 
-	const userID = helpers.idToObj(strUserID)
-    const courseID = helpers.idToObj(strCourseID)
-    if(!userID || !courseID) return ResCode.BAD_INPUT
+    //valid IDs?
+    const [userID, courseID] = helpers.idsToObjs([strUserID, strCourseID])
+    if(!userID) return ResCode.BAD_INPUT
 
     //adds to attendance list in course
     let resCode = await courseModel.addAttendee(courseID, userID)
@@ -25,15 +25,17 @@ exports.attend = async (strUserID, strCourseID) => {
 
 
 exports.leave = async (strUserID, strCourseID) => {
-    const userID = helpers.idToObj(strUserID)
-    const courseID = helpers.idToObj(strCourseID)
-    if(!userID || !courseID) return ResCode.BAD_INPUT
+
+    //valid IDs?
+    const [userID, courseID] = helpers.idsToObjs([strUserID, strCourseID])
+    if(!userID) return ResCode.BAD_INPUT
 
     return await exports.leaveObjID(userID, courseID)
 }
 
 
 exports.leaveObjID = async (userID, courseID) => {
+    
     //removes from course attendance list
     const resCodeCourse = await courseModel.removeAttendee(courseID, userID)
     if(resCodeCourse === ResCode.ERROR) return ResCode.ERROR //not used now but safest to keep

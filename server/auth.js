@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const jwtSecret = "Ag66gcrZI4fdEQ5wQpWtadhFZfPwpi" //obviously a bad idea in production
+const jwtSecret = process.env.JWT_SECRET
 
 
 exports.hash = async (password) => {

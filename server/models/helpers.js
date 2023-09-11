@@ -1,5 +1,6 @@
 const mongoose = require("../db").mongoose
 
+
 exports.ResCode = {
     SUCCESS: 0,
     ERROR: 1,
@@ -12,8 +13,28 @@ exports.ResCode = {
     UNAUTHORIZED: 8
 }
 
+
+//all elements will be null if one ID is bad
+exports.idsToObjs = (strIDs) => {
+    let result = []
+    for(const strID of strIDs){
+        const objID = exports.idToObj(strID)
+
+        if(!objID){
+            const length = strIDs.length
+            return Array.from({ length }, () => null) //inspired by ChatGPT
+        }
+
+        result.push(objID)
+    }
+    return result
+}
+
+
 exports.idToObj = (strID) => {
     try{
         return new mongoose.Types.ObjectId(strID)
-    } catch(err){ }
+    } catch(err){
+        console.error(`Bad ID: ${strID}`)
+    }
 }

@@ -4,6 +4,7 @@ const ResCode = require("../../models/helpers").ResCode
 const auth = require("../auth")
 
 
+
 //CREATE course
 app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
 
@@ -26,6 +27,9 @@ app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
             break
         case ResCode.MISSING_ARGUMENT:
             res.status(400).json({message: "Missing parameters"})
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({message: "Bad input"})
             break
     
         default:
