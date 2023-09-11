@@ -57,6 +57,7 @@ exports.get = async (strID) => {
 }
 
 
+//posted by user
 exports.getFromUser = async (userID) => {
 	return Course.find({userID: userID})
 }

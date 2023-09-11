@@ -64,7 +64,7 @@ exports.addAttendance = async (userID, courseID) => {
 	})
 
 	if(affected) return ResCode.SUCCESS
-	else return ResCode.ERROR //TODO: remove item from course list
+	else return ResCode.ERROR
 }
 
 

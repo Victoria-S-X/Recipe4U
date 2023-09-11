@@ -1,75 +1,562 @@
 {
 	"info": {
-		"_postman_id": "f7ee95b5-9cb9-442f-a6a9-42de46138872",
-		"name": "server",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "69883892-55aa-4573-9abf-bedf285e4bdc",
+		"name": "webDev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29625156"
 	},
 	"item": [
 		{
-			"name": "GET /api",
-			"event": [
+			"name": "posts",
+			"item": [
 				{
-					"listen": "prerequest",
-					"script": {
-						"id": "b58d92ec-5214-450c-adb0-28e068aa71b9",
-						"exec": [
-							""
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login user9}}",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript"
-					}
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "postName",
+									"value": "Swedish meatballs",
+									"type": "text"
+								},
+								{
+									"key": "recipe",
+									"value": "Just make them, idk",
+									"type": "text"
+								},
+								{
+									"key": "postImage",
+									"type": "file",
+									"src": "/Users/h/Downloads/dump.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{host}}/api",
-					"host": [
-						"{{host}}"
+			]
+		},
+		{
+			"name": "attendance",
+			"item": [
+				{
+					"name": "attend",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login oscarlagrosen}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/attend/64fde5ad30e125b8b4326fee",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"attend",
+								"64fde5ad30e125b8b4326fee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkODQxYjZjNzUxNmYxMWRlMDI1NzgiLCJpYXQiOjE2OTQzMzYwNzd9.8ulEkt41bqdAedfbVo3G6trbM6gMPbcclrLD5Qyij_U",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/leave/64fd54d61c92b8a5aea3cd5a",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"leave",
+								"64fd54d61c92b8a5aea3cd5a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "course",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login user9}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "meetingLink",
+									"value": "zoom.gov/3",
+									"type": "text"
+								},
+								{
+									"key": "maxAttendees",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/64ff272da68d171fd661b242/courses",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"64ff272da68d171fd661b242",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get FROM post",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login oscarlagrosen}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/64ff272da68d171fd661b242/courses",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"64ff272da68d171fd661b242",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/64fed6edc0b410fbe78636dc",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"64fed6edc0b410fbe78636dc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "courses posted BY user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "courses posted BY user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "course FROM id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login oscarlagrosen}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/64fde5be30e125b8b4326ff1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"64fde5be30e125b8b4326ff1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "{{login user9}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "lastName",
+									"value": "Robert",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logged in user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login user9}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "trakig",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "myPass",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "kor@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "firstName",
+									"value": "jag",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "ibland",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "localhost:3000/api/v1/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "user9",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "myPass",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
 					"path": [
-						"api"
+						"api",
+						"v1",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "user9",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "myPass",
+							"disabled": true
+						}
 					]
 				}
 			},
 			"response": []
 		}
 	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "05864cff-5cba-4070-bac3-a59328954ebf",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "e9c319be-3306-4fc5-ba34-fcf64391213a",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
 	"variable": [
 		{
-			"id": "cd185905-a834-4211-8030-583d17702534",
-			"key": "host",
-			"value": "http://localhost:3000",
-			"type": "string"
+			"key": "login user9",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8"
+		},
+		{
+			"key": "login oscarlagrosen",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkNmY2YWIxZTc4NWM2NDEzM2I1ZmIiLCJpYXQiOjE2OTQzMzA3ODN9.6UoUsv3Qx5liDcLJjoymNcjWgqwX12kR-em53dTcsmI"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
