@@ -1,93 +1,92 @@
 const app = require("../expressApp")
-const userItem = require("../../items/user")
+const userModel = require("../../models/user")
+const ResCode = require("../../models/helpers").ResCode
 const auth = require("../../auth")
+const authMiddleware = require("../auth")
 
 
-app.post("/api/users", async (req, res) => {
-    const email = req.body?.email
-    const username = req.body?.username
+// CREATE user
+app.post("/api/v1/users", async (req, res) => {
+
+    //hashes password
     const password = req.body?.password
+    if(!password){
+        res.status(400).json({message: "Missing password"})
+        return
+    }
+    const hash = await auth.hash(password)
 
-    if(username && password && email){
-        const hash = await auth.hash(password)
 
-        const resCode = await userItem.create(
-            email, 
-            username, 
-            hash, 
-            req.body?.firstName, 
-            req.body?.lastName, 
-            req.body?.age 
-        )
+    //tries to create user
+    const resCode = await userModel.create(
+        req.body?.email, 
+        req.body?.username, 
+        hash, 
+        req.body?.firstName, 
+        req.body?.lastName, 
+        req.body?.age 
+    )
 
-        switch (resCode) {
-            case userItem.SUCCESS:
-                res.status(201).json({message: "User created"})
-                break
-            case userItem.DUPLICATE_USER:
-                res.status(400).json({message: "Username is already taken"})
-                break
-        
-            default:
-                res.status(500).json({message: "Failed to create account"})
-                break
-        }
-
-        
-    } else {
-        res.status(400).json({message: "Missing parameters"})
+    
+    //handles errors and successes
+    switch (resCode) {
+        case ResCode.SUCCESS:
+            res.status(201).json({message: "User created"})
+            break
+        case ResCode.ITEM_ALREADY_EXISTS:
+            res.status(400).json({message: "Username is already taken"})
+            break
+        case ResCode.MISSING_ARGUMENT:
+            res.status(400).json({message: "Missing parameters"})
+            break
+    
+        default:
+            res.status(500).json({message: "Failed to create account"})
+            break
     }
 })
 
 
-app.get("/api/users/:username", async (req, res) => {
+// READ user info (for the logged in user)
+app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 
-    //provided password?
-    if(!req.body?.password){
-        res.status(400).json({message: "Password missing"})
+    const user = await userModel.get(req.userID)
+    if(!user) {
+        res.status(404).json({message: "User not found"})
         return
-    }
-
-    //user exists?
-    const username = req.params.username
-    const user = await userItem.find(username)
-    if(!user){
-        res.status(404).json({message: "User does not exist"})
-        return
-    }
-
-    //right password?
-    const authenticated = await auth.match(req.body.password, user.password)
-    if(authenticated){
-        //return data
-        res.status(200).json({
-            email: user.email,
-            username: user.username,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            age: user?.age
-        })
-    } else {
-        res.status(401).json({message: "Wrong password"})
     }
     
+    res.status(200).json({
+        email: user.email,
+        username: user.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        age: user?.age
+    })
 })
 
 
-app.patch("/api/users/:username", async (req, res) => {
+// UPDATE user info (for the logged in user)
+app.patch("/api/v1/users/", authMiddleware, async (req, res) => {
 
-    const success = await userItem.update(
+    const resCode = await userModel.update(
+        req.userID,
         req.body?.email, 
-        req.params.username, 
         req.body?.password, 
         req.body?.firstName, 
         req.body?.lastName, 
         req.body?.age 
     )
 
-    if(success){
-        res.status(200).json({message: "User updated successfully"})
-    } else {
-        res.status(404).json({message: "User does not exist"})
+    switch(resCode){
+        case ResCode.SUCCESS:
+            res.status(200).json({message: "User updated successfully"})
+            break
+        case ResCode.NOT_FOUND:
+            res.status(404).json({message: "User does not exist"})
+            break
+        default:
+            res.status(500).json({message: "Internal server error"})
+            break
     }
 })
