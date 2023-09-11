@@ -2,7 +2,7 @@
 
 Latest version: https://git.chalmers.se/courses/dit342/group-00-web
 
-This template refers to itself as `group-00-web`. In your project, use your group number in place of `00`.
+This template refers to itself as `group-20-web`. In your project, use your group number in place of `20`.
 
 ## Project Structure
 
@@ -67,8 +67,10 @@ The system provides a recipe sharing platform. People can post recipes on the si
 
 ### Pages
 
-* Home: 1-3 sentences describing what the page displays and what a user can do
-* Shopping cart: ...
+* Home : Acts as a place holder for the website,contains simple illustration with the heading(Website name)
+* User : This page shows the courses the user has published and the courses he has enrolled for.
+* Login-in : User can log in to their account 
+* Recipe post : User can enroll for a course and check reviews or write their own.
 
 ### Entity-Relationship (ER) Diagram
 
