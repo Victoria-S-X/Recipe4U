@@ -28,6 +28,7 @@ test:
       alias: mongo
   variables:
     MONGODB_URI: "mongodb://mongo:27017/serverTestDB"
+    JWT_SECRET: "Ag66gcrZI4fdEQ5wQpWtadhFZfPwpi"
   script:
     - cd server
     - npm run ci-test
