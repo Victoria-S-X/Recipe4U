@@ -24,7 +24,11 @@ module.exports = async (req, res, next) => {
         }
 
         //valid user?
-        if(!await userData.get(req.userID)) return res.status(401).json({ message: "Can't authenticate, user has been deleted" })
+        if(!await userData.get(req.userID)){
+          console.log(`Token payload: ${data.userID}`)
+          res.status(401).json({ message: "Can't authenticate, user has been deleted" })
+          return
+        }
 
         next()
     } catch (error) {

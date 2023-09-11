@@ -1,11 +1,278 @@
 {
 	"info": {
 		"_postman_id": "69883892-55aa-4573-9abf-bedf285e4bdc",
-		"name": "webDev",
+		"name": "server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29625156"
+		"_exporter_id": "29625156",
+		"_collection_link": "https://orange-meadow-774719.postman.co/workspace/New-Team-Workspace~2ab92b1f-3099-4a59-974b-4c725d3d14d7/collection/29625156-69883892-55aa-4573-9abf-bedf285e4bdc?action=share&source=collection_link&creator=29625156"
 	},
 	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user10",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "myPass",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "kor@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "firstName",
+									"value": "jag",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "ibland",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json()",
+									"pm.environment.set(\"bearer\", response.jwt)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZmNGJhNWFmZWNkNjA0NTZlMjc5MGMiLCJpYXQiOjE2OTQ0NTI2NTJ9.tS99y-wESmOvB18B1IIEXFfVSeGLGtgjoJhmW0TUjk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user10",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "myPass",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "user9",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "myPass",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "lastName",
+									"value": "Tengse",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logged in user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code 200\", () => {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Check if username is 'user10'\", function () {",
+									"    const responseData = pm.response.json()",
+									"",
+									"    pm.expect(responseData.username).to.equal(\"user10\")",
+									"})",
+									"",
+									"pm.test(\"Check if lastName is 'Tengse'\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.lastName).to.equal(\"Tengse\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "posts",
 			"item": [
@@ -321,242 +588,12 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "user",
-			"item": [
-				{
-					"name": "update",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "lastName",
-									"value": "Robert",
-									"type": "default"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/users/",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "logged in user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code 200\", () => {",
-									"    pm.response.to.have.status(200)",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "jwt",
-							"jwt": [
-								{
-									"key": "algorithm",
-									"value": "HS256",
-									"type": "string"
-								},
-								{
-									"key": "isSecretBase64Encoded",
-									"value": false,
-									"type": "boolean"
-								},
-								{
-									"key": "payload",
-									"value": "{}",
-									"type": "string"
-								},
-								{
-									"key": "addTokenTo",
-									"value": "header",
-									"type": "string"
-								},
-								{
-									"key": "headerPrefix",
-									"value": "Bearer",
-									"type": "string"
-								},
-								{
-									"key": "queryParamKey",
-									"value": "token",
-									"type": "string"
-								},
-								{
-									"key": "header",
-									"value": "{}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{login user9}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/users/",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "username",
-									"value": "trakig",
-									"type": "default"
-								},
-								{
-									"key": "password",
-									"value": "myPass",
-									"type": "default"
-								},
-								{
-									"key": "email",
-									"value": "kor@gmail.com",
-									"type": "default"
-								},
-								{
-									"key": "firstName",
-									"value": "jag",
-									"type": "text"
-								},
-								{
-									"key": "lastName",
-									"value": "ibland",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/users",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "localhost:3000/api/v1/login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "username",
-							"value": "user9",
-							"type": "default"
-						},
-						{
-							"key": "password",
-							"value": "myPass",
-							"type": "default"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:3000/api/v1/login",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"v1",
-						"login"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "user9",
-							"disabled": true
-						},
-						{
-							"key": "password",
-							"value": "myPass",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"variable": [
 		{
-			"key": "login user9",
-			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8"
-		},
-		{
-			"key": "login oscarlagrosen",
-			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkNmY2YWIxZTc4NWM2NDEzM2I1ZmIiLCJpYXQiOjE2OTQzMzA3ODN9.6UoUsv3Qx5liDcLJjoymNcjWgqwX12kR-em53dTcsmI"
+			"key": "login user10",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZmNGJhNWFmZWNkNjA0NTZlMjc5MGMiLCJpYXQiOjE2OTQ0NTI5NTd9.pWIvQD3ed3Crj0TkUgmoVUYEVgFrwtFgTBuGvIno_Bw"
 		}
 	]
 }

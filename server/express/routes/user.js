@@ -71,7 +71,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // UPDATE user info (for the logged in user)
 router.patch("/", authMiddleware, async (req, res) => {
 
-    const resCode = await userData.update(
+    const resCode = await userData.patch(
         req.userID,
         req.body?.email, 
         req.body?.password, 
