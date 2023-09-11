@@ -1,5 +1,5 @@
 const app = require("../expressApp")
-const userModel = require("../../models/user")
+const userData = require("../../db/user")
 const auth = require("../../auth")
 
 
@@ -19,7 +19,7 @@ app.post("/api/v1/login", async (req, res) => {
     }
 
     //does user exist?
-    const user = await userModel.find(username)
+    const user = await userData.find(username)
     if(!user){
         res.status(404).json({message: "User does not exist"})
         return

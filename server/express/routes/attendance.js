@@ -1,12 +1,12 @@
 const app = require("../expressApp")
 const auth = require("../auth")
-const attendanceModel = require("../../models/attendance")
-const ResCode = require("../../models/helpers").ResCode
+const attendance = require("../../db/attendance")
+const ResCode = require("../../db/helpers").ResCode
 
 
 //UPDATES attendance status for logged in user to provided course
 app.patch("/api/v1/attend/:courseID", auth, async (req, res) => {
-    const resCode = await attendanceModel.attend(req.userID, req.params.courseID)
+    const resCode = await attendance.attend(req.strUserID, req.params.courseID)
 
     switch(resCode) {
         case ResCode.SUCCESS: 
@@ -33,7 +33,7 @@ app.patch("/api/v1/attend/:courseID", auth, async (req, res) => {
 
 //UPDATES attendance status for logged in user to leave provided course
 app.patch("/api/v1/leave/:courseID", auth, async (req, res) => {
-    const resCode = await attendanceModel.leave(req.userID, req.params.courseID)
+    const resCode = await attendance.leave(req.strUserID, req.params.courseID)
 
     switch(resCode) {
         case ResCode.SUCCESS: 

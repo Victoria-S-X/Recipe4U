@@ -1,6 +1,6 @@
 const app = require("../expressApp")
-const userModel = require("../../models/user")
-const ResCode = require("../../models/helpers").ResCode
+const userData = require("../../db/user")
+const ResCode = require("../../db/helpers").ResCode
 const auth = require("../../auth")
 const authMiddleware = require("../auth")
 
@@ -18,7 +18,7 @@ app.post("/api/v1/users", async (req, res) => {
 
 
     //tries to create user
-    const resCode = await userModel.create(
+    const resCode = await userData.create(
         req.body?.email, 
         req.body?.username, 
         hash, 
@@ -50,7 +50,7 @@ app.post("/api/v1/users", async (req, res) => {
 // READ user info (for the logged in user)
 app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 
-    const user = await userModel.get(req.userID)
+    const user = await userData.get(req.strUserID)
     if(!user) {
         res.status(404).json({message: "User not found"})
         return
@@ -69,8 +69,8 @@ app.get("/api/v1/users/", authMiddleware, async (req, res) => {
 // UPDATE user info (for the logged in user)
 app.patch("/api/v1/users/", authMiddleware, async (req, res) => {
 
-    const resCode = await userModel.update(
-        req.userID,
+    const resCode = await userData.update(
+        req.strUserID,
         req.body?.email, 
         req.body?.password, 
         req.body?.firstName, 

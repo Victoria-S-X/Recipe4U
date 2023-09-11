@@ -1,22 +1,9 @@
-const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
-const removeAttendance = require("./user").removeAttendance
+const removeAttendance = require("./models/user").removeAttendance
 
 
-const schema = new mongoose.Schema({
-    userID: mongoose.Schema.Types.ObjectId,
-    postID: mongoose.Schema.Types.ObjectId,
-    meetingLink: String,
-    start: Date,
-    duration: Number,
-    city: String,
-    address: String,
-	attendees: [mongoose.Schema.Types.ObjectId],
-	maxAttendees: Number
-})
 
-const Course = mongoose.model("Course", schema)
 
 
 
@@ -35,6 +22,9 @@ exports.create = async (strUserID, strPostID, meetingLink, start, duration, city
 	//valid reference IDs?
 	const [userID, postID] = helpers.idsToObjs([strUserID, strPostID])
 	if(!userID) return ResCode.BAD_INPUT
+
+	//user owns post
+	
 
 
 	const course = new Course({

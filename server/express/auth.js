@@ -1,5 +1,6 @@
 const auth = require("../auth")
-const userModel = require("../models/user")
+const userData = require("../db/user")
+const idToObj = require("../db/helpers").idToObj
 
 
 module.exports = async (req, res, next) => {
@@ -13,9 +14,18 @@ module.exports = async (req, res, next) => {
         const data = auth.verifyJWT(token)
 
         //valid user?
-        if(!await userModel.get(data.userID)) return res.status(401).json({ message: "Can't authenticate, user has been deleted" })
+        if(!await userData.get(data.userID)) return res.status(401).json({ message: "Can't authenticate, user has been deleted" })
 
-        req.userID = data.userID
+        //set user id
+        req.strUserID = data.userID
+        req.userID = idToObj(data.userID) 
+
+        //valid userID?
+        if(!req.userID){
+          res.status(400).json({message: "Invalid username"})
+          return
+        }
+
         next()
     } catch (error) {
       return res.status(401).json({ message: "Invalid token" });

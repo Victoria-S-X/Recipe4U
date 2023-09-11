@@ -1,7 +1,7 @@
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
-const userModel = require("./user")
-const courseModel = require("./course")
+const userModel = require("./models/user")
+const courseModel = require("./models/course")
 
 
 

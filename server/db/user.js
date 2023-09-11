@@ -1,24 +1,6 @@
-const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
+const User = require("./models/user")
 const ResCode = helpers.ResCode
-
-
-const schema = new mongoose.Schema({
-	email: String,
-	username: {
-		type: String,
-		unique: true
-	},
-	password: String, 
-	firstName: String,
-	lastName: String,
-	age: Number,
-	attends: [mongoose.Schema.Types.ObjectId]
-})
-
-const User = mongoose.model('User', schema)
-
-
 
 exports.create = async (email, username, password, firstName, lastName, age) => {
 	if(!email || !username || !password) return ResCode.MISSING_ARGUMENT
