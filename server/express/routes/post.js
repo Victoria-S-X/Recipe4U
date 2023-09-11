@@ -1,9 +1,8 @@
-const express = require('express')
-const router = express.Router()
-const auth = require('../auth')
-const helpers = require('../../models/helpers')
+const router = require("../expressApp").Router("/api/v1/posts")
 
-const Post = require('../../models/post')
+const auth = require('../auth')
+
+const Post = require('../../db/models/post')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
@@ -15,6 +14,8 @@ const upload = multer({
         callback(null, imageMimeTypes.includes(file.mimetype))
     }
 })
+
+
 // Create a new post
 router.post('/', upload.single('postImage'), auth, async (req, res) => {
     const fileName = req.file != null ? req.file.filename : null
@@ -64,8 +65,8 @@ router.get('/:id', getPost, (req, res) => {
 
 // Update partially one post
 router.patch('/:id', getPost, auth, async (req, res) => {
-    const userID = helpers.idToObj(req.userID)
-    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
+    if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
+
     if (req.body.postName != null) {
         res.post.postName = req.body.postName
     }
@@ -94,8 +95,8 @@ router.patch('/:id', getPost, auth, async (req, res) => {
 
 // Delete a post
 router.delete('/:id', getPost, auth, async (req, res) => {
-    const userID = helpers.idToObj(req.userID)
-    if(!res.post.user.equals(userID)) return res.status(403).json({message: "Unauthorized"})
+    if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
+    
     try {
         await res.post.deleteOne()
         return res.status(200).json({ message: 'The post is deleted.' })

@@ -1,47 +1,13 @@
-const app = require("../expressApp")
-const courseModel = require("../../models/course")
-const ResCode = require("../../models/helpers").ResCode
+const router = require("../expressApp").Router("/api/v1/courses")
+const courseData = require("../../db/course")
+const ResCode = require("../../db/helpers").ResCode
 const auth = require("../auth")
 
 
 
-//CREATE course
-app.post("/api/v1/posts/:id/courses", auth, async (req, res) => {
-
-    //TODO: get post - verify user is owner of post
-
-    const resCode = await courseModel.create(
-        req.userID,
-        req.params.id,
-        req.body?.meetingLink,
-        req.body?.start,
-        req.body?.duration,
-        req.body?.city,
-        req.body?.address,
-        req.body?.maxAttendees
-    )
-
-    switch(resCode){
-        case ResCode.SUCCESS:
-            res.status(201).json({message: "Course created"})
-            break
-        case ResCode.MISSING_ARGUMENT:
-            res.status(400).json({message: "Missing parameters"})
-            break
-        case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
-            break
-    
-        default:
-            res.status(500).json({message: "Failed to create course"})
-            break
-    }
-})
-
-
 //GET course
-app.get("/api/v1/courses/:id", async (req, res) => {
-    const course = await courseModel.get(req.params.id)
+router.get("/:id", async (req, res) => {
+    const course = await courseData.get(req.params.id)
     if(!course) {
         res.status(404).json({message: "Course not found"})
         return
@@ -54,10 +20,9 @@ app.get("/api/v1/courses/:id", async (req, res) => {
 
 
 //GET courses posted by logged in user
-app.get("/api/v1/courses", auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
 
-    //should not return null as req.userID is verified as valid in the authentication
-    const courses = await courseModel.getFromUser(req.userID)
+    const courses = await courseData.getFromUser(req.userID)
 
     if(!courses){
         res.status(500).json({message: "Something went wrong"})
@@ -76,6 +41,11 @@ app.get("/api/v1/courses", auth, async (req, res) => {
 })
 
 
+router.get("/", async (req, res) => {
+    
+})
+
+
 function publicParams(course){
     return {
         meetingLink: course?.meetingLink,
@@ -89,14 +59,14 @@ function publicParams(course){
 
 
 //UPDATES the specified course
-app.put("/api/v1/courses/:id", auth, async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     
 })
 
 
 //REMOVES all courses created by the logged in user
-app.delete("/api/v1/courses", auth, async (req, res) => {
-    const resCode = await courseModel.deleteCourses(req.userID)
+router.delete("/", auth, async (req, res) => {
+    const resCode = await courseData.deleteCourses(req.userID)
 
     switch(resCode) {
         case ResCode.SUCCESS:
@@ -118,8 +88,8 @@ app.delete("/api/v1/courses", auth, async (req, res) => {
 
 
 //REMOVES course
-app.delete("/api/v1/courses/:id", auth, async (req, res) => {
-    const resCode = await courseModel.deleteCourse(req.params.id, req.userID)
+router.delete("/:id", auth, async (req, res) => {
+    const resCode = await courseData.deleteCourse(req.params.id, req.userID)
 
     switch(resCode) {
         case ResCode.SUCCESS:

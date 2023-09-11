@@ -1,40 +1,29 @@
-const mongoose = require("../db").mongoose
 const helpers = require("./helpers")
 const ResCode = helpers.ResCode
-const removeAttendance = require("./user").removeAttendance
-
-
-const schema = new mongoose.Schema({
-    userID: mongoose.Schema.Types.ObjectId,
-    postID: mongoose.Schema.Types.ObjectId,
-    meetingLink: String,
-    start: Date,
-    duration: Number,
-    city: String,
-    address: String,
-	attendees: [mongoose.Schema.Types.ObjectId],
-	maxAttendees: Number
-})
-
-const Course = mongoose.model("Course", schema)
+const removeAttendance = require("./models/user").removeAttendance
+const getPost = require("./post").getPost
+const Course = require("./models/course")
 
 
 
-function missingField(strUserID, strPostID, maxAttendees, start){
-	return !strUserID || !strPostID || !maxAttendees //TODO: || !start
+function missingField(userID, strPostID, maxAttendees, start){
+	return !userID || !strPostID || !maxAttendees //TODO: || !start
 }
 
 
-
-
-exports.create = async (strUserID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
 
 	//has needed data?
-	if(missingField(strUserID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
+	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
 
-	//valid reference IDs?
-	const [userID, postID] = helpers.idsToObjs([strUserID, strPostID])
-	if(!userID) return ResCode.BAD_INPUT
+	//valid postID?
+	const postID = helpers.idToObj(strPostID)
+	if(!postID) return ResCode.BAD_INPUT
+
+	//user owns post?
+	const post = await getPost(postID)
+	if(!post) return ResCode.NOT_FOUND
+	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
 
 
 	const course = new Course({
@@ -67,11 +56,17 @@ exports.get = async (strID) => {
     return Course.findById(id)
 }
 
-exports.getFromUser = async (strUserID) => {
-	const userID = helpers.idToObj(strUserID)
-    if(!userID) return
 
+exports.getFromUser = async (userID) => {
 	return Course.find({userID: userID})
+}
+
+
+exports.getFromPost = async (strPostID) => {
+	const postID = helpers.idToObj(strPostID)
+	if(!postID) return ResCode.BAD_INPUT
+
+	return Course.find({postID: postID})
 }
 
 
@@ -121,13 +116,13 @@ exports.removeAttendee = async (courseID, userID) => {
 }
 
 
-exports.update = async (strCourseID, strUserID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+exports.update = async (strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
 
 	//has mandatory fields?
-	if(missingField(strUserID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
+	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
 
 	//valid IDs?
-	const [courseID, userID, postID] = helpers.idsToObjs([strCourseID, strUserID, strPostID])
+	const [courseID, postID] = helpers.idsToObjs([strCourseID, strPostID])
     if(!courseID) return ResCode.BAD_INPUT
 
 	const update = {
@@ -152,11 +147,7 @@ exports.update = async (strCourseID, strUserID, strPostID, meetingLink, start, d
 }
 
 
-exports.deleteCourses = async (strUserID) => {
-
-	//valid userID?
-	const userID = helpers.idToObj(strUserID)
-    if(!userID) return ResCode.BAD_INPUT
+exports.deleteCourses = async (userID) => {
 
 	//has courses?
 	const courses = await Course.find({userID: userID})
@@ -174,22 +165,18 @@ exports.deleteCourses = async (strUserID) => {
 }
 
 
-exports.deleteCourse = async (strCourseID, strUserID) => {
+exports.deleteCourse = async (strCourseID, userID) => {
 
 	//valid courseID?
 	const courseID = helpers.idToObj(strCourseID)
 	if(!courseID) return ResCode.BAD_INPUT
-
-	//valid userID?
-	const userID = helpers.idToObj(strUserID)
-    if(!userID) return ResCode.BAD_INPUT
 
 	//course exists?
 	const course = await Course.findById(courseID)
 	if(!course) return ResCode.NOT_FOUND
 	
 	//course belongs to user?
-	if(course.userID !== strUserID) return ResCode.UNAUTHORIZED
+	if(!userID.equals(course.userID)) return ResCode.UNAUTHORIZED
 
 	return exports.deleteCourseObjID(courseID)
 }

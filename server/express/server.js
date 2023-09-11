@@ -1,9 +1,11 @@
 
 // THE ORDER OF REQUIRES IS VERY IMPORTANT
-const app = require("./expressApp")
+const app = require("./expressApp").app
 require("./routes/login")
 require("./routes/course")
 require("./routes/user")
+require("./routes/post")
+require("./routes/postsCourses")
 require("./routes/attendance")
 require("./routes/frontend")
 require("./routes/error")
