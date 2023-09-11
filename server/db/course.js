@@ -147,6 +147,7 @@ exports.update = async (strCourseID, userID, strPostID, meetingLink, start, dura
 }
 
 
+//deletes all courses from a user
 exports.deleteCourses = async (userID) => {
 
 	//has courses?
@@ -162,6 +163,18 @@ exports.deleteCourses = async (userID) => {
 	}
 
 	return resCodeResult
+}
+
+
+//DOES NOT AUTHENTICATE USER
+exports.deleteCoursesFromPost = async (postID) => {
+	try{
+		await Course.deleteMany({postID: postID})
+		return ResCode.SUCCESS
+	} catch(err){
+		console.error(err)
+		return ResCode.ERROR
+	}
 }
 
 
