@@ -26,6 +26,9 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -33,7 +36,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user10",
+									"value": "user13",
 									"type": "default"
 								},
 								{
@@ -86,7 +89,7 @@
 									"});",
 									"",
 									"const response = pm.response.json()",
-									"pm.environment.set(\"bearer\", response.jwt)"
+									"pm.collectionVariables.set(\"jwt\", response.jwt)"
 								],
 								"type": "text/javascript"
 							}
@@ -94,14 +97,7 @@
 					],
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZmNGJhNWFmZWNkNjA0NTZlMjc5MGMiLCJpYXQiOjE2OTQ0NTI2NTJ9.tS99y-wESmOvB18B1IIEXFfVSeGLGtgjoJhmW0TUjk",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "POST",
 						"header": [],
@@ -110,7 +106,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user10",
+									"value": "user13",
 									"type": "default"
 								},
 								{
@@ -168,7 +164,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer}}",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]
@@ -218,12 +214,6 @@
 									"    pm.response.to.have.status(200)",
 									"})",
 									"",
-									"pm.test(\"Check if username is 'user10'\", function () {",
-									"    const responseData = pm.response.json()",
-									"",
-									"    pm.expect(responseData.username).to.equal(\"user10\")",
-									"})",
-									"",
 									"pm.test(\"Check if lastName is 'Tengse'\", function () {",
 									"    const responseData = pm.response.json();",
 									"",
@@ -244,7 +234,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer}}",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]
@@ -278,13 +268,40 @@
 			"item": [
 				{
 					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const response = pm.response.json()",
+									"pm.globals.set(\"postId\", response._id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{login user9}}",
-								"type": "text"
+								"value": "{{user10}}",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -303,10 +320,235 @@
 								{
 									"key": "postImage",
 									"type": "file",
-									"src": "/Users/h/Downloads/dump.png"
+									"src": "/Users/h/Downloads/db8516a7-101f-4c7a-9ed9-7740b6a70672.jpg"
 								}
 							]
 						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/:postId",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "{{postId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update post partially",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ingredients\": [\"pork\", \"broth\", \"Vegetables\", \"Herbs\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/:postId",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "{{postId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete one post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/:postId",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								":postId"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "{{postId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
 						"url": {
 							"raw": "localhost:3000/api/v1/posts",
 							"host": [
@@ -325,78 +567,21 @@
 			]
 		},
 		{
-			"name": "attendance",
-			"item": [
-				{
-					"name": "attend",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{login oscarlagrosen}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/attend/64fde5ad30e125b8b4326fee",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"attend",
-								"64fde5ad30e125b8b4326fee"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "leave",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkODQxYjZjNzUxNmYxMWRlMDI1NzgiLCJpYXQiOjE2OTQzMzYwNzd9.8ulEkt41bqdAedfbVo3G6trbM6gMPbcclrLD5Qyij_U",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "localhost:3000/api/v1/leave/64fd54d61c92b8a5aea3cd5a",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"v1",
-								"leave",
-								"64fd54d61c92b8a5aea3cd5a"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "course",
 			"item": [
 				{
 					"name": "create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -416,12 +601,13 @@
 								{
 									"key": "maxAttendees",
 									"value": "5",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/64ff272da68d171fd661b242/courses",
+							"raw": "localhost:3000/api/v1/posts/{{postId}}/courses",
 							"host": [
 								"localhost"
 							],
@@ -430,7 +616,7 @@
 								"api",
 								"v1",
 								"posts",
-								"64ff272da68d171fd661b242",
+								"{{postId}}",
 								"courses"
 							]
 						}
@@ -588,12 +774,99 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "attendance",
+			"item": [
+				{
+					"name": "attend",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{login oscarlagrosen}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/attend/64fde5ad30e125b8b4326fee",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"attend",
+								"64fde5ad30e125b8b4326fee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "leave",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkODQxYjZjNzUxNmYxMWRlMDI1NzgiLCJpYXQiOjE2OTQzMzYwNzd9.8ulEkt41bqdAedfbVo3G6trbM6gMPbcclrLD5Qyij_U",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/leave/64fd54d61c92b8a5aea3cd5a",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"leave",
+								"64fd54d61c92b8a5aea3cd5a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
 		{
-			"key": "login user10",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZmNGJhNWFmZWNkNjA0NTZlMjc5MGMiLCJpYXQiOjE2OTQ0NTI5NTd9.pWIvQD3ed3Crj0TkUgmoVUYEVgFrwtFgTBuGvIno_Bw"
+			"key": "jwt",
+			"value": ""
 		}
 	]
 }

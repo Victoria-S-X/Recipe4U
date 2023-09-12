@@ -3,50 +3,8 @@ const ResCode = helpers.ResCode
 const removeAttendance = require("./models/user").removeAttendance
 const getPost = require("./post").getPost
 const Course = require("./models/course")
+const createCourse = require("./postsCourses").createCourse
 
-
-
-function missingField(userID, strPostID, maxAttendees, start){
-	return !userID || !strPostID || !maxAttendees //TODO: || !start
-}
-
-
-exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
-
-	//has needed data?
-	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
-
-	//valid postID?
-	const postID = helpers.idToObj(strPostID)
-	if(!postID) return ResCode.BAD_INPUT
-
-	//user owns post?
-	const post = await getPost(postID)
-	if(!post) return ResCode.NOT_FOUND
-	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
-
-
-	const course = new Course({
-		userID: userID,
-		postID: postID,
-		meetingLink: meetingLink,
-		start: start,
-		duration: duration,
-		city: city,
-		address: address,
-		attendees: [],
-		maxAttendees: maxAttendees
-	})
-
-	try{
-		await course.save()
-
-		return ResCode.SUCCESS
-	} catch (err){
-		console.log(err)
-		return ResCode.ERROR
-	}
-}
 
 
 exports.get = async (strID) => {
@@ -63,87 +21,35 @@ exports.getFromUser = async (userID) => {
 }
 
 
-exports.getFromPost = async (strPostID) => {
-	const postID = helpers.idToObj(strPostID)
-	if(!postID) return ResCode.BAD_INPUT
-
-	return Course.find({postID: postID})
-}
-
-
-exports.addAttendee = async (courseID, userID) => {
-	const criteria = {
-		_id: courseID,
-		$expr: { $lt: [{ $size: '$attendees' }, '$maxAttendees'] }, //attendees not full (inspired by ChatGPT)
-		attendees: { $not: { $elemMatch: { $eq: userID } } } //user has not already signed up to course (inspired by ChatGPT)
-	}
-	const operation = {
-		$push: { attendees: userID }
-	}
-
-	try{
-		const success = await Course.findOneAndUpdate(criteria, operation, { new: true })
-
-		if(success) return ResCode.SUCCESS
-		else {
-			const course = await Course.findById(courseID)
-
-			if(course) {
-				if(course.attendees.length == course.maxAttendees) return ResCode.ALREADY_FULL
-				else if(course.attendees.includes(userID)) return ResCode.ITEM_ALREADY_EXISTS
-				else return ResCode.ERROR
-			}
-			else return ResCode.NOT_FOUND
-		}
-
-	} catch(err){
-		console.error(err)
-		return ResCode.ERROR
-	}
-}
-
-
-exports.removeAttendee = async (courseID, userID) => {
-	const course = await Course.findByIdAndUpdate(
-		courseID, 
-		{ $pull: { attendees: userID } }
-	)
-
-	if(course){
-		if(course.attendees.includes(userID)) return ResCode.SUCCESS
-		else return ResCode.NOT_FOUND_1 //user was never attending the course
-	}
-	else return ResCode.NOT_FOUND //course not found
-}
-
-
-exports.update = async (strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
-
-	//has mandatory fields?
-	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
+exports.put = async (strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
 
 	//valid IDs?
 	const [courseID, postID] = helpers.idsToObjs([strCourseID, strPostID])
     if(!courseID) return ResCode.BAD_INPUT
 
-	const update = {
-        meetingLink: meetingLink,
-        start: start,
-        duration: duration,
-        city: city,
-        address: address,
-        maxAttendees: maxAttendees
-    }
+	//post exits?
+	const post = await getPost(postID)
+	if(!post) return ResCode.NOT_FOUND_1
+
+	//user owns post?
+	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
+
+
+	//create course if it does not exist
+	const course = Course.findById(id)
+	if(!course) return createCourse(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees)
 
 	try{
-		const item = await Course.findOneAndUpdate(id, update, { new: true })
-
-		if(item) return ResCode.SUCCESS
-		else return ResCode.NOT_FOUND
-
+		course.meetingLink = meetingLink
+		course.start = start
+		course.duration = duration
+		course.city = city
+		course.address = address
+		course.maxAttendees = maxAttendees
+		course.postID = postID
 	} catch(err){
-		console.error(err)
-		return ResCode.ERROR
+		console.error(`courses PUT error:${err}`)
+		return ResCode.BAD_INPUT
 	}
 }
 

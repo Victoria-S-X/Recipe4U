@@ -1,13 +1,13 @@
 const router = require("./post")
 const auth = require("../auth")
 const ResCode = require("../../db/helpers").ResCode
-const courseData = require("../../db/course")
+const postsCourses = require("../../db/postsCourses")
 
 
 //CREATE course
 router.post("/:id/courses", auth, async (req, res) => {
 
-    const resCode = await courseData.create(
+    const resCode = await postsCourses.create(
         req.userID,
         req.params.id,
         req.body?.meetingLink,
@@ -21,9 +21,6 @@ router.post("/:id/courses", auth, async (req, res) => {
     switch(resCode){
         case ResCode.SUCCESS:
             res.status(201).json({message: "Course created"})
-            break
-        case ResCode.MISSING_ARGUMENT:
-            res.status(422).json({message: "Missing parameters"})
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Bad input"})
@@ -43,7 +40,7 @@ router.post("/:id/courses", auth, async (req, res) => {
 
 
 router.get("/:id/courses", auth, async (req, res) => {
-    const response = await courseData.getFromPost(req.params.id)
+    const response = await postsCourses.getFromPost(req.params.id)
 
     switch(response){
         case ResCode.BAD_INPUT:

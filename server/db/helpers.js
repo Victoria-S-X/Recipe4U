@@ -1,4 +1,5 @@
 const mongoose = require("./db").mongoose
+const ValidationError = require("mongoose").Error.ValidationError
 
 
 exports.ResCode = {
@@ -38,3 +39,6 @@ exports.idToObj = (strID) => {
         console.error(`Bad ID: ${strID}`)
     }
 }
+
+
+exports.ValidationError = ValidationError

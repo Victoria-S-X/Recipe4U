@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
 
 
 //GET courses posted by logged in user
-router.get("/", auth, async (req, res) => {
+router.get("/posted", auth, async (req, res) => {
 
     const courses = await courseData.getFromUser(req.userID)
 
@@ -41,10 +41,6 @@ router.get("/", auth, async (req, res) => {
 })
 
 
-router.get("/", async (req, res) => {
-    
-})
-
 
 function publicParams(course){
     return {
@@ -60,7 +56,28 @@ function publicParams(course){
 
 //UPDATES the specified course
 router.put("/:id", auth, async (req, res) => {
-    
+    const resCode = await courseData.put(
+        req.params.id,
+        req.body?.postID,
+        req.body?.meetingLink,
+        req.body?.start,
+        req.body?.duration,
+        req.body?.city,
+        req.body?.address,
+        req.body?.maxAttendees
+    )
+
+    switch(resCode){
+        case ResCode.SUCCESS:
+            res.status(200).json({message: "Course updated"})
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({message: "Bad input"})
+            break
+        case ResCode.UNAUTHORIZED:
+            res.status(401).json({message: "User does not own post"})
+            break
+    }
 })
 
 

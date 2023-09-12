@@ -1,6 +1,5 @@
 const router = require("../expressApp").Router("/api/v1/users")
 
-const app = require("../expressApp")
 const userData = require("../../db/user")
 const ResCode = require("../../db/helpers").ResCode
 const auth = require("../../auth")

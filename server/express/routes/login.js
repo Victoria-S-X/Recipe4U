@@ -1,6 +1,5 @@
 const router = require("../expressApp").Router("/api/v1/login")
 
-const app = require("../expressApp")
 const userData = require("../../db/user")
 const auth = require("../../auth")
 
