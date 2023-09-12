@@ -23,13 +23,13 @@ router.post("/:id/courses", auth, async (req, res) => {
             res.status(201).json({message: "Course created"})
             break
         case ResCode.MISSING_ARGUMENT:
-            res.status(400).json({message: "Missing parameters"})
+            res.status(422).json({message: "Missing parameters"})
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Bad input"})
             break
         case ResCode.UNAUTHORIZED:
-            res.status(403).json({message: "User does not own post"})
+            res.status(401).json({message: "User does not own post"})
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "Post not found"})

@@ -102,7 +102,7 @@ router.delete("/:id", auth, async (req, res) => {
             res.status(404).json({message: "Course does not exist"})
             break
         case ResCode.UNAUTHORIZED:
-            res.status(403).json({message: "User is not authorized to delete course"})
+            res.status(401).json({message: "User is not authorized to delete course"})
             break
 
         default:

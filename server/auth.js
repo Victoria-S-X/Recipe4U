@@ -5,7 +5,7 @@ const jwtSecret = process.env.JWT_SECRET
 
 
 exports.hash = async (password) => {
-    const salt = await bcrypt.genSalt(3) // use higher in production, would be too slow for testing
+    const salt = await bcrypt.genSalt(10)
     
     const hash = await new Promise((resolve, reject) => {
         bcrypt.hash(password, salt, (err, hash) => {

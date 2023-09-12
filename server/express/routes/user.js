@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     //hashes password
     const password = req.body?.password
     if(!password){
-        res.status(400).json({message: "Missing password"})
+        res.status(422).json({message: "Missing password"})
         return
     }
     const hash = await auth.hash(password)
@@ -36,10 +36,10 @@ router.post("/", async (req, res) => {
             res.status(201).json({message: "User created"})
             break
         case ResCode.ITEM_ALREADY_EXISTS:
-            res.status(400).json({message: "Username is already taken"})
+            res.status(403).json({message: "Username is already taken"})
             break
         case ResCode.MISSING_ARGUMENT:
-            res.status(400).json({message: "Missing parameters"})
+            res.status(422).json({message: "Missing parameters"})
             break
     
         default:
