@@ -84,7 +84,10 @@ router.delete("/", auth, async (req, res) => {
 
     switch(response.resCode) {
         case ResCode.SUCCESS:
-            res.status(200).json({message: `Successful deletion`})
+            res.status(200).json({
+                message: "Successful deletion",
+                amtDeleted: response?.amtDeleted
+            })
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({
@@ -93,11 +96,17 @@ router.delete("/", auth, async (req, res) => {
             })
             break
         case ResCode.NOT_FOUND:
-            res.status(200).json({message: "No courses to delete"})
+            res.status(200).json({
+                message: "No courses to delete",
+                amtDeleted: response?.amtDeleted
+            })
             break
 
         default:
-            res.status(500).json({message: "Internal server error"})
+            res.status(500).json({
+                message: "Internal server error",
+                error: response?.error
+            })
             break
     }
 
