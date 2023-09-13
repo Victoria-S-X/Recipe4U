@@ -2,7 +2,7 @@ const mongoose = require("./db").mongoose
 const ValidationError = require("mongoose").Error.ValidationError
 
 
-exports.ResCode = {
+const ResCode = {
     SUCCESS: 0,
     ERROR: 1,
     MISSING_ARGUMENT: 2,
@@ -11,7 +11,21 @@ exports.ResCode = {
     ALREADY_FULL: 5,
     NOT_FOUND_1: 6,
     BAD_INPUT: 7,
-    UNAUTHORIZED: 8
+    UNAUTHORIZED: 8,
+    MISSING_RESPONSE_CODE: 9,
+}
+
+
+exports.getResCode = (response) => {
+    if(!response) return ResCode.MISSING_RESPONSE_CODE
+
+    const isResCode = Object.values(ResCode).includes(response)
+    if(isResCode) return response
+
+    if("resCode" in response) return response.resCode
+
+    console.error(`Unknown response: ${response}`)
+    return ResCode.ERROR
 }
 
 
@@ -41,4 +55,5 @@ exports.idToObj = (strID) => {
 }
 
 
+exports.ResCode = ResCode
 exports.ValidationError = ValidationError

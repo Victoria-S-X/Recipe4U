@@ -1,22 +1,8 @@
 const router = require("../expressApp").Router("/api/v1/courses")
 const courseData = require("../../db/course")
-const ResCode = require("../../db/helpers").ResCode
+const {ResCode, getResCode} = require("../../db/helpers")
 const auth = require("../auth")
 
-
-
-//GET course
-router.get("/:id", async (req, res) => {
-    const course = await courseData.get(req.params.id)
-    if(!course) {
-        res.status(404).json({message: "Course not found"})
-        return
-    }
-    
-    res.status(200).json(
-        publicParams(course)
-    )
-})
 
 
 //GET courses posted by logged in user
@@ -33,7 +19,7 @@ router.get("/posted", auth, async (req, res) => {
 
     for(const course of courses){
         result.push(
-            publicParams(course)
+            course
         )
     }
 
@@ -41,42 +27,54 @@ router.get("/posted", auth, async (req, res) => {
 })
 
 
-
-function publicParams(course){
-    return {
-        meetingLink: course?.meetingLink,
-        start: course?.start,
-        duration: course?.duration,
-        city: course?.city,
-        address: course?.address,
-        maxAttendees: course?.maxAttendees
+//GET course
+router.get("/:id", async (req, res) => {
+    const course = await courseData.get(req.params.id)
+    if(!course) {
+        res.status(404).json({message: "Course not found"})
+        return
     }
-}
+    
+    res.status(200).json(
+        course
+    )
+})
 
 
 //UPDATES the specified course
 router.put("/:id", auth, async (req, res) => {
-    const resCode = await courseData.put(
-        req.params.id,
-        req.body?.postID,
-        req.body?.meetingLink,
-        req.body?.start,
-        req.body?.duration,
-        req.body?.city,
-        req.body?.address,
-        req.body?.maxAttendees
-    )
+    const response = await courseData.put({
+        strCourseID: req.params.id,
+        userID: req.userID,
+        strPostID: req.body?.postID,
+        meetingLink: req.body?.meetingLink,
+        start: req.body?.start,
+        duration: req.body?.duration,
+        city: req.body?.city,
+        address: req.body?.address,
+        maxAttendees: req.body?.maxAttendees
+    })
 
+    const resCode = getResCode(response)
     switch(resCode){
         case ResCode.SUCCESS:
-            res.status(200).json({message: "Course updated"})
+            res.status(200).json(response?.data)
             break
         case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.data
+            })
             break
         case ResCode.UNAUTHORIZED:
             res.status(401).json({message: "User does not own post"})
             break
+        case ResCode.NOT_FOUND_1:
+            res.status(404).json({message: `Post '${response.data}' not found`})
+            break
+
+        default:
+            res.status(500).json({message: `Internal server error. Code ${resCode}}`})
     }
 })
 

@@ -1,9 +1,9 @@
 const router = require("../expressApp").Router("/api/v1/users")
 
 const userData = require("../../db/user")
-const ResCode = require("../../db/helpers").ResCode
 const auth = require("../../auth")
 const authMiddleware = require("../auth")
+const { ResCode, getResCode } = require("../../db/helpers")
 
 
 // CREATE user
@@ -18,8 +18,7 @@ router.post("/", async (req, res) => {
     const hash = await auth.hash(password)
 
 
-    //tries to create user
-    const resCode = await userData.create(
+    const result = await userData.create(
         req.body?.email, 
         req.body?.username, 
         hash, 
@@ -27,12 +26,11 @@ router.post("/", async (req, res) => {
         req.body?.lastName, 
         req.body?.age 
     )
-
     
-    //handles errors and successes
+    const resCode = getResCode(result)
     switch (resCode) {
         case ResCode.SUCCESS:
-            res.status(201).json({message: "User created"})
+            res.status(201).json(result?.data)
             break
         case ResCode.ITEM_ALREADY_EXISTS:
             res.status(403).json({message: "Username is already taken"})
@@ -62,7 +60,8 @@ router.get("/", authMiddleware, async (req, res) => {
         username: user.username,
         firstName: user?.firstName,
         lastName: user?.lastName,
-        age: user?.age
+        age: user?.age,
+        _id: user._id
     })
 })
 

@@ -1,24 +1,17 @@
-const helpers = require("./helpers")
-const ResCode = helpers.ResCode
-const getPost = require("./post").getPost
+const {ResCode, idToObj, ValidationError, getResCode} = require("./helpers")
+const {postValidation} = require("./post")
 const Course = require("./models/course")
 
 
-exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID=null) => {
 
-	//valid postID?
-	const postID = helpers.idToObj(strPostID)
-	if(!postID) return ResCode.BAD_INPUT
-
-	//user owns post?
-	const post = await getPost(postID)
-	if(!post) return ResCode.NOT_FOUND
-	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
-
+	//valid post?
+	const postResponse = await postValidation(userID, strPostID)
+	if(getResCode(postResponse) !== ResCode.SUCCESS) return getResCode(postResponse)
 
 	const course = new Course({
 		userID: userID,
-		postID: postID,
+		postID: postResponse.postID,
 		meetingLink: meetingLink,
 		start: start,
 		duration: duration,
@@ -28,14 +21,22 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 		maxAttendees: maxAttendees
 	})
 
+	
 	try{
-		await course.save()
+		if(courseID) course._id = courseID
 
-		return ResCode.SUCCESS
+		const data = await course.save()
+		
+		return {
+			resCode: ResCode.SUCCESS,
+			data: data
+		}
 	} catch (err){
-		if(err instanceof helpers.ValidationError){
-			console.log(err)
-			return ResCode.BAD_INPUT
+		if(err instanceof ValidationError){
+			return {
+				resCode: ResCode.BAD_INPUT,
+				data: err
+			}
 		}
 
 		console.log(err)
@@ -45,7 +46,7 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 
 
 exports.getFromPost = async (strPostID) => {
-	const postID = helpers.idToObj(strPostID)
+	const postID = idToObj(strPostID)
 	if(!postID) return ResCode.BAD_INPUT
 
 	return Course.find({postID: postID})

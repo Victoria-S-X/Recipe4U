@@ -1,14 +1,13 @@
-const helpers = require("./helpers")
-const ResCode = helpers.ResCode
+const {idToObj, ResCode, getResCode} = require("./helpers")
 const removeAttendance = require("./models/user").removeAttendance
-const getPost = require("./post").getPost
+const {postValidation} = require("./post")
 const Course = require("./models/course")
-const createCourse = require("./postsCourses").createCourse
+const createCourse = require("./postsCourses").create
 
 
 
 exports.get = async (strID) => {
-    const id = helpers.idToObj(strID)
+    const id = idToObj(strID)
     if(!id) return
 
     return Course.findById(id)
@@ -21,23 +20,23 @@ exports.getFromUser = async (userID) => {
 }
 
 
-exports.put = async (strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
+exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees}) => {
 
-	//valid IDs?
-	const [courseID, postID] = helpers.idsToObjs([strCourseID, strPostID])
-    if(!courseID) return ResCode.BAD_INPUT
+	//valid courseID?
+	const courseID = idToObj(strCourseID)
+    if(!courseID) return {
+		resCode: ResCode.BAD_INPUT,
+		data: "Invalid course ID"
+	}
 
-	//post exits?
-	const post = await getPost(postID)
-	if(!post) return ResCode.NOT_FOUND_1
-
-	//user owns post?
-	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
+	//valid post?
+	const postResponse = await postValidation(userID, strPostID)
+	if(getResCode(postResponse) !== ResCode.SUCCESS) return getResCode(postResponse)
 
 
 	//create course if it does not exist
-	const course = Course.findById(id)
-	if(!course) return createCourse(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees)
+	const course = await Course.findById(courseID)
+	if(!course) return createCourse(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID)
 
 	try{
 		course.meetingLink = meetingLink
@@ -46,10 +45,19 @@ exports.put = async (strCourseID, userID, strPostID, meetingLink, start, duratio
 		course.city = city
 		course.address = address
 		course.maxAttendees = maxAttendees
-		course.postID = postID
+		course.postID = postResponse.postID
+
+		await course.save()
+
+		return {
+			resCode: ResCode.SUCCESS,
+			data: course
+		}
 	} catch(err){
-		console.error(`courses PUT error:${err}`)
-		return ResCode.BAD_INPUT
+		return {
+			resCode: ResCode.BAD_INPUT,
+			data: err
+		}
 	}
 }
 
@@ -66,7 +74,7 @@ exports.deleteCourses = async (userID) => {
 	for(const course of courses){
 		const resCode = exports.deleteCourseObjID(course._id)
 		if(resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND) //ResCode.NOT_FOUND does not indicate error
-			resCode = resCode 
+			resCodeResult = resCode 
 	}
 
 	return resCodeResult
@@ -88,7 +96,7 @@ exports.deleteCoursesFromPost = async (postID) => {
 exports.deleteCourse = async (strCourseID, userID) => {
 
 	//valid courseID?
-	const courseID = helpers.idToObj(strCourseID)
+	const courseID = idToObj(strCourseID)
 	if(!courseID) return ResCode.BAD_INPUT
 
 	//course exists?

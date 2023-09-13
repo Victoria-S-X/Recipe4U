@@ -17,6 +17,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"",
+									"const body = pm.response.json()",
+									"pm.collectionVariables.set(\"username\", body.username)",
+									"pm.collectionVariables.set(\"userID\", body._id)",
+									"",
 									"pm.test(\"Status code is 201\", function () {",
 									"    pm.response.to.have.status(201);",
 									"});"
@@ -36,7 +41,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user13",
+									"value": "user18",
 									"type": "default"
 								},
 								{
@@ -83,13 +88,14 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"const response = pm.response.json()",
+									"pm.collectionVariables.set(\"jwt\", response.jwt)",
 									"",
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
 									"",
-									"const response = pm.response.json()",
-									"pm.collectionVariables.set(\"jwt\", response.jwt)"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -106,7 +112,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user13",
+									"value": "{{username}}",
 									"type": "default"
 								},
 								{
@@ -210,14 +216,24 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"const body = pm.response.json()",
+									"",
 									"pm.test(\"Status code 200\", () => {",
 									"    pm.response.to.have.status(200)",
 									"})",
 									"",
-									"pm.test(\"Check if lastName is 'Tengse'\", function () {",
-									"    const responseData = pm.response.json();",
+									"pm.test(\"Check if username is {{username}}\", () => {",
+									"    const expectedUsername = pm.collectionVariables.get(\"username\")",
+									"    pm.expect(body.username).to.equal(expectedUsername)",
+									"})",
 									"",
-									"    pm.expect(responseData.lastName).to.equal(\"Tengse\");",
+									"pm.test(\"Check if userID is {{userID}}\", () => {",
+									"    const expectedUsername = pm.collectionVariables.get(\"userID\")",
+									"    pm.expect(body._id).to.equal(expectedUsername)",
+									"})",
+									"",
+									"pm.test(\"Check if lastName is 'Tengse'\", function () {",
+									"    pm.expect(body.lastName).to.equal(\"Tengse\");",
 									"});",
 									""
 								],
@@ -278,7 +294,8 @@
 									"});",
 									"",
 									"const response = pm.response.json()",
-									"pm.globals.set(\"postId\", response._id);"
+									"pm.globals.set(\"postId\", response._id);",
+									"pm.collectionVariables.set(\"postID\", response._id)"
 								],
 								"type": "text/javascript"
 							}
@@ -320,7 +337,8 @@
 								{
 									"key": "postImage",
 									"type": "file",
-									"src": "/Users/h/Downloads/db8516a7-101f-4c7a-9ed9-7740b6a70672.jpg"
+									"src": "/Users/h/Downloads/db8516a7-101f-4c7a-9ed9-7740b6a70672.jpg",
+									"disabled": true
 								}
 							]
 						},
@@ -563,21 +581,33 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "course",
-			"item": [
+				},
 				{
-					"name": "create",
+					"name": "create Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const response = pm.response.json()",
+									"pm.globals.set(\"postId\", response._id);",
+									"pm.collectionVariables.set(\"postID\", response._id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{bearer}}",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]
@@ -586,7 +616,94 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{login user9}}",
+								"value": "{{user10}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "postName",
+									"value": "Swedish meatballs",
+									"type": "text"
+								},
+								{
+									"key": "recipe",
+									"value": "Just make them, idk",
+									"type": "text"
+								},
+								{
+									"key": "postImage",
+									"type": "file",
+									"src": "/Users/h/Downloads/db8516a7-101f-4c7a-9ed9-7740b6a70672.jpg",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "course",
+			"item": [
+				{
+					"name": "create course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"courseID\", body._id)",
+									"",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"UserID is {{userID}}\", () => {",
+									"    const userID = pm.collectionVariables.get(\"userID\")",
+									"    pm.expect(body.userID).to.equal(userID)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{userID}}",
 								"type": "text"
 							}
 						],
@@ -601,13 +718,12 @@
 								{
 									"key": "maxAttendees",
 									"value": "5",
-									"type": "text",
-									"disabled": true
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/{{postId}}/courses",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/courses",
 							"host": [
 								"localhost"
 							],
@@ -616,7 +732,7 @@
 								"api",
 								"v1",
 								"posts",
-								"{{postId}}",
+								"{{postID}}",
 								"courses"
 							]
 						}
@@ -625,17 +741,42 @@
 				},
 				{
 					"name": "get FROM post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Post has courses\", () => {",
+									"    pm.expect(body).to.be.an(\"array\").that.is.not.empty",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{login oscarlagrosen}}",
+								"value": "",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/64ff272da68d171fd661b242/courses",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/courses",
 							"host": [
 								"localhost"
 							],
@@ -644,7 +785,7 @@
 								"api",
 								"v1",
 								"posts",
-								"64ff272da68d171fd661b242",
+								"{{postID}}",
 								"courses"
 							]
 						}
@@ -653,6 +794,26 @@
 				},
 				{
 					"name": "by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Gets right post\", () => {",
+									"    const courseID = pm.collectionVariables.get(\"courseID\")",
+									"    pm.expect(body._id).to.equal(courseID)",
+									"})",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -671,7 +832,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/64fed6edc0b410fbe78636dc",
+							"raw": "localhost:3000/api/v1/courses/{{courseID}}",
 							"host": [
 								"localhost"
 							],
@@ -680,7 +841,7 @@
 								"api",
 								"v1",
 								"courses",
-								"64fed6edc0b410fbe78636dc"
+								"{{courseID}}"
 							]
 						}
 					},
@@ -688,17 +849,42 @@
 				},
 				{
 					"name": "courses posted BY user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"user has courses\", () => {",
+									"    pm.expect(body).to.be.an(\"array\").that.is.not.empty",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"value": "{{jwt}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/",
+							"raw": "localhost:3000/api/v1/courses/posted",
 							"host": [
 								"localhost"
 							],
@@ -707,7 +893,174 @@
 								"api",
 								"v1",
 								"courses",
-								""
+								"posted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "course FROM id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/{{courseID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"{{courseID}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "{{login user9}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "courses posted BY user IS empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"user has courses\", () => {",
+									"    pm.expect(body).to.be.an(\"array\").that.is.empty",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/posted",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"posted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recreate course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"courseID\", body._id)",
+									"",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"UserID is {{userID}}\", () => {",
+									"    const userID = pm.collectionVariables.get(\"userID\")",
+									"    pm.expect(body.userID).to.equal(userID)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
+								"key": "Authorization",
+								"value": "{{userID}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "meetingLink",
+									"value": "zoom.gov/3",
+									"type": "text"
+								},
+								{
+									"key": "maxAttendees",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/courses",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"courses"
 							]
 						}
 					},
@@ -716,6 +1069,16 @@
 				{
 					"name": "courses posted BY user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -740,18 +1103,43 @@
 					"response": []
 				},
 				{
-					"name": "course FROM id",
+					"name": "courses posted BY user IS empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"user has courses\", () => {",
+									"    pm.expect(body).to.be.an(\"array\").that.is.empty",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "DELETE",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{login oscarlagrosen}}",
+								"value": "{{jwt}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/64fde5be30e125b8b4326ff1",
+							"raw": "localhost:3000/api/v1/courses/posted",
 							"host": [
 								"localhost"
 							],
@@ -760,14 +1148,68 @@
 								"api",
 								"v1",
 								"courses",
-								"64fde5be30e125b8b4326ff1"
-							],
-							"query": [
+								"posted"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"maxAttendees is updated to 9\", () => {",
+									"    pm.expect(body.maxAttendees).to.equal(9)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "",
-									"value": "{{login user9}}",
-									"disabled": true
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
 								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "postID",
+									"value": "{{postID}}",
+									"type": "text"
+								},
+								{
+									"key": "maxAttendees",
+									"value": "9",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/{{courseID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"{{courseID}}"
 							]
 						}
 					},
@@ -841,6 +1283,82 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "POST Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/:id/review",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								":id",
+								"review"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/:postID/reviews/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								":postID",
+								"reviews",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "postID",
+									"value": ""
+								},
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -866,6 +1384,22 @@
 	"variable": [
 		{
 			"key": "jwt",
+			"value": ""
+		},
+		{
+			"key": "courseID",
+			"value": ""
+		},
+		{
+			"key": "postID",
+			"value": ""
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "userID",
 			"value": ""
 		}
 	]

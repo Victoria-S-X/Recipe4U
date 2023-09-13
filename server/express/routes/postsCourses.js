@@ -1,13 +1,13 @@
 const router = require("./post")
 const auth = require("../auth")
-const ResCode = require("../../db/helpers").ResCode
+const {ResCode, getResCode} = require("../../db/helpers")
 const postsCourses = require("../../db/postsCourses")
 
 
 //CREATE course
 router.post("/:id/courses", auth, async (req, res) => {
 
-    const resCode = await postsCourses.create(
+    const response = await postsCourses.create(
         req.userID,
         req.params.id,
         req.body?.meetingLink,
@@ -17,10 +17,11 @@ router.post("/:id/courses", auth, async (req, res) => {
         req.body?.address,
         req.body?.maxAttendees
     )
+    const resCode = getResCode(response)
 
     switch(resCode){
         case ResCode.SUCCESS:
-            res.status(201).json({message: "Course created"})
+            res.status(201).json(response.data)
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Bad input"})
@@ -33,7 +34,11 @@ router.post("/:id/courses", auth, async (req, res) => {
             break
     
         default:
-            res.status(500).json({message: "Failed to create course"})
+            res.status(500).json({
+                message: "Failed to create course",
+                code: resCode,
+                error: response?.data
+            })
             break
     }
 })
