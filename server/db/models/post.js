@@ -22,12 +22,17 @@ const postSchema = new mongoose.Schema({
     },
     postImageName: {
         type: String,
-        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    reviews: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Review'
+        }]
     }
 })
 
