@@ -21,7 +21,8 @@ router.post('/:postId/reviews', auth, async (req, res) => {
         console.log(review.text)
         res.status(201).send(review)
     } catch (err){
-        res.status(400).json({ message: err })
+        console.log(err.message)
+        res.status(400).json({ message: "Failed to create the review. Please try again." })
     }
 })
 

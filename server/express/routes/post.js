@@ -3,11 +3,12 @@ const router = require("../expressApp").Router("/api/v1/posts")
 const auth = require('../auth')
 const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
 const ResCode = require("../../db/helpers").ResCode
-
+const Review = require("../../db/models/review")
 const Post = require('../../db/models/post')
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
+const review = require("../../db/models/review")
 const uploadPath = path.join('public', Post.postImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png']
 const upload = multer({
@@ -53,7 +54,6 @@ router.delete('/', auth, async (req, res) => {
     try {
         const query = { user: req.userID }
         await Post.deleteMany(query)
-
 
         return res.status(200).json({ message: 'Deleted' })
     } catch (err) {
@@ -102,10 +102,11 @@ router.delete('/:id', getPost, auth, async (req, res) => {
     if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
     
     try {
+        await Review.deleteMany({ post: res.post.id })
         await res.post.deleteOne()
 
-        const resCode = await deleteCoursesFromPost(req.params.id)
-        if(resCode === ResCode.SUCCESS){
+        const cousesDeletedResCode = await deleteCoursesFromPost(req.params.id)
+        if(cousesDeletedResCode === ResCode.SUCCESS) {
             return res.status(200).json({ message: 'The post is deleted.' })
         } else {
             return res.status(500).json({ message: 'The post is deleted, but the courses are not.' })
