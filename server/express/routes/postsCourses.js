@@ -1,6 +1,6 @@
 const router = require("./post")
 const auth = require("../auth")
-const {ResCode, getResCode} = require("../../db/helpers")
+const {ResCode} = require("../../db/helpers")
 const postsCourses = require("../../db/postsCourses")
 
 
@@ -17,9 +17,8 @@ router.post("/:id/courses", auth, async (req, res) => {
         req.body?.address,
         req.body?.maxAttendees
     )
-    const resCode = getResCode(response)
 
-    switch(resCode){
+    switch(response.resCode){
         case ResCode.SUCCESS:
             res.status(201).json(response.data)
             break
@@ -47,7 +46,7 @@ router.post("/:id/courses", auth, async (req, res) => {
 router.get("/:id/courses", auth, async (req, res) => {
     const response = await postsCourses.getFromPost(req.params.id)
 
-    switch(response){
+    switch(response.resCode){
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Post ID is invalid"})
             break

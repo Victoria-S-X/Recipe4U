@@ -1,4 +1,4 @@
-const {ResCode, idToObj, ValidationError, getResCode} = require("./helpers")
+const {ResCode, idToObj, ValidationError} = require("./helpers")
 const {postValidation} = require("./post")
 const Course = require("./models/course")
 
@@ -7,7 +7,7 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 
 	//valid post?
 	const postResponse = await postValidation(userID, strPostID)
-	if(getResCode(postResponse) !== ResCode.SUCCESS) return getResCode(postResponse)
+	if(postResponse.resCode !== ResCode.SUCCESS) return postResponse
 
 	const course = new Course({
 		userID: userID,
