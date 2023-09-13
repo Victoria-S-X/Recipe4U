@@ -30,7 +30,7 @@ router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with 
             break
 
         default:
-            res.status(500).json({message: `Server error. Code ${resCode}`})
+            res.status(500).json({message: `Server error. Code ${response.resCode.number}`})
             break
     }
 })
@@ -57,7 +57,7 @@ router.patch("/leave/:courseID", auth, async (req, res) => {
             break
 
         default:
-            res.status(500).json({message: `Server error. Code ${response}`})
+            res.status(500).json({message: `Server error. Code ${response.resCode.number}`})
             break
     }
 })
