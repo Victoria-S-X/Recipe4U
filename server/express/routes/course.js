@@ -1,6 +1,6 @@
 const router = require("../expressApp").Router("/api/v1/courses")
 const courseData = require("../../db/course")
-const {ResCode, getResCode} = require("../../db/helpers")
+const {ResCode} = require("../../db/helpers")
 const auth = require("../auth")
 
 
@@ -55,8 +55,7 @@ router.put("/:id", auth, async (req, res) => {
         maxAttendees: req.body?.maxAttendees
     })
 
-    const resCode = getResCode(response)
-    switch(resCode){
+    switch(response.resCode){
         case ResCode.SUCCESS:
             res.status(200).json(response?.data)
             break
@@ -81,9 +80,9 @@ router.put("/:id", auth, async (req, res) => {
 
 //REMOVES all courses created by the logged in user
 router.delete("/", auth, async (req, res) => {
-    const resCode = await courseData.deleteCourses(req.userID)
+    const response = await courseData.deleteCourses(req.userID)
 
-    switch(resCode) {
+    switch(response.resCode) {
         case ResCode.SUCCESS:
             res.status(200).json({message: `Successful deletion`})
             break
@@ -104,9 +103,9 @@ router.delete("/", auth, async (req, res) => {
 
 //REMOVES course
 router.delete("/:id", auth, async (req, res) => {
-    const resCode = await courseData.deleteCourse(req.params.id, req.userID)
+    const response = await courseData.deleteCourse(req.params.id, req.userID)
 
-    switch(resCode) {
+    switch(response.resCode) {
         case ResCode.SUCCESS:
             res.status(200).json({message: `Successful deletion`})
             break

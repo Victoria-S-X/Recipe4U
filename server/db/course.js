@@ -1,5 +1,5 @@
-const {idToObj, ResCode, getResCode} = require("./helpers")
-const removeAttendance = require("./models/user").removeAttendance
+const {idToObj, ResCode} = require("./helpers")
+const {removeAttendance} = require("./attendance/user")
 const {postValidation} = require("./post")
 const Course = require("./models/course")
 const createCourse = require("./postsCourses").create
@@ -31,7 +31,7 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 
 	//valid post?
 	const postResponse = await postValidation(userID, strPostID)
-	if(getResCode(postResponse) !== ResCode.SUCCESS) return getResCode(postResponse)
+	if(postResponse.resCode !== ResCode.SUCCESS) return postResponse
 
 
 	//create course if it does not exist
@@ -119,10 +119,16 @@ exports.deleteCourseObjID = async (courseID) => {
 
 
 	//removes attendance from the users´ profiles
-	let resCodeResult = ResCode.SUCCESS
+	var resCodeResult = ResCode.SUCCESS
 	for(const attendee of course.attendees){
 		const resCode = await removeAttendance(attendee, course._id)
-		if(resCode != ResCode.SUCCESS) resCode = resCode
+		if(resCode != ResCode.SUCCESS) {
+			resCodeResult = {
+				resCode: resCode,
+				data: "Failed to remove attendance from user(s)"
+			}
+
+		}	
 	}
 
 	return resCodeResult

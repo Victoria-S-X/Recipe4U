@@ -3,7 +3,7 @@ const router = require("../expressApp").Router("/api/v1/users")
 const userData = require("../../db/user")
 const auth = require("../../auth")
 const authMiddleware = require("../auth")
-const { ResCode, getResCode } = require("../../db/helpers")
+const { ResCode } = require("../../db/helpers")
 
 
 // CREATE user
@@ -27,8 +27,7 @@ router.post("/", async (req, res) => {
         req.body?.age 
     )
     
-    const resCode = getResCode(result)
-    switch (resCode) {
+    switch (result.resCode) {
         case ResCode.SUCCESS:
             res.status(201).json(result?.data)
             break
@@ -69,7 +68,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // UPDATE user info (for the logged in user)
 router.patch("/", authMiddleware, async (req, res) => {
 
-    const resCode = await userData.patch(
+    const response = await userData.patch(
         req.userID,
         req.body?.email, 
         req.body?.password, 
@@ -78,13 +77,14 @@ router.patch("/", authMiddleware, async (req, res) => {
         req.body?.age 
     )
 
-    switch(resCode){
+    switch(response?.resCode){
         case ResCode.SUCCESS:
             res.status(200).json({message: "User updated successfully"})
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "User does not exist"})
             break
+
         default:
             res.status(500).json({message: "Internal server error"})
             break

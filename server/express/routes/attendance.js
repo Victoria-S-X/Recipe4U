@@ -7,9 +7,9 @@ const ResCode = require("../../db/helpers").ResCode
 
 //UPDATES attendance status for logged in user to provided course
 router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with not using noun word?
-    const resCode = await attendance.attend(req.userID, req.params.courseID)
+    const response = await attendance.attend(req.userID, req.params.courseID)
 
-    switch(resCode) {
+    switch(response.resCode) {
         case ResCode.SUCCESS: 
             res.status(200).json({message: `Attendance updated`})
             break
@@ -34,9 +34,9 @@ router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with 
 
 //UPDATES attendance status for logged in user to leave provided course
 router.patch("/leave/:courseID", auth, async (req, res) => {
-    const resCode = await attendance.leave(req.userID, req.params.courseID)
+    const response = await attendance.leave(req.userID, req.params.courseID)
 
-    switch(resCode) {
+    switch(response.resCode) {
         case ResCode.SUCCESS: 
             res.status(200).json({message: `Removed from course`})
             break
@@ -51,7 +51,7 @@ router.patch("/leave/:courseID", auth, async (req, res) => {
             break
 
         default:
-            res.status(500).json({message: `Server error. Code ${resCode}`})
+            res.status(500).json({message: `Server error. Code ${response}`})
             break
     }
 })
