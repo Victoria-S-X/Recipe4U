@@ -97,7 +97,10 @@ exports.deleteCourse = async (strCourseID, userID) => {
 
 	//valid courseID?
 	const courseID = idToObj(strCourseID)
-	if(!courseID) return ResCode.BAD_INPUT
+	if(!courseID) return {
+		resCode: ResCode.BAD_INPUT,
+		error: "Invalid course ID"
+	}
 
 	//course exists?
 	const course = await Course.findById(courseID)

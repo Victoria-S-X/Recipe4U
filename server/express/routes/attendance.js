@@ -14,7 +14,10 @@ router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with 
             res.status(200).json({message: `Attendance updated`})
             break
         case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.error
+            })
             break
         case ResCode.ALREADY_FULL:
             res.status(403).json({message: "Course is already full"})
@@ -41,7 +44,10 @@ router.patch("/leave/:courseID", auth, async (req, res) => {
             res.status(200).json({message: `Removed from course`})
             break
         case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.error
+            })
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "Course not found"})

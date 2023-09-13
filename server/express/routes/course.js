@@ -87,7 +87,10 @@ router.delete("/", auth, async (req, res) => {
             res.status(200).json({message: `Successful deletion`})
             break
         case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.error
+            })
             break
         case ResCode.NOT_FOUND:
             res.status(200).json({message: "No courses to delete"})
@@ -110,7 +113,10 @@ router.delete("/:id", auth, async (req, res) => {
             res.status(200).json({message: `Successful deletion`})
             break
         case ResCode.BAD_INPUT:
-            res.status(400).json({message: "Bad input"})
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.error
+            })
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "Course does not exist"})

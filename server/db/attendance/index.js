@@ -1,5 +1,4 @@
-const helpers = require("../helpers")
-const ResCode = helpers.ResCode
+const {ResCode, idToObj} = require("../helpers")
 const attendanceUser = require("./user")
 const attendanceCourse = require("./course")
 
@@ -8,8 +7,11 @@ const attendanceCourse = require("./course")
 exports.attend = async (userID, strCourseID) => {
 
     //valid IDs?
-    const courseID = helpers.idToObj(strCourseID)
-    if(!courseID) return ResCode.BAD_INPUT
+    const courseID = idToObj(strCourseID)
+    if(!courseID) return {
+        resCode: ResCode.BAD_INPUT,
+        error: "Invalid course ID"
+    }
 
     //adds to attendance list in course
     let resCode = await attendanceCourse.addAttendee(courseID, userID)
@@ -26,9 +28,12 @@ exports.attend = async (userID, strCourseID) => {
 
 exports.leave = async (userID, strCourseID) => {
 
-    //valid IDs?
-    const courseID = helpers.idToObj(strCourseID)
-    if(!userID) return ResCode.BAD_INPUT
+    //valid courseID?
+    const courseID = idToObj(strCourseID)
+    if(!courseID) return {
+        resCode: ResCode.BAD_INPUT,
+        error: "Invalid course ID"
+    }
 
     return await exports.leaveObjID(userID, courseID)
 }
