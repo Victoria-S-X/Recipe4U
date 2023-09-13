@@ -1,6 +1,8 @@
 const router = require("../expressApp").Router("/api/v1/posts")
 
 const auth = require('../auth')
+const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
+const ResCode = require("../../db/helpers").ResCode
 
 const Post = require('../../db/models/post')
 const multer = require('multer')
@@ -51,6 +53,8 @@ router.delete('/', auth, async (req, res) => {
     try {
         const query = { user: req.userID }
         await Post.deleteMany(query)
+
+
         return res.status(200).json({ message: 'Deleted' })
     } catch (err) {
         return res.status(500).json({ message: err.message })
@@ -99,7 +103,14 @@ router.delete('/:id', getPost, auth, async (req, res) => {
     
     try {
         await res.post.deleteOne()
-        return res.status(200).json({ message: 'The post is deleted.' })
+
+        const resCode = await deleteCoursesFromPost(req.params.id)
+        if(resCode === ResCode.SUCCESS){
+            return res.status(200).json({ message: 'The post is deleted.' })
+        } else {
+            return res.status(500).json({ message: 'The post is deleted, but the courses are not.' })
+        }
+
     } catch (err) {
         return res.status(500).json({ message: err.message })
     }

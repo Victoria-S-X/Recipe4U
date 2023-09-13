@@ -1,152 +1,68 @@
-const helpers = require("./helpers")
-const ResCode = helpers.ResCode
+const {idToObj, ResCode, getResCode} = require("./helpers")
 const removeAttendance = require("./models/user").removeAttendance
-const getPost = require("./post").getPost
+const {postValidation} = require("./post")
 const Course = require("./models/course")
+const createCourse = require("./postsCourses").create
 
-
-
-function missingField(userID, strPostID, maxAttendees, start){
-	return !userID || !strPostID || !maxAttendees //TODO: || !start
-}
-
-
-exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
-
-	//has needed data?
-	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
-
-	//valid postID?
-	const postID = helpers.idToObj(strPostID)
-	if(!postID) return ResCode.BAD_INPUT
-
-	//user owns post?
-	const post = await getPost(postID)
-	if(!post) return ResCode.NOT_FOUND
-	if(!userID.equals(post.user)) return ResCode.UNAUTHORIZED
-
-
-	const course = new Course({
-		userID: userID,
-		postID: postID,
-		meetingLink: meetingLink,
-		start: start,
-		duration: duration,
-		city: city,
-		address: address,
-		attendees: [],
-		maxAttendees: maxAttendees
-	})
-
-	try{
-		await course.save()
-
-		return ResCode.SUCCESS
-	} catch (err){
-		console.log(err)
-		return ResCode.ERROR
-	}
-}
 
 
 exports.get = async (strID) => {
-    const id = helpers.idToObj(strID)
+    const id = idToObj(strID)
     if(!id) return
 
     return Course.findById(id)
 }
 
 
+//posted by user
 exports.getFromUser = async (userID) => {
 	return Course.find({userID: userID})
 }
 
 
-exports.getFromPost = async (strPostID) => {
-	const postID = helpers.idToObj(strPostID)
-	if(!postID) return ResCode.BAD_INPUT
+exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees}) => {
 
-	return Course.find({postID: postID})
-}
-
-
-exports.addAttendee = async (courseID, userID) => {
-	const criteria = {
-		_id: courseID,
-		$expr: { $lt: [{ $size: '$attendees' }, '$maxAttendees'] }, //attendees not full (inspired by ChatGPT)
-		attendees: { $not: { $elemMatch: { $eq: userID } } } //user has not already signed up to course (inspired by ChatGPT)
+	//valid courseID?
+	const courseID = idToObj(strCourseID)
+    if(!courseID) return {
+		resCode: ResCode.BAD_INPUT,
+		data: "Invalid course ID"
 	}
-	const operation = {
-		$push: { attendees: userID }
-	}
+
+	//valid post?
+	const postResponse = await postValidation(userID, strPostID)
+	if(getResCode(postResponse) !== ResCode.SUCCESS) return getResCode(postResponse)
+
+
+	//create course if it does not exist
+	const course = await Course.findById(courseID)
+	if(!course) return createCourse(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID)
 
 	try{
-		const success = await Course.findOneAndUpdate(criteria, operation, { new: true })
+		course.meetingLink = meetingLink
+		course.start = start
+		course.duration = duration
+		course.city = city
+		course.address = address
+		course.maxAttendees = maxAttendees
+		course.postID = postResponse.postID
 
-		if(success) return ResCode.SUCCESS
-		else {
-			const course = await Course.findById(courseID)
+		await course.save()
 
-			if(course) {
-				if(course.attendees.length == course.maxAttendees) return ResCode.ALREADY_FULL
-				else if(course.attendees.includes(userID)) return ResCode.ITEM_ALREADY_EXISTS
-				else return ResCode.ERROR
-			}
-			else return ResCode.NOT_FOUND
+		return {
+			resCode: ResCode.SUCCESS,
+			data: course
 		}
-
 	} catch(err){
-		console.error(err)
-		return ResCode.ERROR
+		return {
+			resCode: ResCode.BAD_INPUT,
+			data: err
+		}
 	}
 }
 
 
-exports.removeAttendee = async (courseID, userID) => {
-	const course = await Course.findByIdAndUpdate(
-		courseID, 
-		{ $pull: { attendees: userID } }
-	)
-
-	if(course){
-		if(course.attendees.includes(userID)) return ResCode.SUCCESS
-		else return ResCode.NOT_FOUND_1 //user was never attending the course
-	}
-	else return ResCode.NOT_FOUND //course not found
-}
-
-
-exports.update = async (strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees) => {
-
-	//has mandatory fields?
-	if(missingField(userID, strPostID, maxAttendees, start)) return ResCode.MISSING_ARGUMENT
-
-	//valid IDs?
-	const [courseID, postID] = helpers.idsToObjs([strCourseID, strPostID])
-    if(!courseID) return ResCode.BAD_INPUT
-
-	const update = {
-        meetingLink: meetingLink,
-        start: start,
-        duration: duration,
-        city: city,
-        address: address,
-        maxAttendees: maxAttendees
-    }
-
-	try{
-		const item = await Course.findOneAndUpdate(id, update, { new: true })
-
-		if(item) return ResCode.SUCCESS
-		else return ResCode.NOT_FOUND
-
-	} catch(err){
-		console.error(err)
-		return ResCode.ERROR
-	}
-}
-
-
+//deletes all courses from a user
 exports.deleteCourses = async (userID) => {
 
 	//has courses?
@@ -158,17 +74,29 @@ exports.deleteCourses = async (userID) => {
 	for(const course of courses){
 		const resCode = exports.deleteCourseObjID(course._id)
 		if(resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND) //ResCode.NOT_FOUND does not indicate error
-			resCode = resCode 
+			resCodeResult = resCode 
 	}
 
 	return resCodeResult
 }
 
 
+//DOES NOT AUTHENTICATE USER
+exports.deleteCoursesFromPost = async (postID) => {
+	try{
+		await Course.deleteMany({postID: postID})
+		return ResCode.SUCCESS
+	} catch(err){
+		console.error(err)
+		return ResCode.ERROR
+	}
+}
+
+
 exports.deleteCourse = async (strCourseID, userID) => {
 
 	//valid courseID?
-	const courseID = helpers.idToObj(strCourseID)
+	const courseID = idToObj(strCourseID)
 	if(!courseID) return ResCode.BAD_INPUT
 
 	//course exists?

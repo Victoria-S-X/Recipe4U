@@ -1,15 +1,29 @@
 const mongoose = require("../db").mongoose
 
 const schema = new mongoose.Schema({
-    userID: mongoose.Schema.Types.ObjectId,
-    postID: mongoose.Schema.Types.ObjectId,
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+    },
+    postID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Post",
+    },
     meetingLink: String,
     start: Date,
     duration: Number,
     city: String,
     address: String,
-	attendees: [mongoose.Schema.Types.ObjectId],
-	maxAttendees: Number
+	attendees: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
+	maxAttendees: {
+        type: Number,
+        required: true,
+    }
 })
 
 module.exports = mongoose.model("Course", schema)

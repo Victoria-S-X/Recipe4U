@@ -1,6 +1,5 @@
-const helpers = require("./helpers")
+const {ResCode} = require("./helpers")
 const User = require("./models/user")
-const ResCode = helpers.ResCode
 
 exports.create = async (email, username, password, firstName, lastName, age) => {
 	if(!email || !username || !password) return ResCode.MISSING_ARGUMENT
@@ -16,9 +15,12 @@ exports.create = async (email, username, password, firstName, lastName, age) => 
 	})
 
 	try{
-		await user.save()
+		const result = await user.save()
 
-		return ResCode.SUCCESS
+		return {
+			resCode: ResCode.SUCCESS,
+			data: result
+		}
 	} catch (err){
 		if(err.code == 11000) return ResCode.ITEM_ALREADY_EXISTS
 		return ResCode.ERROR
@@ -55,24 +57,4 @@ exports.patch = async (id, email, password, firstName, lastName, age) => {
 	} catch(_){
 		return ResCode.ERROR
 	}
-}
-
-
-exports.addAttendance = async (userID, courseID) => {
-	const affected = await User.findByIdAndUpdate(userID, {
-		$push: { attends: courseID }
-	})
-
-	if(affected) return ResCode.SUCCESS
-	else return ResCode.ERROR //TODO: remove item from course list
-}
-
-
-exports.removeAttendance = async (userID, courseID) => {
-	const affected = await User.findByIdAndUpdate(userID, {
-		$pull: { attends: courseID }
-	})
-
-	if(affected) return ResCode.SUCCESS
-	else return ResCode.ERROR
 }

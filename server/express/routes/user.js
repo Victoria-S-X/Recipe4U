@@ -1,10 +1,9 @@
 const router = require("../expressApp").Router("/api/v1/users")
 
-const app = require("../expressApp")
 const userData = require("../../db/user")
-const ResCode = require("../../db/helpers").ResCode
 const auth = require("../../auth")
 const authMiddleware = require("../auth")
+const { ResCode, getResCode } = require("../../db/helpers")
 
 
 // CREATE user
@@ -13,14 +12,13 @@ router.post("/", async (req, res) => {
     //hashes password
     const password = req.body?.password
     if(!password){
-        res.status(400).json({message: "Missing password"})
+        res.status(422).json({message: "Missing password"})
         return
     }
     const hash = await auth.hash(password)
 
 
-    //tries to create user
-    const resCode = await userData.create(
+    const result = await userData.create(
         req.body?.email, 
         req.body?.username, 
         hash, 
@@ -28,18 +26,17 @@ router.post("/", async (req, res) => {
         req.body?.lastName, 
         req.body?.age 
     )
-
     
-    //handles errors and successes
+    const resCode = getResCode(result)
     switch (resCode) {
         case ResCode.SUCCESS:
-            res.status(201).json({message: "User created"})
+            res.status(201).json(result?.data)
             break
         case ResCode.ITEM_ALREADY_EXISTS:
-            res.status(400).json({message: "Username is already taken"})
+            res.status(403).json({message: "Username is already taken"})
             break
         case ResCode.MISSING_ARGUMENT:
-            res.status(400).json({message: "Missing parameters"})
+            res.status(422).json({message: "Missing parameters"})
             break
     
         default:
@@ -63,7 +60,8 @@ router.get("/", authMiddleware, async (req, res) => {
         username: user.username,
         firstName: user?.firstName,
         lastName: user?.lastName,
-        age: user?.age
+        age: user?.age,
+        _id: user._id
     })
 })
 
@@ -71,7 +69,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // UPDATE user info (for the logged in user)
 router.patch("/", authMiddleware, async (req, res) => {
 
-    const resCode = await userData.update(
+    const resCode = await userData.patch(
         req.userID,
         req.body?.email, 
         req.body?.password, 

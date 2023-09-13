@@ -1,6 +1,5 @@
 const router = require("../expressApp").Router("/api/v1/login")
 
-const app = require("../expressApp")
 const userData = require("../../db/user")
 const auth = require("../../auth")
 
@@ -9,14 +8,14 @@ router.post("/", async (req, res) => {
     //provided password?
     const password = req.body?.password
     if(password === undefined){
-        res.status(400).json({message: "Password missing"})
+        res.status(422).json({message: "Password missing"})
         return
     }
 
     //provided username?
     const username = req.body?.username
     if(username === undefined){
-        res.status(400).json({message: "Username missing"})
+        res.status(422).json({message: "Username missing"})
         return
     }
 

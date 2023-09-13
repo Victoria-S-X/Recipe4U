@@ -1,13 +1,13 @@
 const router = require("./post")
 const auth = require("../auth")
-const ResCode = require("../../db/helpers").ResCode
-const courseData = require("../../db/course")
+const {ResCode, getResCode} = require("../../db/helpers")
+const postsCourses = require("../../db/postsCourses")
 
 
 //CREATE course
 router.post("/:id/courses", auth, async (req, res) => {
 
-    const resCode = await courseData.create(
+    const response = await postsCourses.create(
         req.userID,
         req.params.id,
         req.body?.meetingLink,
@@ -17,33 +17,35 @@ router.post("/:id/courses", auth, async (req, res) => {
         req.body?.address,
         req.body?.maxAttendees
     )
+    const resCode = getResCode(response)
 
     switch(resCode){
         case ResCode.SUCCESS:
-            res.status(201).json({message: "Course created"})
-            break
-        case ResCode.MISSING_ARGUMENT:
-            res.status(400).json({message: "Missing parameters"})
+            res.status(201).json(response.data)
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Bad input"})
             break
         case ResCode.UNAUTHORIZED:
-            res.status(403).json({message: "User does not own post"})
+            res.status(401).json({message: "User does not own post"})
             break
         case ResCode.NOT_FOUND:
             res.status(404).json({message: "Post not found"})
             break
     
         default:
-            res.status(500).json({message: "Failed to create course"})
+            res.status(500).json({
+                message: "Failed to create course",
+                code: resCode,
+                error: response?.data
+            })
             break
     }
 })
 
 
 router.get("/:id/courses", auth, async (req, res) => {
-    const response = await courseData.getFromPost(req.params.id)
+    const response = await postsCourses.getFromPost(req.params.id)
 
     switch(response){
         case ResCode.BAD_INPUT:

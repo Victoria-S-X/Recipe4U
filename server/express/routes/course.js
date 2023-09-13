@@ -1,26 +1,12 @@
 const router = require("../expressApp").Router("/api/v1/courses")
 const courseData = require("../../db/course")
-const ResCode = require("../../db/helpers").ResCode
+const {ResCode, getResCode} = require("../../db/helpers")
 const auth = require("../auth")
 
 
 
-//GET course
-router.get("/:id", async (req, res) => {
-    const course = await courseData.get(req.params.id)
-    if(!course) {
-        res.status(404).json({message: "Course not found"})
-        return
-    }
-    
-    res.status(200).json(
-        publicParams(course)
-    )
-})
-
-
 //GET courses posted by logged in user
-router.get("/", auth, async (req, res) => {
+router.get("/posted", auth, async (req, res) => {
 
     const courses = await courseData.getFromUser(req.userID)
 
@@ -33,7 +19,7 @@ router.get("/", auth, async (req, res) => {
 
     for(const course of courses){
         result.push(
-            publicParams(course)
+            course
         )
     }
 
@@ -41,26 +27,55 @@ router.get("/", auth, async (req, res) => {
 })
 
 
-router.get("/", async (req, res) => {
-    
-})
-
-
-function publicParams(course){
-    return {
-        meetingLink: course?.meetingLink,
-        start: course?.start,
-        duration: course?.duration,
-        city: course?.city,
-        address: course?.address,
-        maxAttendees: course?.maxAttendees
+//GET course
+router.get("/:id", async (req, res) => {
+    const course = await courseData.get(req.params.id)
+    if(!course) {
+        res.status(404).json({message: "Course not found"})
+        return
     }
-}
+    
+    res.status(200).json(
+        course
+    )
+})
 
 
 //UPDATES the specified course
 router.put("/:id", auth, async (req, res) => {
-    
+    const response = await courseData.put({
+        strCourseID: req.params.id,
+        userID: req.userID,
+        strPostID: req.body?.postID,
+        meetingLink: req.body?.meetingLink,
+        start: req.body?.start,
+        duration: req.body?.duration,
+        city: req.body?.city,
+        address: req.body?.address,
+        maxAttendees: req.body?.maxAttendees
+    })
+
+    const resCode = getResCode(response)
+    switch(resCode){
+        case ResCode.SUCCESS:
+            res.status(200).json(response?.data)
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({
+                message: "Bad input",
+                error: response?.data
+            })
+            break
+        case ResCode.UNAUTHORIZED:
+            res.status(401).json({message: "User does not own post"})
+            break
+        case ResCode.NOT_FOUND_1:
+            res.status(404).json({message: `Post '${response.data}' not found`})
+            break
+
+        default:
+            res.status(500).json({message: `Internal server error. Code ${resCode}}`})
+    }
 })
 
 
@@ -102,7 +117,7 @@ router.delete("/:id", auth, async (req, res) => {
             res.status(404).json({message: "Course does not exist"})
             break
         case ResCode.UNAUTHORIZED:
-            res.status(403).json({message: "User is not authorized to delete course"})
+            res.status(401).json({message: "User is not authorized to delete course"})
             break
 
         default:
