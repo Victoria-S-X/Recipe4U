@@ -73,7 +73,7 @@ router.put("/:id", auth, async (req, res) => {
             break
 
         default:
-            res.status(500).json({message: `Internal server error. Code ${resCode}}`})
+            res.status(500).json({message: `Internal server error. Code ${response.resCode.number}}`})
     }
 })
 
