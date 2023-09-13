@@ -7,6 +7,7 @@ require("./routes/user")
 require("./routes/post")
 require("./routes/postsCourses")
 require("./routes/attendance")
+require("./routes/review")
 require("./routes/frontend")
 require("./routes/error")
 
