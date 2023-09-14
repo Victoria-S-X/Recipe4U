@@ -1,6 +1,6 @@
 const router = require("./post")
 const auth = require("../auth")
-const {ResCode} = require("../../db/helpers")
+const {ResCode, sort} = require("../../db/helpers")
 const postsCourses = require("../../db/postsCourses")
 
 
@@ -45,17 +45,22 @@ router.post("/:id/courses", auth, async (req, res) => {
 
 router.get("/:id/courses", auth, async (req, res) => {
     const response = await postsCourses.getFromPost(req.params.id)
+    sort(req.query.sort, response.data)
 
     switch(response.resCode){
         case ResCode.BAD_INPUT:
             res.status(400).json({message: "Post ID is invalid"})
             break
-        case ResCode.ERROR:
-            res.status(500).json({message: "Internal server error"})
+        case ResCode.NOT_FOUND:
+            res.status(404).json({message: "Course not found"})
+            break
+        case ResCode.SUCCESS:
+            res.status(200).json(response.data)
             break
 
         default:
-            res.status(200).json(response)
+            res.status(500).json({message: "Internal server error"})
             break
+
     }
 })

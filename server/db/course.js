@@ -67,14 +67,21 @@ exports.deleteCourses = async (userID) => {
 
 	//has courses?
 	const courses = await Course.find({userID: userID})
-	if(!courses) return ResCode.NOT_FOUND
+	if(!courses || courses.length === 0) return {
+		resCode: ResCode.NOT_FOUND,
+		amtDeleted: 0
+	}
 
-
-	let resCodeResult = ResCode.SUCCESS
+	let resCodeResult = {
+		resCode: ResCode.SUCCESS,
+		amtDeleted: 0
+	}
 	for(const course of courses){
-		const resCode = exports.deleteCourseObjID(course._id)
+		const resCode = await exports.deleteCourseObjID(course._id)
 		if(resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND) //ResCode.NOT_FOUND does not indicate error
-			resCodeResult = resCode 
+			resCodeResult.resCode = resCode.resCode 
+		else
+			resCodeResult.amtDeleted++
 	}
 
 	return resCodeResult

@@ -14,6 +14,16 @@ app.use(morgan('dev'));
 app.options('*', cors());
 app.use(cors());
 
+
+// HTTP method override, inspired by online examples and ChatGPT
+app.use((req, _, next) => {
+    if (req.headers['x-http-method-override']) {
+        req.method = req.headers['x-http-method-override'].toUpperCase()
+    }
+    next()
+})
+
+
 // Import routes
 app.get('/api/v1', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});

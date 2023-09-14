@@ -49,5 +49,11 @@ exports.getFromPost = async (strPostID) => {
 	const postID = idToObj(strPostID)
 	if(!postID) return ResCode.BAD_INPUT
 
-	return Course.find({postID: postID})
+	const courses = await Course.find({postID: postID})
+	if(!courses) return ResCode.NOT_FOUND
+
+	return {
+		resCode: ResCode.SUCCESS,
+		data: courses
+	}
 }

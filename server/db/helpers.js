@@ -34,5 +34,46 @@ exports.idToObj = (strID) => {
 }
 
 
+function SortOption(sortStr){
+    switch(sortStr[0]){
+        case "-":
+            this.property = sortStr.substring(1)
+            this.asc = false
+            break
+        case " ":
+            console.log("Sorting property starts with space, issues with query encoding?")
+        case "+":
+            this.property = sortStr.substring(1)
+            this.asc = true
+            break
+
+        default:
+            this.property = sortStr
+            this.asc = true
+    }
+
+    this.orderSmaller = this.asc ? -1 : 1
+    this.orderBigger = this.asc ? 1 : -1
+}
+
+
+exports.sort = (sortString, elements) => {
+    if(!sortString) return elements
+
+    const sorts = sortString.split(",")
+    const sortOptions = sorts.map(sort => new SortOption(sort))
+
+    for(let i = sortOptions.length-1; i >= 0; i--){
+        const sortOpt = sortOptions[i]
+
+        elements.sort((a, b) => {
+            if(a[sortOpt.property] < b[sortOpt.property]) return sortOpt.orderSmaller
+            if(a[sortOpt.property] > b[sortOpt.property]) return sortOpt.orderBigger
+            return 0
+        })
+    }
+}
+
+
 exports.ResCode = ResCode
 exports.ValidationError = ValidationError
