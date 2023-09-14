@@ -17,14 +17,29 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"",
 									"const body = pm.response.json()",
 									"pm.collectionVariables.set(\"username\", body.username)",
 									"pm.collectionVariables.set(\"userID\", body._id)",
 									"",
 									"pm.test(\"Status code is 201\", function () {",
 									"    pm.response.to.have.status(201);",
-									"});"
+									"});",
+									"",
+									"var value = pm.collectionVariables.get(\"userIDNo\");",
+									"pm.collectionVariables.set(\"userIDNo\", value+1);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var value = pm.collectionVariables.get(\"userIDNo\");",
+									"",
+									"if (!value) {",
+									"    pm.collectionVariables.set(\"userIDNo\", 1);",
+									"}"
 								],
 								"type": "text/javascript"
 							}
@@ -41,7 +56,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user71",
+									"value": "{{userIDNo}}",
 									"type": "default"
 								},
 								{
@@ -1066,7 +1081,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -1075,7 +1090,7 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
 							]
 						}
 					},
@@ -1174,7 +1189,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -1183,7 +1198,7 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
 							]
 						}
 					},
@@ -1419,7 +1434,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -1428,7 +1443,7 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
 							]
 						}
 					},
@@ -2132,6 +2147,10 @@
 		},
 		{
 			"key": "reviewId",
+			"value": ""
+		},
+		{
+			"key": "userIDNo",
 			"value": ""
 		}
 	]

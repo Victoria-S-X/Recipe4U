@@ -7,7 +7,7 @@ const links = require("./links")
 
 
 //GET courses posted by logged in user
-router.get("/posted", auth, async (req, res) => {
+router.get("/posted-courses", auth, async (req, res) => {
 
     const courses = await courseData.getFromUser(req.userID)
 
