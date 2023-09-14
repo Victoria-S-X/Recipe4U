@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 	if (!token) return res.status(401).json({ 
 		message: "Authentication token missing",
 		_links: {
-			login: links.login,
+			login: links.login(),
 		}
 	})
 
@@ -28,7 +28,7 @@ module.exports = async (req, res, next) => {
 			res.status(400).json({
 				message: "Invalid userID",
 				_links: {
-					login: links.login,
+					login: links.login(),
 				}
 			})
 			return
@@ -40,8 +40,8 @@ module.exports = async (req, res, next) => {
 			res.status(401).json({ 
 				message: "Can't authenticate, user does not exist",
 				_links: {
-					login: links.login,
-					createUser: links.createUser
+					login: links.login(),
+					createUser: links.createUser()
 				}
 			})
 			return
@@ -52,7 +52,7 @@ module.exports = async (req, res, next) => {
 		return res.status(401).json({
 			message: "Invalid token",
 			_links: {
-				login: links.login,
+				login: links.login(),
 			}
 		});
 	}

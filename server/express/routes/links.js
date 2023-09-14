@@ -6,16 +6,20 @@ exports.setBackendUrl = (url) => {
 
 
 
-exports.login = {
-    description: "login",
-    href: `${backendUrl}/login`,
-    method: "POST"
+exports.login = () => {
+    return {
+        description: "login",
+        href: `${backendUrl}/login`,
+        method: "POST"
+    }
 }
 
-exports.createUser = {
-    description: "Create user",
-    href: `${backendUrl}/users`,
-    method: "POST"
+exports.createUser = () => {
+    return {
+        description: "Create user",
+        href: `${backendUrl}/users`,
+        method: "POST"
+    }
 }
 
 exports.getCourse = (courseID) => {

@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
         case ResCode.SUCCESS:
             const data = {...result?.data}._doc
             data._links = {
-                login: links.login
+                login: links.login()
             }
             res.status(201).json(data)
             break
