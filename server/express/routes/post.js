@@ -1,7 +1,6 @@
 const router = require("../expressApp").Router("/api/v1/posts")
 const auth = require('../auth')
-const ResCode = require("../../db/helpers").ResCode
-const Review = require("../../db/models/review")
+const {ResCode, idToObj} = require("../../db/helpers")
 const Post = require('../../db/models/post')
 const multer = require('multer')
 const links = require("./links")
@@ -81,7 +80,9 @@ router.get('/:id', getPost, (req, res) => {
         result._links = {
             self: links.getPost(req.params.id)
         }
-        res.send(result)
+        res.status(200).json(result)
+    } else {
+        res.status(404).json({ message: 'Cannot find post' })
     }
 })
 
@@ -139,7 +140,13 @@ router.delete('/:id', getPost, auth, async (req, res) => {
 async function getPost(req, res, next) {
     let post
     try {
-        post = await Post.findById(req.params.id)
+        const postID = idToObj(req.params.id)
+        if(!postID) return res.status(400).json({
+            message: "Invalid post ID",
+            postID: req.params.id
+        })
+
+        post = await Post.findById(postID)
         if (post == null) {
             return res.status(404).json({ message: 'Cannot find post'})
         }
