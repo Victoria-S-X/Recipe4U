@@ -43,12 +43,23 @@ router.post('/', upload.single('postImage'), auth, async (req, res) => {
 // Get all posts
 router.get('/', async (req, res) => {
     try {
-        let { postName, user, reviews } = req.query
+        let { postName, user, reviews, offset, limit } = req.query
+        // Filtering the searching post results
         let query = {}
         if (user != null) query.user = user
         if (postName != null) query.postName = postName
         if (reviews != null) query.reviews = reviews
+        
         let result = await Post.find(query)
+
+        // Paging with offset and limit
+        let currentOffset = 0
+        if (limit != null) {
+            if (offset != null) {
+                currentOffset = offset                
+            }
+           result = result.slice(currentOffset, Number(currentOffset) + Number(req.query.limit))
+        }
         res.status(200).json(result)
     } catch (err) {
         res.status(500).json({ message: err.message })
