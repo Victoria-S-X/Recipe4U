@@ -3,6 +3,7 @@ const router = require("../expressApp").Router("/api/v1/posts")
 const auth = require('../auth')
 const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
 const ResCode = require("../../db/helpers").ResCode
+const sort = require('../../db/helpers').sort
 const Review = require("../../db/models/review")
 const Post = require('../../db/models/post')
 const multer = require('multer')
@@ -42,8 +43,13 @@ router.post('/', upload.single('postImage'), auth, async (req, res) => {
 // Get all posts
 router.get('/', async (req, res) => {
     try {
-        const post = await Post.find()
-        res.status(200).json(post)
+        let { postName, user, reviews } = req.query
+        let query = {}
+        if (user != null) query.user = user
+        if (postName != null) query.postName = postName
+        if (reviews != null) query.reviews = reviews
+        let result = await Post.find(query)
+        res.status(200).json(result)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
