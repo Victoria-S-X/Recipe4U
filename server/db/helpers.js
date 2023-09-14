@@ -2,6 +2,8 @@ const mongoose = require("./db").mongoose
 const ValidationError = require("mongoose").Error.ValidationError
 
 
+// ==================== RES CODE ====================
+
 function ResCodeObj(number){
     this.number = number
     this.toString = () => {
@@ -9,7 +11,6 @@ function ResCodeObj(number){
     }
     this.resCode = this
 }
-
 
 const ResCode = {
     SUCCESS: new ResCodeObj(0),
@@ -25,14 +26,8 @@ const ResCode = {
 }
 
 
-exports.idToObj = (strID) => {
-    try{
-        return new mongoose.Types.ObjectId(strID)
-    } catch(err){
-        console.error(`Bad ID: ${strID}`)
-    }
-}
 
+// ==================== SORTING ====================
 
 function SortOption(sortStr){
     switch(sortStr[0]){
@@ -71,6 +66,18 @@ exports.sort = (sortString, elements) => {
             if(a[sortOpt.property] > b[sortOpt.property]) return sortOpt.orderBigger
             return 0
         })
+    }
+}
+
+
+
+// ==================== OTHER ====================
+
+exports.idToObj = (strID) => {
+    try{
+        return new mongoose.Types.ObjectId(strID)
+    } catch(err){
+        console.error(`Bad ID: ${strID}`)
     }
 }
 
