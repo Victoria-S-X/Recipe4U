@@ -10,9 +10,9 @@ module.exports = async (req, res, next) => {
 	const token = req.header("Authorization")?.split(' ')[1] //removes "Bearer " prefix
 	if (!token) return res.status(401).json({ 
 		message: "Authentication token missing",
-		_links: [
-			loginLink,
-		]
+		_links: {
+			login: links.login(),
+		}
 	})
 
 	try {
@@ -27,9 +27,9 @@ module.exports = async (req, res, next) => {
 		if(!req.userID){
 			res.status(400).json({
 				message: "Invalid userID",
-				_links: [
-					links.login,
-				]
+				_links: {
+					login: links.login(),
+				}
 			})
 			return
 		}
@@ -39,10 +39,10 @@ module.exports = async (req, res, next) => {
 			console.log(`Token payload: ${data.userID}`)
 			res.status(401).json({ 
 				message: "Can't authenticate, user does not exist",
-				_links: [
-					links.login,
-					links.createUser
-				]
+				_links: {
+					login: links.login(),
+					createUser: links.createUser()
+				}
 			})
 			return
 		}
@@ -51,9 +51,9 @@ module.exports = async (req, res, next) => {
 	} catch (error) {
 		return res.status(401).json({
 			message: "Invalid token",
-			_links: [
-				links.login,
-			]
+			_links: {
+				login: links.login(),
+			}
 		});
 	}
 }

@@ -1,5 +1,9 @@
 const { ResCode, idToObj } = require("./helpers")
+
 const Post = require("./models/post")
+const Review = require("./models/review")
+
+
 
 exports.getPost = async (postID) => {
     return await Post.findById(postID)
@@ -27,5 +31,22 @@ exports.postValidation = async (userID, strPostID) => {
     return {
         resCode: ResCode.SUCCESS,
         postID: postID
+    }
+}
+
+
+//DOESN'T AUTHENTICATE USER
+exports.delete = async (post) => {
+
+    try{
+        await Review.deleteMany({ post: post.id })
+        await post.deleteOne()
+
+        return await require("./postsCourses").deleteCoursesFromPost(post.id)
+    } catch(err) {
+        return {
+            resCode: ResCode.ERROR,
+            error: err.message
+        }
     }
 }

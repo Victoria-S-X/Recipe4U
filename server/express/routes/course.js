@@ -7,7 +7,7 @@ const links = require("./links")
 
 
 //GET courses posted by logged in user
-router.get("/posted", auth, async (req, res) => {
+router.get("/posted-courses", auth, async (req, res) => {
 
     const courses = await courseData.getFromUser(req.userID)
 
@@ -59,9 +59,9 @@ router.put("/:id", auth, async (req, res) => {
     switch(result.resCode){
         case ResCode.SUCCESS:
             const data = {...result?.data}._doc
-            data._links = [
-                links.getCourse(data._id),
-            ]
+            data._links = {
+                getCourse: links.getCourse(data._id),
+            }
             res.status(200).json(data)
             break
         case ResCode.BAD_INPUT:
