@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 	if (!token) return res.status(401).json({ 
 		message: "Authentication token missing",
 		_links: {
-			login: loginLink,
+			login: links.login,
 		}
 	})
 

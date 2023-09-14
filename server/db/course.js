@@ -5,7 +5,6 @@ const Course = require("./models/course")
 const createCourse = require("./postsCourses").create
 
 
-
 exports.get = async (strID) => {
     const id = idToObj(strID)
     if(!id) return
@@ -85,18 +84,6 @@ exports.deleteCourses = async (userID) => {
 	}
 
 	return resCodeResult
-}
-
-
-//DOES NOT AUTHENTICATE USER
-exports.deleteCoursesFromPost = async (postID) => {
-	try{
-		await Course.deleteMany({postID: postID})
-		return ResCode.SUCCESS
-	} catch(err){
-		console.error(err)
-		return ResCode.ERROR
-	}
 }
 
 
