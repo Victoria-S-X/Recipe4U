@@ -41,7 +41,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user69",
+									"value": "user71",
 									"type": "default"
 								},
 								{
@@ -1684,7 +1684,11 @@
 									"})",
 									"",
 									"const response = pm.response.json()",
-									"pm.collectionVariables.set(\"reviewId\", response._id);"
+									"pm.collectionVariables.set(\"reviewId\", response._id);",
+									"",
+									"pm.test(\"Rating is 5\", () => {",
+									"    pm.expect(response.rating).to.equal(5)",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -1724,6 +1728,88 @@
 								"posts",
 								"{{postID}}",
 								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"const response = pm.response.json()",
+									"",
+									"pm.test(\"Rating is 1\", () => {",
+									"    pm.expect(response.rating).to.equal(1)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "...Actually, nevermind. I got food poisoning",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "postID",
+									"value": "{{postID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/reviews/{{reviewId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{reviewId}}"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "...Actually nevermind, it sucks",
+									"disabled": true
+								},
+								{
+									"key": "rating",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},

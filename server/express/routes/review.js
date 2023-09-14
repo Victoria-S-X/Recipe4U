@@ -1,32 +1,43 @@
-const router = require("../expressApp").Router("/api/v1/posts")
+const postRouter = require("./post")
+const router = require("../expressApp").Router("/api/v1/reviews")
 
+const reviewData = require("../../db/review")
 const auth = require('../auth')
+const { ResCode } = require("../../db/helpers")
 
 const Review = require('../../db/models/review')
 const Post = require('../../db/models/post')
 
-router.post('/:postId/reviews', auth, async (req, res) => {
-    console.log(req.body)
-    const review = new Review({
-        text: req.body.text, 
-        post: req.params.postId,
-        rating: req.params.rating,
-        user: req.userID,
+
+postRouter.post('/:postId/reviews', auth, async (req, res) => {
+
+    const result = await reviewData.create({
+        text: req.body.text,
+        strPostID: req.params.postId,
+        rating: req.body.rating,
+        userID: req.userID
     })
-    try {
-        await review.save()
-        const post = await Post.findById(req.params.postId)
-        await post.reviews.push(review)
-        await post.save()
-        console.log(review.text)
-        res.status(201).send(review)
-    } catch (err){
-        console.log(err.message)
-        res.status(400).json({ message: "Failed to create the review. Please try again." })
+
+    switch (result.resCode) {
+        case ResCode.SUCCESS:
+            res.status(201).json(result?.data)
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({ message: result?.error })
+            break
+        case ResCode.NOT_FOUND:
+            res.status(404).json({ message: result?.error })
+
+        default:
+            res.status(500).json({ 
+                message: "Failed to create review",
+                resCode: result?.resCode.number,
+            })
+            break
     }
 })
 
-router.get('/:postId/reviews', async (req, res) => {
+postRouter.get('/:postId/reviews', async (req, res) => {
     try {
         let reviews = await Review.find()
         if (reviews != null) {
@@ -39,11 +50,11 @@ router.get('/:postId/reviews', async (req, res) => {
     }
 })
 
-router.get('/:postId/reviews/:reviewId', getReview, async (req, res) => {
+postRouter.get('/:postId/reviews/:reviewId', getReview, async (req, res) => {
     res.send(res.review)
 })
 
-router.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res) => {
+postRouter.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res) => {
     if (!res.review.user.equals(req.userID)) return res.status(403).json({ message: 'Unauthorized' })
     try {
         const post = await Post.findById(req.params.postId)
@@ -55,6 +66,41 @@ router.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res) =>
         res.status(200).json({ message: 'The review is deleted.' })
     } catch (err) {
         return res.status(500).json({ message: err.message })
+    }
+})
+
+
+
+router.put("/:id", auth, async (req, res) => {
+
+    const result = await reviewData.put({
+        strPostID: req.body.postID,
+        userID: req.userID,
+        text: req.body.text,
+        rating: req.body.rating,
+        id: req.params.id
+    })
+
+    switch (result.resCode) {
+        case ResCode.SUCCESS:
+            res.status(200).json(result?.data)
+            break
+        case ResCode.MISSING_ARGUMENT:
+            res.status(422).json({ message: result?.error })
+            break
+        case ResCode.BAD_INPUT:
+            res.status(400).json({ message: result?.error })
+            break
+        case ResCode.NOT_FOUND:
+            res.status(404).json({ message: result?.error })
+            break
+        case ResCode.UNAUTHORIZED:
+            res.status(403).json({ message: result?.error })
+            break
+        
+        default:
+            res.status(500).json({ message: "Failed to update review" })
+            break
     }
 })
 

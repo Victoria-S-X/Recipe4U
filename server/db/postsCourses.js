@@ -36,10 +36,10 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 				resCode: ResCode.BAD_INPUT,
 				data: err
 			}
+		} else {
+			console.log(err)
+			return ResCode.ERROR
 		}
-
-		console.log(err)
-		return ResCode.ERROR
 	}
 }
 
