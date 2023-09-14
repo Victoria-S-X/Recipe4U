@@ -6,7 +6,7 @@ const ResCode = require("../../db/helpers").ResCode
 
 
 //UPDATES attendance status for logged in user to provided course
-router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with not using noun word?
+router.patch("/attendance/:courseID", auth, async (req, res) => { //TODO: fine with not using noun word?
     const response = await attendance.attend(req.userID, req.params.courseID)
 
     switch(response.resCode) {
@@ -36,7 +36,7 @@ router.patch("/attend/:courseID", auth, async (req, res) => { //TODO: fine with 
 })
 
 //UPDATES attendance status for logged in user to leave provided course
-router.patch("/leave/:courseID", auth, async (req, res) => {
+router.delete("/attendance/:courseID", auth, async (req, res) => {
     const response = await attendance.leave(req.userID, req.params.courseID)
 
     switch(response.resCode) {

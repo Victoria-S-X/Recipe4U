@@ -1618,7 +1618,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/attend/{{courseID}}",
+							"raw": "localhost:3000/api/v1/attendance/{{courseID}}",
 							"host": [
 								"localhost"
 							],
@@ -1626,7 +1626,7 @@
 							"path": [
 								"api",
 								"v1",
-								"attend",
+								"attendance",
 								"{{courseID}}"
 							]
 						}
@@ -1660,14 +1660,14 @@
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/leave/{{courseID}}",
+							"raw": "localhost:3000/api/v1/attendance/{{courseID}}",
 							"host": [
 								"localhost"
 							],
@@ -1675,7 +1675,7 @@
 							"path": [
 								"api",
 								"v1",
-								"leave",
+								"attendance",
 								"{{courseID}}"
 							]
 						}
