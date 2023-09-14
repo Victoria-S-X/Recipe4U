@@ -3,13 +3,10 @@ const auth = require('../auth')
 const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
 const ResCode = require("../../db/helpers").ResCode
 const Review = require("../../db/models/review")
-
-const hal = require('hal')
 const Post = require('../../db/models/post')
 const multer = require('multer')
+const links = require("./links")
 const path = require('path')
-const fs = require('fs')
-const review = require("../../db/models/review")
 const uploadPath = path.join('public', Post.postImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png']
 const upload = multer({
@@ -67,11 +64,11 @@ router.delete('/', auth, async (req, res) => {
 // Get one post with its id
 router.get('/:id', getPost, (req, res) => {
     if (res.post) {
-        const post = res.post
-        console.log(post)
-        const resource = new hal.Resource({post}, `/api/v1/posts/${req.params.id}`)
-        resource.link('posts', '/api/v1/posts')
-        res.send(resource)
+        const result = {...res.post}._doc
+        result._links = {
+            self: links.getPost(req.params.id)
+        }
+        res.send(result)
     }
 })
 

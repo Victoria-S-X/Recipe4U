@@ -31,9 +31,9 @@ router.post("/", async (req, res) => {
     switch (result.resCode) {
         case ResCode.SUCCESS:
             const data = {...result?.data}._doc
-            data._links = [
-                links.login
-            ]
+            data._links = {
+                login: links.login
+            }
             res.status(201).json(data)
             break
         case ResCode.ITEM_ALREADY_EXISTS:

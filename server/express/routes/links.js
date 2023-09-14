@@ -7,21 +7,29 @@ exports.setBackendUrl = (url) => {
 
 
 exports.login = {
-    rel: "login",
+    description: "login",
     href: `${backendUrl}/login`,
     method: "POST"
 }
 
 exports.createUser = {
-    rel: "createUser",
+    description: "Create user",
     href: `${backendUrl}/users`,
     method: "POST"
 }
 
 exports.getCourse = (courseID) => {
     return {
-        rel: "getCourse",
+        description: "Get course",
         href: `${backendUrl}/courses/${courseID}`,
+        method: "GET"
+    }
+}
+
+exports.getPost = (postID) => {
+    return {
+        description: "Get post",
+        href: `${backendUrl}/posts/${postID}`,
         method: "GET"
     }
 }

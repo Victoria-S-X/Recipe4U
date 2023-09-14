@@ -26,9 +26,10 @@ router.post("/", async (req, res) => {
     if(!user){
         res.status(404).json({
             message: "User does not exist",
-            _links: [
-                links.createUser
-            ]})
+            _links: {
+                createUser: links.createUser
+            }
+        })
         return
     }
 
