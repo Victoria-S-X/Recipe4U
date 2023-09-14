@@ -1,16 +1,11 @@
 const router = require("../expressApp").Router("/api/v1/posts")
 const auth = require('../auth')
-const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
-const ResCode = require("../../db/helpers").ResCode
-const sort = require('../../db/helpers').sort
-const Review = require("../../db/models/review")
-
-const hal = require('hal')
+const {ResCode, idToObj} = require("../../db/helpers")
 const Post = require('../../db/models/post')
 const multer = require('multer')
+const links = require("./links")
 const path = require('path')
-const fs = require('fs')
-const review = require("../../db/models/review")
+const postHandler = require("../../db/post")
 const uploadPath = path.join('public', Post.postImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png']
 const upload = multer({
@@ -67,15 +62,28 @@ router.get('/', async (req, res) => {
     }
 })
 
-// Delete all posts of a specific user
-router.delete('/', auth, async (req, res) => {
-    try {
-        const query = { user: req.userID }
-        await Post.deleteMany(query)
 
-        return res.status(200).json({ message: 'Deleted' })
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
+// Delete all posts from the logged in user
+router.delete('/', auth, async (req, res) => {
+    const posts = await Post.find({ user: req.userID })
+
+    const resultsResult = ResCode.SUCCESS
+    for(const post of posts) {
+        const result = await postHandler.delete(post)
+        if(result !== ResCode.SUCCESS) resultsResult = result
+    }
+
+    switch(resultsResult) {
+        case ResCode.SUCCESS:
+            res.status(200).json({ message: 'Deleted' })
+            break
+
+        default:
+            res.status(500).json({
+                message: "Server error",
+                error: result?.error
+            })
+            break
     }
 
 })
@@ -83,11 +91,13 @@ router.delete('/', auth, async (req, res) => {
 // Get one post with its id
 router.get('/:id', getPost, (req, res) => {
     if (res.post) {
-        const post = res.post
-        console.log(post)
-        const resource = new hal.Resource({post}, `/api/v1/posts/${req.params.id}`)
-        resource.link('posts', '/api/v1/posts')
-        res.send(resource)
+        const result = {...res.post}._doc
+        result._links = {
+            self: links.getPost(req.params.id)
+        }
+        res.status(200).json(result)
+    } else {
+        res.status(404).json({ message: 'Cannot find post' })
     }
 })
 
@@ -124,20 +134,20 @@ router.patch('/:id', getPost, auth, async (req, res) => {
 // Delete a post
 router.delete('/:id', getPost, auth, async (req, res) => {
     if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
-    
-    try {
-        await Review.deleteMany({ post: res.post.id })
-        await res.post.deleteOne()
 
-        const cousesDeletedResCode = await deleteCoursesFromPost(req.params.id)
-        if(cousesDeletedResCode === ResCode.SUCCESS) {
-            return res.status(200).json({ message: 'The post is deleted.' })
-        } else {
-            return res.status(500).json({ message: 'The post is deleted, but the courses are not.' })
-        }
+    const result = await postHandler.delete(res.post)
 
-    } catch (err) {
-        return res.status(500).json({ message: err.message })
+    switch(result) {
+        case ResCode.SUCCESS:
+            res.status(200).json({ message: 'The post is deleted.' })
+            break
+
+        default:
+            res.status(500).json({
+                message: "Server error",
+                error: result?.error
+            })
+            break
     }
 })
 
@@ -145,7 +155,13 @@ router.delete('/:id', getPost, auth, async (req, res) => {
 async function getPost(req, res, next) {
     let post
     try {
-        post = await Post.findById(req.params.id)
+        const postID = idToObj(req.params.id)
+        if(!postID) return res.status(400).json({
+            message: "Invalid post ID",
+            postID: req.params.id
+        })
+
+        post = await Post.findById(postID)
         if (post == null) {
             return res.status(404).json({ message: 'Cannot find post'})
         }
