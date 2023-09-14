@@ -2,6 +2,7 @@ const router = require("../expressApp").Router("/api/v1/courses")
 const courseData = require("../../db/course")
 const {ResCode} = require("../../db/helpers")
 const auth = require("../auth")
+const links = require("./links")
 
 
 
@@ -43,7 +44,7 @@ router.get("/:id", async (req, res) => {
 
 //UPDATES the specified course
 router.put("/:id", auth, async (req, res) => {
-    const response = await courseData.put({
+    const result = await courseData.put({
         strCourseID: req.params.id,
         userID: req.userID,
         strPostID: req.body?.postID,
@@ -55,25 +56,29 @@ router.put("/:id", auth, async (req, res) => {
         maxAttendees: req.body?.maxAttendees
     })
 
-    switch(response.resCode){
+    switch(result.resCode){
         case ResCode.SUCCESS:
-            res.status(200).json(response?.data)
+            const data = {...result?.data}._doc
+            data._links = [
+                links.getCourse(data._id),
+            ]
+            res.status(200).json(data)
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({
                 message: "Bad input",
-                error: response?.data
+                error: result?.data
             })
             break
         case ResCode.UNAUTHORIZED:
             res.status(401).json({message: "User does not own post"})
             break
         case ResCode.NOT_FOUND_1:
-            res.status(404).json({message: `Post '${response.data}' not found`})
+            res.status(404).json({message: `Post '${result.data}' not found`})
             break
 
         default:
-            res.status(500).json({message: `Internal server error. Code ${response.resCode.number}}`})
+            res.status(500).json({message: `Internal server error. Code ${result.resCode.number}}`})
     }
 })
 
