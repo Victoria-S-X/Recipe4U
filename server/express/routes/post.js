@@ -1,9 +1,10 @@
 const router = require("../expressApp").Router("/api/v1/posts")
-
 const auth = require('../auth')
 const deleteCoursesFromPost = require("../../db/course").deleteCoursesFromPost
 const ResCode = require("../../db/helpers").ResCode
 const Review = require("../../db/models/review")
+
+const hal = require('hal')
 const Post = require('../../db/models/post')
 const multer = require('multer')
 const path = require('path')
@@ -42,8 +43,9 @@ router.post('/', upload.single('postImage'), auth, async (req, res) => {
 // Get all posts
 router.get('/', async (req, res) => {
     try {
-        const post = await Post.find()
-        res.status(200).json(post)
+        const posts = await Post.find()
+
+        res.status(200).json(posts)
     } catch (err) {
         res.status(500).json({ message: err.message })
     }
@@ -64,7 +66,13 @@ router.delete('/', auth, async (req, res) => {
 
 // Get one post with its id
 router.get('/:id', getPost, (req, res) => {
-    res.send(res.post)
+    if (res.post) {
+        const post = res.post
+        console.log(post)
+        const resource = new hal.Resource({post}, `/api/v1/posts/${req.params.id}`)
+        resource.link('posts', '/api/v1/posts')
+        res.send(resource)
+    }
 })
 
 // Update partially one post
