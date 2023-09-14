@@ -18,6 +18,7 @@ require("./express/routes/user")
 require("./express/routes/post")
 require("./express/routes/postsCourses")
 require("./express/routes/attendance")
+require("./express/routes/review")
 require("./express/routes/frontend")
 require("./express/routes/error")
 
