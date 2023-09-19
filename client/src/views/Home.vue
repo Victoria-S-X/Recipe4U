@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-jumbotron header="DIT342 Frontend" lead="Welcome to your DIT342 Frontend Vue.js App">
-      <!-- <b-button class="btn_message" variant="primary" v-on:click="getMessage()">Get Message from Server</b-button> -->
+      <b-button class="btn_message" variant="primary" v-on:click="getMessage()">Get Message from Server</b-button>
       <p>Message from the server:<br />
         {{ message }}</p>
     </b-jumbotron>
@@ -13,7 +13,7 @@
 
 <script>
 // @ is an alias to /src
-// import { Api } from '@/Api'
+import { Api } from '@/Api'
 import Courses from '@/components/Courses.vue'
 
 export default {
@@ -25,17 +25,17 @@ export default {
     return {
       message: 'none'
     }
-  // },
-  // methods: {
-  //   getMessage() {
-  //     Api.get('/')
-  //       .then(response => {
-  //         this.message = response.data.message
-  //       })
-  //       .catch(error => {
-  //         this.message = error
-  //       })
-  //   }
+  },
+  methods: {
+    getMessage() {
+      Api.get('/')
+        .then(response => {
+          this.message = response.data.message
+        })
+        .catch(error => {
+          this.message = error
+        })
+    }
   }
 }
 </script>
