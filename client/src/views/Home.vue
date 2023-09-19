@@ -6,7 +6,6 @@
         {{ message }}</p>
     </b-jumbotron>
 
-    <p>fe</p>
     <Courses />
   </div>
 </template>
