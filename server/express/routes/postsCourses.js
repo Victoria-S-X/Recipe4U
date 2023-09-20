@@ -7,11 +7,13 @@ const postsCourses = require("../../db/postsCourses")
 //CREATE course
 router.post("/:id/courses", auth, async (req, res) => {
 
+    const start = new Date(req.body?.start)
+
     const response = await postsCourses.create(
         req.userID,
         req.params.id,
         req.body?.meetingLink,
-        req.body?.start,
+        start,
         req.body?.duration,
         req.body?.city,
         req.body?.address,
@@ -35,7 +37,7 @@ router.post("/:id/courses", auth, async (req, res) => {
         default:
             res.status(500).json({
                 message: "Failed to create course",
-                code: resCode,
+                code: response?.resCode,
                 error: response?.data
             })
             break
@@ -44,7 +46,8 @@ router.post("/:id/courses", auth, async (req, res) => {
 
 
 router.get("/:id/courses", auth, async (req, res) => {
-    const response = await postsCourses.getFromPost(req.params.id)
+    const response = await postsCourses.getFromPost(req.params.id, req.query.filter)
+
     sort(req.query.sort, response.data)
 
     switch(response.resCode){
