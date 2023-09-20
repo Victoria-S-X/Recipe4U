@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { Api } from '@/Api'
 // Import FilePond
 import vueFilePond from 'vue-filepond'
 
@@ -67,7 +68,6 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
-import { Api } from '@/Api'
 
 // Create component
 const FilePond = vueFilePond(
@@ -93,7 +93,7 @@ export default {
 
   methods: {
     onCreatePost() {
-      Api.post('/', {
+      Api.post('/v1/posts', {
         postName: this.postName,
         cookingTime: this.cookingTime,
         description: this.description,
