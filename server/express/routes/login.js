@@ -1,7 +1,9 @@
-const router = require("../expressApp").Router("/api/v1/login")
+const {Router} = require("../expressApp")
+const router = Router("/api/v1/login")
 
 const userData = require("../../db/user")
 const auth = require("../../auth")
+const links = require("./links")
 
 
 router.post("/", async (req, res) => {
@@ -22,7 +24,12 @@ router.post("/", async (req, res) => {
     //does user exist?
     const user = await userData.find(username)
     if(!user){
-        res.status(404).json({message: "User does not exist"})
+        res.status(404).json({
+            message: "User does not exist",
+            _links: {
+                createUser: links.createUser()
+            }
+        })
         return
     }
 

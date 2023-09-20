@@ -4,6 +4,7 @@ const userData = require("../../db/user")
 const auth = require("../../auth")
 const authMiddleware = require("../auth")
 const { ResCode } = require("../../db/helpers")
+const links = require("./links")
 
 
 // CREATE user
@@ -29,7 +30,11 @@ router.post("/", async (req, res) => {
     
     switch (result.resCode) {
         case ResCode.SUCCESS:
-            res.status(201).json(result?.data)
+            const data = {...result?.data}._doc
+            data._links = {
+                login: links.login()
+            }
+            res.status(201).json(data)
             break
         case ResCode.ITEM_ALREADY_EXISTS:
             res.status(403).json({message: "Username is already taken"})

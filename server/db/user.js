@@ -25,16 +25,16 @@ exports.create = async (email, username, password, firstName, lastName, age) => 
 		if(err.code == 11000) return ResCode.ITEM_ALREADY_EXISTS
 		return ResCode.ERROR
 	}
-	}
+}
 
 
-	exports.find = async (username) => {
+exports.find = async (username) => {
 	return await User.findOne({ username:username })
 }
 
 
 exports.get = async (id) => {
-	return User.findById(id)
+	return await User.findById(id)
 }
 
 

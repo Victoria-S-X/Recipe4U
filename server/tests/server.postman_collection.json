@@ -17,13 +17,97 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"",
 									"const body = pm.response.json()",
 									"pm.collectionVariables.set(\"username\", body.username)",
 									"pm.collectionVariables.set(\"userID\", body._id)",
 									"",
 									"pm.test(\"Status code is 201\", function () {",
 									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var value = pm.collectionVariables.get(\"userIDNo\");",
+									"pm.collectionVariables.set(\"userIDNo\", value+1);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var value = pm.collectionVariables.get(\"userIDNo\");",
+									"",
+									"if (!value) {",
+									"    pm.collectionVariables.set(\"userIDNo\", 1);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{userIDNo}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "myPass",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "kor@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "firstName",
+									"value": "jag",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "ibland",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to create the same user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -41,7 +125,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "user18",
+									"value": "{{username}}",
 									"type": "default"
 								},
 								{
@@ -52,6 +136,70 @@
 								{
 									"key": "email",
 									"value": "kor@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "firstName",
+									"value": "jag",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "ibland",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to create user with no email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 422\", function () {",
+									"    pm.response.to.have.status(422);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "iShallNeverBeCreated",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "myPass",
 									"type": "default"
 								},
 								{
@@ -176,13 +324,54 @@
 							]
 						},
 						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
-								"type": "default"
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "lastName",
+									"value": "Tengse",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user WHEN not logged in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
@@ -294,7 +483,6 @@
 									"});",
 									"",
 									"const response = pm.response.json()",
-									"pm.globals.set(\"postId\", response._id);",
 									"pm.collectionVariables.set(\"postID\", response._id)"
 								],
 								"type": "text/javascript"
@@ -339,6 +527,16 @@
 									"type": "file",
 									"src": "/Users/h/Downloads/db8516a7-101f-4c7a-9ed9-7740b6a70672.jpg",
 									"disabled": true
+								},
+								{
+									"key": "ingredients[0]",
+									"value": "Meat",
+									"type": "text"
+								},
+								{
+									"key": "ingredients[1]",
+									"value": "Veggies",
+									"type": "text"
 								}
 							]
 						},
@@ -409,7 +607,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/:postId",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}",
 							"host": [
 								"localhost"
 							],
@@ -418,13 +616,7 @@
 								"api",
 								"v1",
 								"posts",
-								":postId"
-							],
-							"variable": [
-								{
-									"key": "postId",
-									"value": "{{postId}}"
-								}
+								"{{postID}}"
 							]
 						}
 					},
@@ -468,7 +660,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/:postId",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}",
 							"host": [
 								"localhost"
 							],
@@ -477,13 +669,7 @@
 								"api",
 								"v1",
 								"posts",
-								":postId"
-							],
-							"variable": [
-								{
-									"key": "postId",
-									"value": "{{postId}}"
-								}
+								"{{postID}}"
 							]
 						}
 					},
@@ -518,7 +704,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/:postId",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}",
 							"host": [
 								"localhost"
 							],
@@ -527,13 +713,7 @@
 								"api",
 								"v1",
 								"posts",
-								":postId"
-							],
-							"variable": [
-								{
-									"key": "postId",
-									"value": "{{postId}}"
-								}
+								"{{postID}}"
 							]
 						}
 					},
@@ -583,7 +763,7 @@
 					"response": []
 				},
 				{
-					"name": "create Copy",
+					"name": "create again (needed for other tests)",
 					"event": [
 						{
 							"listen": "test",
@@ -748,9 +928,16 @@
 								"exec": [
 									"const body = pm.response.json()",
 									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"pm.test(\"Post has courses\", () => {",
 									"    pm.expect(body).to.be.an(\"array\").that.is.not.empty",
-									"})"
+									"})",
+									"",
+									"",
+									"//TODO: check sorting"
 								],
 								"type": "text/javascript"
 							}
@@ -776,7 +963,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/{{postID}}/courses",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/courses?sort=-maxAttendees,_id",
 							"host": [
 								"localhost"
 							],
@@ -787,6 +974,12 @@
 								"posts",
 								"{{postID}}",
 								"courses"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "-maxAttendees,_id"
+								}
 							]
 						}
 					},
@@ -856,6 +1049,10 @@
 								"exec": [
 									"const body = pm.response.json()",
 									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
 									"pm.test(\"user has courses\", () => {",
 									"    pm.expect(body).to.be.an(\"array\").that.is.not.empty",
 									"})"
@@ -884,7 +1081,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -893,7 +1090,7 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
 							]
 						}
 					},
@@ -901,6 +1098,20 @@
 				},
 				{
 					"name": "course FROM id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -946,9 +1157,13 @@
 								"exec": [
 									"const body = pm.response.json()",
 									"",
-									"pm.test(\"user has courses\", () => {",
+									"pm.test(\"user has no courses\", () => {",
 									"    pm.expect(body).to.be.an(\"array\").that.is.empty",
-									"})"
+									"})",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -974,7 +1189,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -983,14 +1198,14 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "recreate course",
+					"name": "recreate course USING http override",
 					"event": [
 						{
 							"listen": "test",
@@ -1014,6 +1229,9 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1025,12 +1243,11 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
-								"warning": "This is a duplicate header and will be overridden by the Authorization header generated by Postman.",
-								"key": "Authorization",
-								"value": "{{userID}}",
+								"key": "x-http-method-override",
+								"value": "post",
 								"type": "text"
 							}
 						],
@@ -1068,6 +1285,80 @@
 				},
 				{
 					"name": "courses posted BY user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"right amount of deletions\", () => {",
+									"    pm.expect(body.amtDeleted).to.equal(1)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/courses",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "courses posted BY user WHEN none",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"right amount of deletions\", () => {",
+									"    pm.expect(body.amtDeleted).to.equal(0)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1111,9 +1402,13 @@
 								"exec": [
 									"const body = pm.response.json()",
 									"",
-									"pm.test(\"user has courses\", () => {",
+									"pm.test(\"user has no courses\", () => {",
 									"    pm.expect(body).to.be.an(\"array\").that.is.empty",
-									"})"
+									"})",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1139,7 +1434,7 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/api/v1/courses/posted",
+							"raw": "localhost:3000/api/v1/courses/posted-courses",
 							"host": [
 								"localhost"
 							],
@@ -1148,7 +1443,73 @@
 								"api",
 								"v1",
 								"courses",
-								"posted"
+								"posted-courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put new course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "postID",
+									"value": "{{postID}}",
+									"type": "text"
+								},
+								{
+									"key": "maxAttendees",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "meetingLink",
+									"value": "zoom.gov/95",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/courses/{{courseID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"{{courseID}}"
 							]
 						}
 					},
@@ -1165,7 +1526,11 @@
 									"",
 									"pm.test(\"maxAttendees is updated to 9\", () => {",
 									"    pm.expect(body.maxAttendees).to.equal(9)",
-									"})"
+									"})",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -1222,21 +1587,38 @@
 			"item": [
 				{
 					"name": "attend",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{login oscarlagrosen}}",
-								"type": "text"
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/attend/64fde5ad30e125b8b4326fee",
+							"raw": "localhost:3000/api/v1/attendance/{{courseID}}",
 							"host": [
 								"localhost"
 							],
@@ -1244,8 +1626,8 @@
 							"path": [
 								"api",
 								"v1",
-								"attend",
-								"64fde5ad30e125b8b4326fee"
+								"attendance",
+								"{{courseID}}"
 							]
 						}
 					},
@@ -1253,21 +1635,39 @@
 				},
 				{
 					"name": "leave",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZkODQxYjZjNzUxNmYxMWRlMDI1NzgiLCJpYXQiOjE2OTQzMzYwNzd9.8ulEkt41bqdAedfbVo3G6trbM6gMPbcclrLD5Qyij_U",
-								"type": "text"
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
 							}
-						],
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "localhost:3000/api/v1/leave/64fd54d61c92b8a5aea3cd5a",
+							"raw": "localhost:3000/api/v1/attendance/{{courseID}}",
 							"host": [
 								"localhost"
 							],
@@ -1275,8 +1675,8 @@
 							"path": [
 								"api",
 								"v1",
-								"leave",
-								"64fd54d61c92b8a5aea3cd5a"
+								"attendance",
+								"{{courseID}}"
 							]
 						}
 					},
@@ -1288,7 +1688,27 @@
 			"name": "Review",
 			"item": [
 				{
-					"name": "POST Review",
+					"name": "post new review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"})",
+									"",
+									"const response = pm.response.json()",
+									"pm.collectionVariables.set(\"reviewId\", response._id);",
+									"",
+									"pm.test(\"Rating is 5\", () => {",
+									"    pm.expect(response.rating).to.equal(5)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1302,8 +1722,17 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"Recommended recipe!\",\n    \"rating\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/:id/review",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews",
 							"host": [
 								"localhost"
 							],
@@ -1312,13 +1741,89 @@
 								"api",
 								"v1",
 								"posts",
-								":id",
-								"review"
-							],
-							"variable": [
+								"{{postID}}",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"const response = pm.response.json()",
+									"",
+									"pm.test(\"Rating is 1\", () => {",
+									"    pm.expect(response.rating).to.equal(1)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "id",
-									"value": ""
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "...Actually, nevermind. I got food poisoning",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "postID",
+									"value": "{{postID}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/reviews/{{reviewId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{reviewId}}"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "...Actually nevermind, it sucks",
+									"disabled": true
+								},
+								{
+									"key": "rating",
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -1326,12 +1831,25 @@
 					"response": []
 				},
 				{
-					"name": "DELETE Review",
+					"name": "get one review by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/:postID/reviews/:id",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
 							"host": [
 								"localhost"
 							],
@@ -1340,19 +1858,244 @@
 								"api",
 								"v1",
 								"posts",
-								":postID",
+								"{{postID}}",
 								"reviews",
-								":id"
-							],
-							"variable": [
+								"{{reviewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete one review by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "postID",
-									"value": ""
-								},
-								{
-									"key": "id",
-									"value": ""
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
 								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"reviews",
+								"{{reviewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete review by invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"reviews",
+								"{{reviewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one deleted review by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"reviews",
+								"{{reviewId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post new review USING http override",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"})",
+									"",
+									"const response = pm.response.json()",
+									"pm.collectionVariables.set(\"reviewId\", response._id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-http-method-override",
+								"value": "post",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"Recommended recipe!\",\n    \"rating\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all reviews under one post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const body = pm.response.json()",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"There is >=1 reviews\", () => {",
+									"    pm.expect(body).to.be.an(\"array\").that.is.not.empty",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{{postID}}",
+								"reviews"
 							]
 						}
 					},
@@ -1400,6 +2143,14 @@
 		},
 		{
 			"key": "userID",
+			"value": ""
+		},
+		{
+			"key": "reviewId",
+			"value": ""
+		},
+		{
+			"key": "userIDNo",
 			"value": ""
 		}
 	]

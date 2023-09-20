@@ -1,12 +1,11 @@
 const {ResCode, idToObj, ValidationError} = require("./helpers")
-const {postValidation} = require("./post")
 const Course = require("./models/course")
 
 
 exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID=null) => {
 
 	//valid post?
-	const postResponse = await postValidation(userID, strPostID)
+	const postResponse = await require("./post").postValidation(userID, strPostID)
 	if(postResponse.resCode !== ResCode.SUCCESS) return postResponse
 
 	const course = new Course({
@@ -37,10 +36,10 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 				resCode: ResCode.BAD_INPUT,
 				data: err
 			}
+		} else {
+			console.log(err)
+			return ResCode.ERROR
 		}
-
-		console.log(err)
-		return ResCode.ERROR
 	}
 }
 
@@ -55,5 +54,19 @@ exports.getFromPost = async (strPostID) => {
 	return {
 		resCode: ResCode.SUCCESS,
 		data: courses
+	}
+}
+
+
+//DOES NOT AUTHENTICATE USER
+exports.deleteCoursesFromPost = async (postID) => {
+	try{
+		await Course.deleteMany({postID: postID})
+		return ResCode.SUCCESS
+	} catch(err){
+		return {
+			resCode: ResCode.ERROR,
+			error: "Failed to delete course from post"
+		}
 	}
 }
