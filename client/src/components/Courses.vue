@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <p>{{ getAttendanceInfoString(course) }}</p>
+      <p>
+        <strong>Attendance:</strong>
+        {{ attendanceRatio(course) }}
+      </p>
       <p>
         <span>
           <strong>Starting:</strong>
@@ -55,9 +58,9 @@ export default {
         console.log(response)
       }).catch(errorHandler)
     },
-    getAttendanceInfoString(course) {
+    attendanceRatio(course) {
       const { attendees, maxAttendees } = course
-      return `Attendees: ${attendees.length}/${maxAttendees}`
+      return `${attendees.length}/${maxAttendees}`
     },
     durationStr(duration) {
       if (!duration) return ''
@@ -78,10 +81,27 @@ export default {
 
 <style>
 
-.course-item{
-  margin: 3em 0;
-  border: .15em solid #838383;
-  padding: 3em 8%;
+.course-item {
+  margin: 1em auto;
+  max-width: 50em;
+  border: .08em solid #838383;
+  padding: 2em 8%;
+  box-shadow: .05em .05em .2em #838383dd;
+}
+
+.course-item button {
+  background-color: #fff;
+  padding: .3em 2em;
+  border: .12em solid #838383;
+  transition: box-shadow .1s;
+}
+
+.course-item button:hover {
+  box-shadow: .12em .12em .12em #838383;
+}
+
+.course-item button:active {
+  box-shadow: none;
 }
 
 </style>
