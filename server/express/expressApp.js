@@ -28,6 +28,10 @@ app.use((req, _, next) => {
 app.get('/api/v1', function(req, res) {
     res.json({'message': 'Welcome to your DIT342 backend ExpressJS project!'});
 });
+app.post('/api/v1/login',(req,res)=>
+{
+    res.send({message:`hello ${req.body.username} we are trying to log you in`})
+})
 
 
 
