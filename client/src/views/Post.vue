@@ -93,7 +93,7 @@ export default {
 
   methods: {
     onCreatePost() {
-      Api.post('/v1/posts', {
+      Api.post('/posts', {
         postName: this.postName,
         cookingTime: this.cookingTime,
         description: this.description,
@@ -106,7 +106,6 @@ export default {
         this.isSuccessful = true
         console.log(response)
       }).catch(error => {
-        console.log(this.$refs.pond.getFiles())
         console.log(error)
       })
     },
