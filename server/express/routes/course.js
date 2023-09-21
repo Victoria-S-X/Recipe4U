@@ -73,12 +73,16 @@ router.put("/:id", auth, async (req, res) => {
         case ResCode.UNAUTHORIZED:
             res.status(401).json({message: "User does not own post"})
             break
-        case ResCode.NOT_FOUND_1:
+        case ResCode.NOT_FOUND:
             res.status(404).json({message: `Post '${result.data}' not found`})
             break
 
         default:
-            res.status(500).json({message: `Internal server error. Code ${result.resCode.number}}`})
+            console.log(result.resCode == ResCode.NOT_FOUND, "hiefa")
+            res.status(500).json({
+                message: `Internal server error. Code ${result.resCode.number}`,
+                error: result?.error
+            })
     }
 })
 

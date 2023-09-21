@@ -20,7 +20,10 @@ exports.postValidation = async (userID, strPostID) => {
 
     //post exists?
     const post = await Post.findById(postID)
-    if(!post) return ResCode.NOT_FOUND
+    if(!post) return {
+        resCode: ResCode.NOT_FOUND,
+        error: `Post ${postID} not found`
+    }
 
     //user owns post?
     if(!userID.equals(post.user)) return {

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <button v-if="course.editing" class="course-edit-btn" @click="saveCourse(course)">SAVE</button>
-    <button v-else class="course-edit-btn" @click="editCourse(course)">✎</button>
+    <button class="course-edit-btn" @click="editCourse(course)">✎</button>
 
     <p>
       <strong>Attendance:</strong>
@@ -32,7 +31,10 @@ import myFormatDate from '@/mixins/helpers'
 import isAttending from '@/mixins/user'
 
 export default {
-  props: ['course'],
+  props: {
+    course: Object,
+    reload: Function
+  },
   methods: {
     attend(courseID) {
       Api.patch(`/attendance/${courseID}`, {}, {
@@ -70,12 +72,9 @@ export default {
       return result
     },
     editCourse(course) {
+      console.log('editing course')
       course.editing = true
-      this.$forceUpdate()
-    },
-    saveCourse(course) {
-      course.editing = false
-      this.$forceUpdate()
+      this.$emit('edit')
     }
   },
   mixins: [myFormatDate, isAttending]

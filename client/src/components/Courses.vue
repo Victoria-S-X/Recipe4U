@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <CourseView :course="course" />
+      <CourseEdit v-if="course.editing" :course="course" @save="reload()"/>
+      <CourseView v-else :course="course" @edit="reload()"/>
     </div>
     <div v-if="!courses.length">
       <p>No available courses</p>
@@ -20,6 +21,7 @@ import { errorHandler } from '@/Api'
 import course from '@/mixins/courses'
 import addBtn from '@/styles/addBtn.css'
 import CourseView from '@/components/CourseView.vue'
+import CourseEdit from '@/components/CourseEdit.vue'
 
 export default {
   mounted() {
@@ -44,12 +46,17 @@ export default {
         maxAttendees: 0,
         attendees: []
       })
+    },
+    reload() {
+      console.log('reloading...')
+      this.$forceUpdate()
     }
   },
   mixins: [course],
   styles: [addBtn],
   components: {
-    CourseView
+    CourseView,
+    CourseEdit
   }
 }
 
