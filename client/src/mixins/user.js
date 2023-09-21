@@ -1,7 +1,7 @@
 export default {
   methods: {
     isAttending() {
-      return true
+      return false
     }
   }
 }
