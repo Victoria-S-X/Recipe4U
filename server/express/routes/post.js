@@ -7,7 +7,7 @@ const links = require("./links")
 const path = require('path')
 const postHandler = require("../../db/post")
 const uploadPath = path.join('public', Post.postImageBasePath)
-const imageMimeTypes = ['image/jpeg', 'image/png']
+const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const upload = multer({
     dest: uploadPath,
     fileFilter: (req, file, callback) => {
@@ -19,15 +19,17 @@ const upload = multer({
 // Create a new post
 router.post('/', upload.single('postImage'), auth, async (req, res) => {
     const fileName = req.file != null ? req.file.filename : null
+    console.log(req.body)
     const post = new Post({
         postName: req.body.postName,
-        cookTime: req.body.cookTime,
+        cookingTime: req.body.cookingTime,
         ingredients: req.body.ingredients,
         description: req.body.description,
         recipe: req.body.recipe,
         postImageName: fileName,
         user: req.userID
     })
+    console.log(post)
     try {
         const newPost = await post.save()
         res.status(201).json(newPost)
@@ -108,8 +110,8 @@ router.patch('/:id', getPost, auth, async (req, res) => {
     if (req.body.postName != null) {
         res.post.postName = req.body.postName
     }
-    if (req.body.cookTime != null) {
-        res.post.cookTime = req.body.cookTime
+    if (req.body.cookingTime != null) {
+        res.post.cookingTime = req.body.cookingTime
     }
     if (req.body.ingredients != null) {
         res.post.ingredients = req.body.ingredients
