@@ -15,7 +15,7 @@
 
             <button class="login-button-tag" @click = logInUser()>Log-in</button>
 
-            <button class="register-button-tag">Register</button>
+            <button class="register-button-tag" @click = goToRegister()>Register</button>
             <span  class="login-options">or</span>
     </div>
 </template>
@@ -37,7 +37,11 @@ export default {
       password: this.password
     })
     console.log(response.data)
+  },
+  goToRegister() {
+    this.$router.push('/Welcome/Register')
   }
+
 }
 }
 </script>
