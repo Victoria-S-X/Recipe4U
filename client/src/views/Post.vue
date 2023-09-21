@@ -43,10 +43,11 @@
               class-name="my-pond"
               label-idle="Drop files here..."
               allow-multiple="false"
-              accepted-file-types="image/jpeg, image/png"
-              v-bind:files="image"
+              accepted-file-types="image/jpeg, image/png, image/jpg"
+              v-bind:file="postImage"
               v-on:init="handleFilePondInit"
-              @processfile="onProcessFile" @addfile="onAddFile"
+              @addfile="onAddFile"
+              v-on:updatefiles="handleFilePondUpdateFile()"
             />
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Create Post</button>
@@ -61,8 +62,6 @@ import { Api } from '@/Api'
 import vueFilePond from 'vue-filepond'
 
 // Import plugins
-
-// Import image preview and file type validation plugins
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 
@@ -87,26 +86,28 @@ export default {
       inputs: [{
         ingredient: ''
       }],
-      image: ''
+      postImage: ''
     }
   },
 
   methods: {
     onCreatePost() {
-      Api.post('/v1/posts', {
-        postName: this.postName,
-        cookingTime: this.cookingTime,
-        description: this.description,
-        recipe: this.recipe,
-        ingredients: this.inputs.data,
-        postImageName: this.image.files
-      }, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      }).then(response => {
+      const formData = new FormData()
+      formData.append('postImage', this.postImage)
+      formData.append('postName', this.postName)
+      formData.append('description', this.description)
+      formData.append('recipe', this.recipe)
+      formData.append('cookingTime', this.cookingTime)
+      for (let i = 0; i < this.inputs.length; i++) {
+        const ingre = this.inputs[i]
+        formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+      }
+      console.log(formData.get('postImage'))
+      console.log(formData.get('postName'))
+      Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
         this.isSuccessful = true
         console.log(response)
       }).catch(error => {
-        console.log(this.$refs.pond.getFiles())
         console.log(error)
       })
     },
@@ -114,19 +115,16 @@ export default {
       this.inputs.push({
         ingredient: ''
       })
-      console.log(this.inputs)
     },
-
     remove(index) {
       this.inputs.splice(index, 1)
     },
+    handleFilePondUpdateFile() {
+      this.postImage = this.$refs.pond.getFile().file
+      console.log(this.postImage)
+    },
     handleFilePondInit: function () {
       console.log('FilePond has initialized')
-      // example of instance method call on pond reference
-      this.$refs.pond.getFiles()
-    },
-    onProcessFile(error, file) {
-      console.log('file processed', { error, file })
     },
     onAddFile(error, file) {
       console.log('file added', { error, file })

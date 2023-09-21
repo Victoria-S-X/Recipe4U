@@ -36,7 +36,8 @@ export default {
       username: this.username,
       password: this.password
     })
-    console.log(response.data)
+    localStorage.setItem('token', 'Bearer ' + response.data.jwt) // store login token
+    console.log(response)
   },
   goToRegister() {
     this.$router.push('/Welcome/Register')
