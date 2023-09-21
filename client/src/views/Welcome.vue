@@ -15,7 +15,7 @@
 
             <button class="login-button-tag" @click = logInUser()>Log-in</button>
 
-            <button class="register-button-tag">Register</button>
+            <button class="register-button-tag" @click = goToRegister()>Register</button>
             <span  class="login-options">or</span>
     </div>
 </template>
@@ -38,7 +38,11 @@ export default {
     })
     localStorage.setItem('token', 'Bearer ' + response.data.jwt) // store login token
     console.log(response)
+  },
+  goToRegister() {
+    this.$router.push('/Welcome/Register')
   }
+
 }
 }
 </script>
