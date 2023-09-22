@@ -66,7 +66,7 @@ router.put("/:id", auth, async (req, res) => {
             break
         case ResCode.BAD_INPUT:
             res.status(400).json({
-                message: `The value(s) for ${result?.badProperties.join(", ")} is/are invalid`,
+                message: `The value(s) for ${result?.badProperties?.join(", ")} is/are invalid`,
                 error: result?.data,
             })
             break
