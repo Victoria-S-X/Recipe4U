@@ -7,7 +7,7 @@
     <div v-if="!courses.length">
       <p>No available courses</p>
     </div>
-    <div class="button-container">
+    <div v-if="getFrom === 'post'" class="button-container">
       <div class="btn-white-block">
         <button class="add-item-btn add-course-btn" @click="addCourse()">+</button>
       </div>
@@ -34,7 +34,8 @@ export default {
   },
   methods: {
     loadCourses() {
-      this.getVacantCourses('650c6aa97f73f706e4d48072').then((response) => {
+      const method = this.getFrom === 'post' ? this.getVacantCourses : this.getMyCourses
+      method(this.postID).then((response) => {
         this.courses = response.data
       }).catch(errorHandler)
     },
@@ -46,7 +47,7 @@ export default {
         maxAttendees: 3,
         attendees: [],
         _id: null,
-        postID: '650c6aa97f73f706e4d48072'
+        postID: this.postID
       })
     },
     reload() {
@@ -62,6 +63,10 @@ export default {
   components: {
     CourseView,
     CourseEdit
+  },
+  props: {
+    getFrom: String,
+    postID: String
   }
 }
 

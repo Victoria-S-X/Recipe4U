@@ -54,6 +54,7 @@ function SortOption(sortStr){
 
 exports.sort = (sortString, elements) => {
     if(!sortString) return elements
+    if(!elements) return elements
 
     const sorts = sortString.split(",")
     const sortOptions = sorts.map(sort => new SortOption(sort))
