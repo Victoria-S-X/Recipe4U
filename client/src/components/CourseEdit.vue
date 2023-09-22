@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button v-if="course.editing" class="course-edit-btn" @click="saveCourse(course)">SAVE</button>
+    <button class="course-edit-btn" @click="saveCourse(course)">SAVE</button>
+    <button class="course-delete-btn" @click="onDeleteCourse(course)">DELETE</button>
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
@@ -45,6 +46,11 @@ export default {
         course.editing = false
         this.$emit('save')
       }).catch(errorHandler)
+    },
+    onDeleteCourse(course) {
+      this.deleteCourse(course).then(() => {
+        this.$emit('delete')
+      }).catch(errorHandler)
     }
   },
   mixins: [courseMixin, helpers]
@@ -64,5 +70,23 @@ export default {
 .keyValues strong{
   text-align: right;
   padding-right: 10px;
+}
+
+.course-edit-btn {
+  position: absolute;
+  right: .5em;
+  top: .5em;
+  font-size: 1.4em;
+  border: none;
+  background-color: transparent;
+}
+
+.course-delete-btn {
+  position: absolute;
+  left: .5em;
+  top: .5em;
+  font-size: 1.4em;
+  border: none;
+  background-color: transparent;
 }
 </style>

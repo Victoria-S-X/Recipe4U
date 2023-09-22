@@ -1,7 +1,7 @@
 export default {
   methods: {
     // TODO: fix time zone issue
-    myFormatDate(dateStr, dateTimeSep = ' ') {
+    myFormatDate(dateStr) {
       if (!dateStr) return ''
 
       try {

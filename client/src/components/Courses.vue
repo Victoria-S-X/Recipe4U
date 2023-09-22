@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <CourseEdit v-if="course.editing" :course="course" @save="reload()"/>
+      <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="deleteCourse(course)"/>
       <CourseView v-else :course="course" @edit="reload()"/>
     </div>
     <div v-if="!courses.length">
@@ -50,8 +50,11 @@ export default {
       })
     },
     reload() {
-      console.log('reloading...')
       this.$forceUpdate()
+    },
+    deleteCourse(course) {
+      this.courses.splice(this.courses.indexOf(course), 1)
+      this.reload()
     }
   },
   mixins: [course],
@@ -110,15 +113,6 @@ export default {
 
 .add-course-btn {
   margin: 0 auto;
-}
-
-.course-edit-btn {
-  position: absolute;
-  right: .5em;
-  top: .5em;
-  font-size: 1.4em;
-  border: none;
-  background-color: transparent;
 }
 
 </style>
