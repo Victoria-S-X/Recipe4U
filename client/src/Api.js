@@ -9,6 +9,5 @@ export const errorHandler = (error) => {
   alert(error?.response?.data?.message)
 }
 
-
 // Set token in auth headers
 Api.defaults.headers.common.Authorization = localStorage.getItem('token')

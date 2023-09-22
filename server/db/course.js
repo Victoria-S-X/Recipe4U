@@ -21,11 +21,12 @@ exports.getFromUser = async (userID) => {
 
 exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, duration, city, address, maxAttendees}) => {
 
+
 	//valid courseID?
 	const courseID = idToObj(strCourseID)
-    if(strCourseID && !courseID) return { //TODO, idemptotency
+    if(!courseID) return {
 		resCode: ResCode.BAD_INPUT,
-		data: "Invalid course ID"
+		data: "Invalid course ID: " + strCourseID
 	}
 
 	//valid post?

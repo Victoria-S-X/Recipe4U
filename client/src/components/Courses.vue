@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
       <CourseEdit v-if="course.editing" :course="course" @save="reload()"/>
       <CourseView v-else :course="course" @edit="reload()"/>
@@ -42,9 +42,11 @@ export default {
       this.courses.push({
         editing: true,
         start: new Date(),
-        duration: 0,
-        maxAttendees: 0,
-        attendees: []
+        duration: 60,
+        maxAttendees: 3,
+        attendees: [],
+        _id: null,
+        postID: '650c6aa97f73f706e4d48072'
       })
     },
     reload() {
@@ -63,6 +65,10 @@ export default {
 </script>
 
 <style>
+
+.root {
+  text-align: center;
+}
 
 .course-item {
   margin: 1em auto;
@@ -99,6 +105,11 @@ export default {
   width: 5em;
   margin: 0 auto;
   transform: translateY(1.5em);
+  display: grid
+}
+
+.add-course-btn {
+  margin: 0 auto;
 }
 
 .course-edit-btn {
