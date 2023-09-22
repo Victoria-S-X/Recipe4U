@@ -4,7 +4,7 @@
 
     <p>
       <strong>Attendance:</strong>
-      {{ attendanceRatio(course) }}
+      {{ attendanceRatioStr }}
     </p>
     <p>
       <span>
@@ -20,44 +20,46 @@
       <strong>City:</strong>
       {{ course.city }}
     </p>
-    <button v-if="isAttending()" @click="unAttend(course._id)" class="course-action-btn" >Unregister</button>
-    <button v-else @click="attend(course._id)" class="course-action-btn" >Register</button>
+    <button v-if="isAttendingBool === true" @click="onUnAttend()" class="course-action-btn" >Unregister</button>
+    <button v-else-if="isAttendingBool === false" @click="onAttend()" class="course-action-btn" >Register</button>
   </div>
 </template>
 
 <script>
-import { Api, errorHandler } from '@/Api'
+import { errorHandler } from '@/Api'
 import myFormatDate from '@/mixins/helpers'
-import isAttending from '@/mixins/user'
+import isAttendingAsync from '@/mixins/user'
+import course from '@/mixins/course'
 
 export default {
   props: {
     course: Object,
     reload: Function
   },
+  data() {
+    return {
+      isAttendingBool: undefined,
+      attendanceRatioStr: this.attendanceRatio()
+    }
+  },
+  mounted() {
+    this.isAttending()
+  },
   methods: {
-    attend(courseID) {
-      Api.patch(`/attendance/${courseID}`, {}, {
-        headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTBjNmFhNzdmNzNmNzA2ZTRkNDgwNTkiLCJpYXQiOjE2OTUzMTI5NzF9.ylIiwyTcG_nq5uej5yW8q2vEkcG1f_MG_9rMwHMBM_s'
-        }
-      }).then((response) => {
-        console.log(response)
-        this.loadCourses()
+    onAttend() {
+      this.attend(this.course).then((_) => {
+        this.isAttendingBool = true
+        this.attendanceRatioStr = this.attendanceRatio()
       }).catch(errorHandler)
     },
-    unAttend(courseID) {
-      Api.delete(`/attendance/${courseID}`, {
-        headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTBjNmFhNzdmNzNmNzA2ZTRkNDgwNTkiLCJpYXQiOjE2OTUzMTI5NzF9.ylIiwyTcG_nq5uej5yW8q2vEkcG1f_MG_9rMwHMBM_s'
-        }
-      }).then((response) => {
-        console.log(response)
-        this.loadCourses()
+    onUnAttend() {
+      this.unattend(this.course).then((_) => {
+        this.isAttendingBool = false
+        this.attendanceRatioStr = this.attendanceRatio()
       }).catch(errorHandler)
     },
-    attendanceRatio(course) {
-      const { attendees, maxAttendees } = course
+    attendanceRatio() {
+      const { attendees, maxAttendees } = this.course
       return `${attendees.length}/${maxAttendees}`
     },
     durationStr(duration) {
@@ -72,11 +74,15 @@ export default {
       return result
     },
     editCourse(course) {
-      console.log('editing course')
       course.editing = true
       this.$emit('edit')
+    },
+    isAttending() {
+      this.isAttendingAsync(this.course).then((response) => {
+        this.isAttendingBool = response
+      })
     }
   },
-  mixins: [myFormatDate, isAttending]
+  mixins: [myFormatDate, isAttendingAsync, course]
 }
 </script>

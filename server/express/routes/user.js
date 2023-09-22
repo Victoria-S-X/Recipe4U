@@ -65,7 +65,8 @@ router.get("/", authMiddleware, async (req, res) => {
         firstName: user?.firstName,
         lastName: user?.lastName,
         age: user?.age,
-        _id: user._id
+        _id: user._id,
+        attends: user?.attends,
     })
 })
 

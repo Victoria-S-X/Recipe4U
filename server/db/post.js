@@ -5,7 +5,7 @@ const Review = require("./models/review")
 
 
 
-exports.getPost = async (postID) => {
+exports.get = async (postID) => {
     return await Post.findById(postID)
 }
 
