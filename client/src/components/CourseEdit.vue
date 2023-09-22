@@ -66,6 +66,7 @@ export default {
   grid-template-columns: max-content 1fr;
   align-content: center;
   justify-content: center;
+  row-gap: .4em;
   margin: 1em 10%;
 }
 

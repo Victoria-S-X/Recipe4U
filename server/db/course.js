@@ -53,9 +53,11 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 			data: course
 		}
 	} catch(err){
+		const badVariables = Object.keys(err?.errors)
 		return {
 			resCode: ResCode.BAD_INPUT,
-			data: err
+			data: err,
+			badProperties: badVariables
 		}
 	}
 }

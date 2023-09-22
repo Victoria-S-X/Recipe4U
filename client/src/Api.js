@@ -5,6 +5,6 @@ export const Api = axios.create({
 })
 
 export const errorHandler = (error) => {
-  alert(error?.response?.data?.message)
   console.error(error?.response?.data)
+  alert(error?.response?.data?.message)
 }
