@@ -1,5 +1,5 @@
 
-require("./db/db")
+require("./db/DBhandler")
 
 const port = process.env.PORT || 3000
 const baseUrl = `http://localhost:${port}`

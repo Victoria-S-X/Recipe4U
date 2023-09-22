@@ -1,5 +1,5 @@
-const {ResCode} = require("./helpers")
-const User = require("./models/user")
+const {ResCode} = require("../helpers")
+const User = require("../models/user")
 
 exports.create = async (email, username, password, firstName, lastName, age) => {
 	if(!email || !username || !password) return ResCode.MISSING_ARGUMENT

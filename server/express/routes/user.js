@@ -2,7 +2,7 @@ const router = require("../expressApp").Router("/api/v1/users")
 
 const userData = require("../../db/user")
 const auth = require("../../auth")
-const authMiddleware = require("../auth")
+const authMiddleware = require("../authMiddleware")
 const { ResCode } = require("../../db/helpers")
 const links = require("./links")
 

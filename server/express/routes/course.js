@@ -1,7 +1,7 @@
 const router = require("../expressApp").Router("/api/v1/courses")
-const courseData = require("../../db/course")
+const courseData = require("../../db/controllers/course")
 const {ResCode} = require("../../db/helpers")
-const auth = require("../auth")
+const auth = require("../authMiddleware")
 const links = require("./links")
 
 

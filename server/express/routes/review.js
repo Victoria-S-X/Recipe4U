@@ -2,7 +2,7 @@ const postRouter = require("./post")
 const router = require("../expressApp").Router("/api/v1/reviews")
 
 const reviewData = require("../../db/review")
-const auth = require('../auth')
+const auth = require('../authMiddleware')
 const { ResCode } = require("../../db/helpers")
 
 const Review = require('../../db/models/review')

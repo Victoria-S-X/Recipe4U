@@ -1,5 +1,5 @@
 const router = require("./post")
-const auth = require("../auth")
+const auth = require("../authMiddleware")
 const {ResCode, sort} = require("../../db/helpers")
 const postsCourses = require("../../db/postsCourses")
 

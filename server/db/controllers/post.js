@@ -1,7 +1,7 @@
-const { ResCode, idToObj } = require("./helpers")
+const { ResCode, idToObj } = require("../helpers")
 
-const Post = require("./models/post")
-const Review = require("./models/review")
+const Post = require("../models/post")
+const Review = require("../models/review")
 
 
 

@@ -1,7 +1,7 @@
-const {idToObj, ResCode} = require("./helpers")
-const {removeAttendance} = require("./attendance/user")
+const {idToObj, ResCode} = require("../helpers")
+const {removeAttendance} = require("../attendance/user")
 const {postValidation} = require("./post")
-const Course = require("./models/course")
+const Course = require("../models/course")
 const createCourse = require("./postsCourses").create
 
 

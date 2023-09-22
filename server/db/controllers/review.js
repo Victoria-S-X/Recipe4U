@@ -1,5 +1,5 @@
-const { idToObj, ResCode } = require("./helpers")
-const Review = require("./models/review")
+const { idToObj, ResCode } = require("../helpers")
+const Review = require("../models/review")
 
 
 exports.create = async ({text, strPostID, rating, userID, reviewID=null}) => {

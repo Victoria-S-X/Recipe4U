@@ -1,5 +1,5 @@
-const {ResCode, idToObj, ValidationError} = require("./helpers")
-const Course = require("./models/course")
+const {ResCode, idToObj, ValidationError} = require("../helpers")
+const Course = require("../models/course")
 
 
 exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID=null) => {

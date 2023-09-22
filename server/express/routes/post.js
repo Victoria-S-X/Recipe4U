@@ -1,5 +1,5 @@
 const router = require("../expressApp").Router("/api/v1/posts")
-const auth = require('../auth')
+const auth = require('../authMiddleware')
 const {ResCode, idToObj} = require("../../db/helpers")
 const Post = require('../../db/models/post')
 const multer = require('multer')
