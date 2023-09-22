@@ -1,8 +1,8 @@
 <template>
-  <div class="root">
+  <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
       <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="deleteCourse(course)"/>
-      <CourseView v-else :course="course" @edit="reload()"/>
+      <CourseView v-else :course="course" @onEdit="reload()"/>
     </div>
     <div v-if="!courses.length">
       <p>No available courses</p>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="course-edit-btn" @click="editCourse(course)">✎</button>
+    <button v-if="ownsCourse(course)" class="course-edit-btn" @click="editCourse(course)">✎</button>
 
     <p>
       <strong>Attendance:</strong>
@@ -28,7 +28,7 @@
 <script>
 import { errorHandler } from '@/Api'
 import myFormatDate from '@/mixins/helpers'
-import isAttendingAsync from '@/mixins/user'
+import user from '@/mixins/user'
 import course from '@/mixins/course'
 
 export default {
@@ -75,7 +75,7 @@ export default {
     },
     editCourse(course) {
       course.editing = true
-      this.$emit('edit')
+      this.$emit('onEdit')
     },
     isAttending() {
       this.isAttendingAsync(this.course).then((response) => {
@@ -83,6 +83,6 @@ export default {
       })
     }
   },
-  mixins: [myFormatDate, isAttendingAsync, course]
+  mixins: [myFormatDate, user, course]
 }
 </script>
