@@ -48,6 +48,11 @@ export default {
       }).catch(errorHandler)
     },
     onDeleteCourse(course) {
+      if (!course._id) {
+        this.$emit('delete')
+        return
+      }
+
       this.deleteCourse(course).then(() => {
         this.$emit('delete')
       }).catch(errorHandler)
