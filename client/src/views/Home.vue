@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     getMessage() {
-      Api.get('/')
+      Api.get('/v1')
         .then(response => {
           this.message = response.data.message
         })

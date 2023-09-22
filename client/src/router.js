@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 
+import Welcome from './views/Welcome.vue'
+import Post from './views/Post.vue'
+import Register from './views/Register.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -12,6 +16,22 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/Welcome',
+      name: 'Welcome',
+      component: Welcome
+    },
+    {
+      path: '/api/v1/posts',
+      name: 'post',
+      component: Post
+    },
+    {
+      path: '/Welcome/Register',
+      name: 'register',
+      component: Register
     }
+
   ]
 })
