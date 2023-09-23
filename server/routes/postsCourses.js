@@ -1,7 +1,7 @@
-const router = require("./post")
+const router = require("../routers").post
 const auth = require("../authMiddleware")
-const {ResCode, sort} = require("../../db/helpers")
-const postsCourses = require("../../db/postsCourses")
+const {ResCode, sort} = require("../db/helpers")
+const postsCourses = require("../db/controllers/postsCourses")
 
 
 //CREATE course

@@ -2,6 +2,14 @@ const {ResCode, idToObj} = require("../helpers")
 const Course = require("../models/course")
 const User = require("../models/user")
 
+/*
+	## README ##
+	- Attendance is stored in two places: the course and the user
+	- courseAddUser and courseRemoveUser are used to update the course record of attendance
+	- userAddCourse and userRemoveCourse are used to update the user record of attendance
+*/
+
+
 
 exports.attend = async (userID, strCourseID) => {
 
@@ -98,7 +106,8 @@ async function courseRemoveUser (courseID, userID) {
 
 
 
-// ============================ COURSE RECORD ===============================
+// ============================ USER RECORD ===============================
+
 
 async function userAddCourse(userID, courseID) {
 	const affected = await User.findByIdAndUpdate(userID, {

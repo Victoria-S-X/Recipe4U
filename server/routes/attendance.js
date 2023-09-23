@@ -1,8 +1,8 @@
-const router = require("../expressApp").Router("/api/v1/")
+const router = require("../routers").base
 
 const auth = require("../authMiddleware")
-const attendance = require("../../db/attendance")
-const ResCode = require("../../db/helpers").ResCode
+const attendance = require("../db/controllers/attendance")
+const ResCode = require("../db/helpers").ResCode
 
 
 router.patch("/attendance/:courseID", auth, async (req, res) => {

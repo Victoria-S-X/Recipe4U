@@ -1,8 +1,8 @@
-const router = require("../expressApp").Router("/api/v1/courses")
-const courseData = require("../../db/controllers/course")
-const {ResCode} = require("../../db/helpers")
+const router = require("../routers").course
+const courseData = require("../db/controllers/course")
+const {ResCode} = require("../db/helpers")
 const auth = require("../authMiddleware")
-const links = require("./links")
+const links = require("../hateoasLinks")
 
 
 
@@ -28,7 +28,6 @@ router.get("/posted-courses", auth, async (req, res) => {
 })
 
 
-//GET course
 router.get("/:id", async (req, res) => {
     const course = await courseData.get(req.params.id)
     if(!course) {
@@ -42,7 +41,6 @@ router.get("/:id", async (req, res) => {
 })
 
 
-//UPDATES the specified course
 router.put("/:id", auth, async (req, res) => {
     const result = await courseData.put({
         strCourseID: req.params.id,
@@ -67,7 +65,7 @@ router.put("/:id", auth, async (req, res) => {
         case ResCode.BAD_INPUT:
             const message = result?.badProperties ? `The value(s) for ${result?.badProperties?.join(", ")} is/are invalid` : "Bad input"
             res.status(400).json({
-                message: `The value(s) for ${result?.badProperties?.join(", ")} is/are invalid`,
+                message: message,
                 error: result?.data,
             })
             break
@@ -88,9 +86,9 @@ router.put("/:id", auth, async (req, res) => {
 })
 
 
-//REMOVES all courses created by the logged in user
+//DELETES all courses created by the logged in user
 router.delete("/", auth, async (req, res) => {
-    const response = await courseData.deleteCourses(req.userID)
+    const response = await courseData.deleteAllFromUser(req.userID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS:
@@ -123,9 +121,8 @@ router.delete("/", auth, async (req, res) => {
 })
 
 
-//REMOVES course
 router.delete("/:id", auth, async (req, res) => {
-    const response = await courseData.deleteCourse(req.params.id, req.userID)
+    const response = await courseData.delete(req.params.id, req.userID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS:

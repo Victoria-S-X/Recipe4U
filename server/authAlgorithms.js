@@ -7,14 +7,12 @@ const jwtSecret = process.env.JWT_SECRET
 exports.hash = async (password) => {
     const salt = await bcrypt.genSalt(10)
     
-    const hash = await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         bcrypt.hash(password, salt, (err, hash) => {
           if (err) reject(err);
           resolve(hash);
         });
     })
-
-    return hash
 }
 
 exports.match = async (password, hash) => {

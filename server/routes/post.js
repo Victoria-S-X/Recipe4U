@@ -1,11 +1,11 @@
-const router = require("../expressApp").Router("/api/v1/posts")
+const router = require("../routers").post
 const auth = require('../authMiddleware')
-const {ResCode, idToObj} = require("../../db/helpers")
-const Post = require('../../db/models/post')
+const {ResCode, idToObj} = require("../db/helpers")
+const Post = require('../db/models/post')
 const multer = require('multer')
-const links = require("./links")
+const links = require("../hateoasLinks")
 const path = require('path')
-const postHandler = require("../../db/post")
+const postHandler = require("../db/controllers/post")
 const uploadPath = path.join('public', Post.postImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const upload = multer({

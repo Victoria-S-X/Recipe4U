@@ -1,10 +1,10 @@
-const router = require("../expressApp").Router("/api/v1/users")
+const router = require("../routers").user
 
-const userData = require("../../db/user")
-const auth = require("../../auth")
+const userData = require("../db/controllers/user")
+const auth = require("../authAlgorithms")
 const authMiddleware = require("../authMiddleware")
-const { ResCode } = require("../../db/helpers")
-const links = require("./links")
+const { ResCode } = require("../db/helpers")
+const links = require("../hateoasLinks")
 
 
 // CREATE user
@@ -16,7 +16,14 @@ router.post("/", async (req, res) => {
         res.status(422).json({message: "Missing password"})
         return
     }
-    const hash = await auth.hash(password)
+
+    let hash
+    try {
+        hash = await auth.hash(password)
+    } catch (error) {
+        res.status(500).json({message: "Failed to create account"})
+        return
+    }
 
 
     const result = await userData.create(
