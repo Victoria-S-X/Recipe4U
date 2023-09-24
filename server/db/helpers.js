@@ -1,4 +1,4 @@
-const mongoose = require("./db").mongoose
+const mongoose = require("./DBhandler").mongoose
 const ValidationError = require("mongoose").Error.ValidationError
 
 
@@ -54,6 +54,7 @@ function SortOption(sortStr){
 
 exports.sort = (sortString, elements) => {
     if(!sortString) return elements
+    if(!elements) return elements
 
     const sorts = sortString.split(",")
     const sortOptions = sorts.map(sort => new SortOption(sort))

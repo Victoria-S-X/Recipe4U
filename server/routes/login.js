@@ -1,9 +1,8 @@
-const {Router} = require("../expressApp")
-const router = Router("/api/v1/login")
+const router = require("../routers").login
 
-const userData = require("../../db/user")
-const auth = require("../../auth")
-const links = require("./links")
+const userData = require("../db/controllers/user")
+const auth = require("../authAlgorithms")
+const links = require("../hateoasLinks")
 
 
 router.post("/", async (req, res) => {

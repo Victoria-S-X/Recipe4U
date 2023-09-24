@@ -1,5 +1,5 @@
-const {ResCode, idToObj, ValidationError} = require("./helpers")
-const Course = require("./models/course")
+const {ResCode, idToObj, ValidationError} = require("../helpers")
+const Course = require("../models/course")
 
 
 exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID=null) => {
@@ -44,11 +44,17 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 }
 
 
-exports.getFromPost = async (strPostID) => {
+exports.getAllFromPost = async (strPostID, requestedFilter) => {
 	const postID = idToObj(strPostID)
 	if(!postID) return ResCode.BAD_INPUT
 
-	const courses = await Course.find({postID: postID})
+	const filter = {
+		postID: postID
+	}
+
+	if(requestedFilter === "notFull") filter.$expr = { $lt: [{ $size: '$attendees' }, '$maxAttendees'] } //inspired by ChatGPT
+
+	const courses = await Course.find(filter)
 	if(!courses) return ResCode.NOT_FOUND
 
 	return {
