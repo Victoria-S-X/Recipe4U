@@ -49,7 +49,6 @@ require("./routes/login")
 require("./routes/course")
 require("./routes/user")
 require("./routes/post")
-require("./routes/postsCourses")
 require("./routes/attendance")
 require("./routes/review")
 
