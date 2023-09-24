@@ -6,30 +6,28 @@ const multer = require('multer')
 const links = require("./links")
 const path = require('path')
 const postHandler = require("../../db/post")
-const uploadPath = path.join('public', Post.postImageBasePath)
+
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
-const upload = multer({
-    dest: uploadPath,
+const storage = multer.memoryStorage()
+const upload = multer({ 
+    storage: storage, 
     fileFilter: (req, file, callback) => {
         callback(null, imageMimeTypes.includes(file.mimetype))
     }
 })
 
-
 // Create a new post
 router.post('/', upload.single('postImage'), auth, async (req, res) => {
-    const fileName = req.file != null ? req.file.filename : null
-    console.log(req.body)
     const post = new Post({
         postName: req.body.postName,
         cookingTime: req.body.cookingTime,
         ingredients: req.body.ingredients,
         description: req.body.description,
         recipe: req.body.recipe,
-        postImageName: fileName,
+        postImage: req.file.buffer,
+        postImageType: req.file.mimetype,
         user: req.userID
     })
-    console.log(post)
     try {
         const newPost = await post.save()
         res.status(201).json(newPost)
@@ -64,11 +62,22 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Get a particular post's image
+router.get("/image/:id", async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        res.setHeader("Expires", "-1");
+        res.setHeader("Cache-Control", "must-revalidate, private");
+        res.type(post.postImageType).send(post.postImage);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+});
 
 // Delete all posts from the logged in user
 router.delete('/', auth, async (req, res) => {
     const posts = await Post.find({ user: req.userID })
-
     const resultsResult = ResCode.SUCCESS
     for(const post of posts) {
         const result = await postHandler.delete(post)
@@ -87,7 +96,6 @@ router.delete('/', auth, async (req, res) => {
             })
             break
     }
-
 })
 
 // Get one post with its id
@@ -104,7 +112,7 @@ router.get('/:id', getPost, (req, res) => {
 })
 
 // Update partially one post
-router.patch('/:id', getPost, auth, async (req, res) => {
+router.patch('/:id', getPost, upload.single(), auth, async (req, res) => {
     if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
 
     if (req.body.postName != null) {
@@ -115,6 +123,7 @@ router.patch('/:id', getPost, auth, async (req, res) => {
     }
     if (req.body.ingredients != null) {
         res.post.ingredients = req.body.ingredients
+        console.log(res.post.ingredients)
     }
     if (req.body.description != null) {
         res.post.description = req.body.description
@@ -122,9 +131,7 @@ router.patch('/:id', getPost, auth, async (req, res) => {
     if (req.body.recipe != null) {
         res.post.recipe = req.body.recipe
     }
-    if (req.body.postImageName != null) {
-        res.post.postImageName = req.body.postImageName
-    }
+
     try {
         const updatedPost = await res.post.save()
         return res.status(200).json(updatedPost)

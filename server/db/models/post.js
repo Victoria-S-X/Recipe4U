@@ -20,7 +20,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    postImageName: {
+    postImage: {
+        type: Buffer,
+    },
+    postImageType: {
         type: String,
     },
     user: {
@@ -37,4 +40,3 @@ const postSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model('Post', postSchema)
-module.exports.postImageBasePath = postImageBasePath
