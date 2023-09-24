@@ -1,26 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 require('dotenv').config()
 
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
 
 
-
-// ======== CONNECT ========
-
-mongoose.connect(mongoURI).then(
-    (_) => {
-        console.log(`Connected to MongoDB`)
-    }
-).catch((err) => {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-});
-
-
-
-module.exports = {
-    mongoose
+exports.setup = () => {
+    mongoose.connect(mongoURI).then(
+        (_) => {
+            console.log(`Connected to MongoDB`)
+        }
+    ).catch((err) => {
+        if (err) {
+            console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`)
+            console.error(err.stack)
+            process.exit(1)
+        }
+    })
 }

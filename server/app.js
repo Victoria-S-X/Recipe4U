@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const path = require('path')
 const history = require('connect-history-api-fallback')
 
-require("./db/DBhandler")
+require("./db/DBhandler").setup()
 
 
 
@@ -45,6 +45,7 @@ app.get('/api/v1', function(req, res) {
 
 require("./routers").init(app) // needs to be called before routes are required
 
+// sets up routes
 require("./routes/login")
 require("./routes/course")
 require("./routes/user")

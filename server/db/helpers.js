@@ -1,5 +1,5 @@
-const mongoose = require("./DBhandler").mongoose
-const ValidationError = require("mongoose").Error.ValidationError
+const mongoose = require('mongoose')
+const ValidationError = mongoose.Error.ValidationError
 
 
 // ==================== RES CODE ====================
