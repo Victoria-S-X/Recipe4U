@@ -3,7 +3,7 @@ const reviewRouter = require("../routers").review
 
 const controller = require("../db/controllers/review")
 const auth = require('../authMiddleware')
-const { ResCode } = require("../db/helpers")
+const {ResCode} = require("../db/helpers")
 
 const Review = require('../db/models/review')
 const Post = require('../db/models/post')

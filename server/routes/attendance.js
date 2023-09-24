@@ -2,7 +2,7 @@ const router = require("../routers").base
 
 const auth = require("../authMiddleware")
 const controller = require("../db/controllers/attendance")
-const ResCode = require("../db/helpers").ResCode
+const {ResCode} = require("../db/helpers")
 
 
 router.patch("/attendance/:courseID", auth, async (req, res) => {

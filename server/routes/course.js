@@ -74,7 +74,7 @@ postRouter.get("/:id/courses", auth, async (req, res) => {
 //GET courses posted by logged in user
 courseRouter.get("/posted-courses", auth, async (req, res) => {
 
-    const courses = await controller.getFromUser(req.userID)
+    const courses = await controller.getAllFromUser(req.userID)
 
     if(!courses){
         res.status(500).json({message: "Something went wrong"})

@@ -1,4 +1,5 @@
 const router = require("../routers").post
+
 const auth = require('../authMiddleware')
 const {ResCode, idToObj} = require("../db/helpers")
 const Post = require('../db/models/post')

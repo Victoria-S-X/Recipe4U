@@ -54,8 +54,7 @@ exports.get = async (strID) => {
 }
 
 
-//TODO: name this better
-exports.getFromUser = async (userID) => {
+exports.getAllFromUser = async (userID) => {
 	return Course.find({userID: userID})
 }
 
@@ -124,7 +123,6 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 }
 
 
-//deletes all courses from a user
 exports.deleteAllFromUser = async (userID) => {
 
 	//has courses?
@@ -151,8 +149,10 @@ exports.deleteAllFromUser = async (userID) => {
 }
 
 
-//DOES NOT AUTHENTICATE USER
-exports.deleteCoursesFromPost = async (postID) => {
+/**
+	DOES NOT AUTHENTICATE USER
+*/
+exports.deleteAllFromPost = async (postID) => {
 	try{
 		await Course.deleteMany({postID: postID})
 		return ResCode.SUCCESS
