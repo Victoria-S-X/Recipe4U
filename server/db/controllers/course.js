@@ -1,7 +1,7 @@
-const {idToObj, ResCode} = require("./helpers")
-const {removeAttendance} = require("./attendance/user")
+const {idToObj, ResCode} = require("../helpers")
+const {userRemoveCourse} = require("./attendance")
 const {postValidation} = require("./post")
-const Course = require("./models/course")
+const Course = require("../models/course")
 const createCourse = require("./postsCourses").create
 
 
@@ -25,7 +25,7 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 	const courseID = idToObj(strCourseID)
     if(!courseID) return {
 		resCode: ResCode.BAD_INPUT,
-		data: "Invalid course ID"
+		data: "Invalid course ID: " + strCourseID
 	}
 
 	//valid post?
@@ -53,19 +53,22 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 			data: course
 		}
 	} catch(err){
+		const badVariables = Object.keys(err?.errors)
 		return {
 			resCode: ResCode.BAD_INPUT,
-			data: err
+			data: err,
+			badProperties: badVariables
 		}
 	}
 }
 
 
 //deletes all courses from a user
-exports.deleteCourses = async (userID) => {
+exports.deleteAllFromUser = async (userID) => {
 
 	//has courses?
 	const courses = await Course.find({userID: userID})
+
 	if(!courses || courses.length === 0) return {
 		resCode: ResCode.NOT_FOUND,
 		amtDeleted: 0
@@ -76,7 +79,7 @@ exports.deleteCourses = async (userID) => {
 		amtDeleted: 0
 	}
 	for(const course of courses){
-		const resCode = await exports.deleteCourseObjID(course._id)
+		const resCode = await deleteObjID(course._id)
 		if(resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND) //ResCode.NOT_FOUND does not indicate error
 			resCodeResult.resCode = resCode.resCode 
 		else
@@ -87,7 +90,7 @@ exports.deleteCourses = async (userID) => {
 }
 
 
-exports.deleteCourse = async (strCourseID, userID) => {
+exports.delete = async (strCourseID, userID) => {
 
 	//valid courseID?
 	const courseID = idToObj(strCourseID)
@@ -103,11 +106,11 @@ exports.deleteCourse = async (strCourseID, userID) => {
 	//course belongs to user?
 	if(!userID.equals(course.userID)) return ResCode.UNAUTHORIZED
 
-	return exports.deleteCourseObjID(courseID)
+	return deleteObjID(courseID)
 }
 
 
-exports.deleteCourseObjID = async (courseID) => {
+async function deleteObjID(courseID){
 
 	//complete deletion FIRST so that ALL users will be removed AFTER course it deleted
 	//response code does not need to be saved, if it is fails, the course has already been deleted
@@ -118,7 +121,7 @@ exports.deleteCourseObjID = async (courseID) => {
 	//removes attendance from the users´ profiles
 	var resCodeResult = ResCode.SUCCESS
 	for(const attendee of course.attendees){
-		const resCode = await removeAttendance(attendee, course._id)
+		const resCode = await userRemoveCourse(attendee, course._id)
 		if(resCode != ResCode.SUCCESS) {
 			resCodeResult = {
 				resCode: resCode,

@@ -1,12 +1,17 @@
-const router = require("../expressApp").Router("/api/v1/posts")
-const auth = require('../auth')
-const {ResCode, idToObj} = require("../../db/helpers")
-const Post = require('../../db/models/post')
+const router = require("../routers").post
+const auth = require('../authMiddleware')
+const {ResCode, idToObj} = require("../db/helpers")
+const Post = require('../db/models/post')
 const multer = require('multer')
-const links = require("./links")
+const links = require("../hateoasLinks")
 const path = require('path')
+<<<<<<< HEAD:server/express/routes/post.js
 const postHandler = require("../../db/post")
 
+=======
+const postHandler = require("../db/controllers/post")
+const uploadPath = path.join('public', Post.postImageBasePath)
+>>>>>>> master:server/routes/post.js
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const storage = multer.memoryStorage()
 const upload = multer({ 
@@ -180,5 +185,3 @@ async function getPost(req, res, next) {
     res.post = post
     next()
 }
-
-module.exports = router

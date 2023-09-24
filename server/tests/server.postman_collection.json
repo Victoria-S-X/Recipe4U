@@ -899,6 +899,16 @@
 									"key": "maxAttendees",
 									"value": "5",
 									"type": "text"
+								},
+								{
+									"key": "start",
+									"value": "2023-10-21",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "180",
+									"type": "text"
 								}
 							]
 						},
@@ -1263,6 +1273,16 @@
 									"key": "maxAttendees",
 									"value": "5",
 									"type": "text"
+								},
+								{
+									"key": "start",
+									"value": "2093-12-12",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "1",
+									"type": "text"
 								}
 							]
 						},
@@ -1496,6 +1516,16 @@
 									"key": "meetingLink",
 									"value": "zoom.gov/95",
 									"type": "text"
+								},
+								{
+									"key": "start",
+									"value": "2024-07-11",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "80",
+									"type": "text"
 								}
 							]
 						},
@@ -1560,6 +1590,16 @@
 								{
 									"key": "maxAttendees",
 									"value": "9",
+									"type": "text"
+								},
+								{
+									"key": "start",
+									"value": "2025-08-11",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "40",
 									"type": "text"
 								}
 							]

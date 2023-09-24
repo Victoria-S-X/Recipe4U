@@ -1,7 +1,7 @@
-const auth = require("../auth")
-const userData = require("../db/user")
-const { idToObj } = require("../db/helpers")
-const links = require("./routes/links")
+const auth = require("./authAlgorithms")
+const userData = require("./db/controllers/user")
+const { idToObj } = require("./db/helpers")
+const links = require("./hateoasLinks")
 
 
 module.exports = async (req, res, next) => {

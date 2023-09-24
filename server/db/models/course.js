@@ -1,4 +1,4 @@
-const mongoose = require("../db").mongoose
+const mongoose = require("../DBhandler").mongoose
 
 const schema = new mongoose.Schema({
     userID: {
@@ -12,7 +12,10 @@ const schema = new mongoose.Schema({
         ref: "Post",
     },
     meetingLink: String,
-    start: Date,
+    start: {
+        type: Date,
+        required: true,
+    },
     duration: Number,
     city: String,
     address: String,

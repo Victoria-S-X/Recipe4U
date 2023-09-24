@@ -1,12 +1,11 @@
-const router = require("../expressApp").Router("/api/v1/")
+const router = require("../routers").base
 
-const auth = require("../auth")
-const attendance = require("../../db/attendance")
-const ResCode = require("../../db/helpers").ResCode
+const auth = require("../authMiddleware")
+const attendance = require("../db/controllers/attendance")
+const ResCode = require("../db/helpers").ResCode
 
 
-//UPDATES attendance status for logged in user to provided course
-router.patch("/attendance/:courseID", auth, async (req, res) => { //TODO: fine with not using noun word?
+router.patch("/attendance/:courseID", auth, async (req, res) => {
     const response = await attendance.attend(req.userID, req.params.courseID)
 
     switch(response.resCode) {
@@ -35,7 +34,7 @@ router.patch("/attendance/:courseID", auth, async (req, res) => { //TODO: fine w
     }
 })
 
-//UPDATES attendance status for logged in user to leave provided course
+
 router.delete("/attendance/:courseID", auth, async (req, res) => {
     const response = await attendance.leave(req.userID, req.params.courseID)
 

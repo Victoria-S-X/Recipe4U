@@ -1,5 +1,5 @@
-const { idToObj, ResCode } = require("./helpers")
-const Review = require("./models/review")
+const { idToObj, ResCode } = require("../helpers")
+const Review = require("../models/review")
 
 
 exports.create = async ({text, strPostID, rating, userID, reviewID=null}) => {
@@ -12,7 +12,7 @@ exports.create = async ({text, strPostID, rating, userID, reviewID=null}) => {
     }
 
     //post exists?
-    const post = await require("./post").getPost(postID)
+    const post = await require("./post").get(postID)
     if(!post) return {
         resCode: ResCode.NOT_FOUND,
         error: "Post not found"

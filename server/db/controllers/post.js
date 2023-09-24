@@ -1,11 +1,11 @@
-const { ResCode, idToObj } = require("./helpers")
+const { ResCode, idToObj } = require("../helpers")
 
-const Post = require("./models/post")
-const Review = require("./models/review")
+const Post = require("../models/post")
+const Review = require("../models/review")
 
 
 
-exports.getPost = async (postID) => {
+exports.get = async (postID) => {
     return await Post.findById(postID)
 }
 
@@ -20,7 +20,10 @@ exports.postValidation = async (userID, strPostID) => {
 
     //post exists?
     const post = await Post.findById(postID)
-    if(!post) return ResCode.NOT_FOUND
+    if(!post) return {
+        resCode: ResCode.NOT_FOUND,
+        error: `Post ${postID} not found`
+    }
 
     //user owns post?
     if(!userID.equals(post.user)) return {
