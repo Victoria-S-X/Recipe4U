@@ -5,13 +5,7 @@ const Post = require('../db/models/post')
 const multer = require('multer')
 const links = require("../hateoasLinks")
 const path = require('path')
-<<<<<<< HEAD:server/express/routes/post.js
-const postHandler = require("../../db/post")
-
-=======
 const postHandler = require("../db/controllers/post")
-const uploadPath = path.join('public', Post.postImageBasePath)
->>>>>>> master:server/routes/post.js
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const storage = multer.memoryStorage()
 const upload = multer({ 
