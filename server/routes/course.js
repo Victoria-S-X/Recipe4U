@@ -1,5 +1,5 @@
 const router = require("../routers").course
-const courseData = require("../db/controllers/course")
+const controller = require("../db/controllers/course")
 const {ResCode} = require("../db/helpers")
 const auth = require("../authMiddleware")
 const links = require("../hateoasLinks")
@@ -9,7 +9,7 @@ const links = require("../hateoasLinks")
 //GET courses posted by logged in user
 router.get("/posted-courses", auth, async (req, res) => {
 
-    const courses = await courseData.getFromUser(req.userID)
+    const courses = await controller.getFromUser(req.userID)
 
     if(!courses){
         res.status(500).json({message: "Something went wrong"})
@@ -29,7 +29,7 @@ router.get("/posted-courses", auth, async (req, res) => {
 
 
 router.get("/:id", async (req, res) => {
-    const course = await courseData.get(req.params.id)
+    const course = await controller.get(req.params.id)
     if(!course) {
         res.status(404).json({message: "Course not found"})
         return
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
 
 
 router.put("/:id", auth, async (req, res) => {
-    const result = await courseData.put({
+    const result = await controller.put({
         strCourseID: req.params.id,
         userID: req.userID,
         strPostID: req.body?.postID,
@@ -88,7 +88,7 @@ router.put("/:id", auth, async (req, res) => {
 
 //DELETES all courses created by the logged in user
 router.delete("/", auth, async (req, res) => {
-    const response = await courseData.deleteAllFromUser(req.userID)
+    const response = await controller.deleteAllFromUser(req.userID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS:
@@ -122,7 +122,7 @@ router.delete("/", auth, async (req, res) => {
 
 
 router.delete("/:id", auth, async (req, res) => {
-    const response = await courseData.delete(req.params.id, req.userID)
+    const response = await controller.delete(req.params.id, req.userID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS:
