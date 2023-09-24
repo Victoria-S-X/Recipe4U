@@ -2,7 +2,6 @@ const courseRouter = require("../routers").course
 const postRouter = require("../routers").post
 
 const controller = require("../db/controllers/course")
-const postsCourses = require("../db/controllers/postsCourses")
 const {ResCode, sort} = require("../db/helpers")
 const auth = require("../authMiddleware")
 const links = require("../hateoasLinks")
@@ -13,7 +12,7 @@ postRouter.post("/:id/courses", auth, async (req, res) => {
 
     const start = new Date(req.body?.start)
 
-    const response = await postsCourses.create(
+    const response = await controller.create(
         req.userID,
         req.params.id,
         req.body?.meetingLink,
@@ -50,7 +49,7 @@ postRouter.post("/:id/courses", auth, async (req, res) => {
 
 
 postRouter.get("/:id/courses", auth, async (req, res) => {
-    const response = await postsCourses.getAllFromPost(req.params.id, req.query.filter)
+    const response = await controller.getAllFromPost(req.params.id, req.query.filter)
 
     sort(req.query.sort, response.data)
 

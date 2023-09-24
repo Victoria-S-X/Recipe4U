@@ -45,7 +45,7 @@ exports.delete = async (post) => {
         await Review.deleteMany({ post: post.id })
         await post.deleteOne()
 
-        return await require("./postsCourses").deleteCoursesFromPost(post.id)
+        return await require("./course").deleteCoursesFromPost(post.id)
     } catch(err) {
         return {
             resCode: ResCode.ERROR,
