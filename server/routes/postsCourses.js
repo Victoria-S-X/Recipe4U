@@ -46,7 +46,7 @@ router.post("/:id/courses", auth, async (req, res) => {
 
 
 router.get("/:id/courses", auth, async (req, res) => {
-    const response = await postsCourses.getFromPost(req.params.id, req.query.filter)
+    const response = await postsCourses.getAllFromPost(req.params.id, req.query.filter)
 
     sort(req.query.sort, response.data)
 

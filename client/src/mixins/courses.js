@@ -7,6 +7,9 @@ export default {
     },
     getMyCourses() {
       return Api.get('/courses/posted-courses')
+    },
+    deleteCourses() {
+      return Api.delete('/courses')
     }
   }
 }

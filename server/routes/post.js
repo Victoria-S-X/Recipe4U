@@ -173,5 +173,3 @@ async function getPost(req, res, next) {
     res.post = post
     next()
 }
-
-module.exports = router

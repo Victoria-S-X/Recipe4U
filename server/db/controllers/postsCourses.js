@@ -44,7 +44,7 @@ exports.create = async (userID, strPostID, meetingLink, start, duration, city, a
 }
 
 
-exports.getFromPost = async (strPostID, requestedFilter) => {
+exports.getAllFromPost = async (strPostID, requestedFilter) => {
 	const postID = idToObj(strPostID)
 	if(!postID) return ResCode.BAD_INPUT
 

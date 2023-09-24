@@ -16,6 +16,7 @@ function ownsCourse(course) {
   return user._id === course.userID
 }
 
+// TODO: don't get from server every time
 async function getUser() {
   try {
     const user = await Api.get('/users')

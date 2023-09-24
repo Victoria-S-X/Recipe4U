@@ -117,5 +117,3 @@ async function getReview(req, res, next) {
     res.review = review
     next()
 }
-
-module.exports = reviewRouter

@@ -1,15 +1,20 @@
 <template>
   <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="deleteCourse(course)"/>
+      <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="onDeleteCourse(course)"/>
       <CourseView v-else :course="course" @onEdit="reload()"/>
     </div>
-    <div v-if="!courses.length">
+    <div v-if="!courses.length" class="no-courses-container">
       <p>No available courses</p>
     </div>
     <div v-if="getFrom === 'post'" class="button-container">
       <div class="btn-white-block">
         <button class="add-item-btn add-course-btn" @click="addCourse()">+</button>
+      </div>
+    </div>
+    <div v-else-if="getFrom === 'user'" class="button-container">
+      <div class="btn-white-block">
+        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">🗑</button> <!-- TODO: rename classes-->
       </div>
     </div>
   </div>
@@ -53,9 +58,16 @@ export default {
     reload() {
       this.$forceUpdate()
     },
-    deleteCourse(course) {
+    onDeleteCourse(course) {
       this.courses.splice(this.courses.indexOf(course), 1)
       this.reload()
+    },
+    onDeleteCourses() {
+      if (confirm('Are you sure you want to delete ALL courses?')) {
+        this.courses = []
+        this.deleteCourses()
+        this.reload()
+      }
     }
   },
   mixins: [course],
@@ -106,6 +118,10 @@ export default {
   border-bottom: .1em solid #838383;
   max-width: 30em;
   margin: 0 auto 3em auto;
+}
+
+.no-courses-container{
+  margin: 2em;
 }
 
 .btn-white-block {

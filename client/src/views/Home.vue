@@ -6,7 +6,7 @@
         {{ message }}</p>
     </b-jumbotron>
 
-    <Courses getFrom="post" postID="650c6aa97f73f706e4d48072"/>
+    <Courses getFrom="post" postID="650f2e451f2f70d02af23be0"/>
   </div>
 </template>
 
