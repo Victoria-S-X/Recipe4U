@@ -58,12 +58,13 @@
 
 <script>
 import { Api } from '@/Api'
+import router from '../router'
 // Import FilePond
 import vueFilePond from 'vue-filepond'
-
 // Import plugins
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
 
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
@@ -71,11 +72,12 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css
 // Create component
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
-  FilePondPluginImagePreview
+  FilePondPluginImagePreview,
+  FilePondPluginFileEncode
 )
 
 export default {
-  name: 'post',
+  name: 'createPost',
   data() {
     return {
       postName: '',
@@ -102,11 +104,9 @@ export default {
         const ingre = this.inputs[i]
         formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
       }
-      console.log(formData.get('postImage'))
-      console.log(formData.get('postName'))
       Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
         this.isSuccessful = true
-        console.log(response)
+        router.push({ path: '/api/v1/posts' })
       }).catch(error => {
         console.log(error)
       })
