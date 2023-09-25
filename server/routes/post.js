@@ -17,16 +17,16 @@ const upload = multer({
 
 // Create a new post
 router.post('/', upload.single('postImage'), auth, async (req, res) => {
+    const imageFile = (req.file != null ? req.file : null)
     const post = new Post({
         postName: req.body.postName,
         cookingTime: req.body.cookingTime,
         ingredients: req.body.ingredients,
         description: req.body.description,
         recipe: req.body.recipe,
-        postImage: req.file.buffer,
-        postImageType: req.file.mimetype,
         user: req.userID
     })
+    saveImageFile(post, imageFile)
     try {
         const newPost = await post.save()
         res.status(201).json(newPost)
@@ -68,7 +68,9 @@ router.get("/image/:id", async (req, res) => {
 
         res.setHeader("Expires", "-1");
         res.setHeader("Cache-Control", "must-revalidate, private");
-        res.type(post.postImageType).send(post.postImage);
+        if (post.postImage != null) {
+            res.type(post.postImageType).send(post.postImage);
+        }
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -178,4 +180,12 @@ async function getPost(req, res, next) {
     }
     res.post = post
     next()
+}
+
+function saveImageFile(post, imageFile) {
+    if (imageFile == null) return
+    if (imageFile != null && imageMimeTypes.includes(imageFile.mimetype)) {
+        post.postImage = imageFile.buffer,
+        post.postImageType = imageFile.mimetype
+    }
 }
