@@ -22,22 +22,24 @@ export default ({
       posts: []
     }
   },
-  created() {
+  mounted() {
     this.populatePosts()
   },
   methods: {
     populatePosts() {
-      Api.get('/posts')
+      Api.get('/posts', {
+        cashe: false
+      })
         .then(response => {
           this.posts = response.data
+          console.log(response.data)
         })
         .catch(error => {
           console.log(error)
         })
     },
     goToEditPost(index) {
-      // ßconsole.log(index)
-      router.push({ path: `/api/v1/posts/${index}` })
+      router.push({ path: `/posts/${index}` })
     }
   }
 })

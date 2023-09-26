@@ -27,7 +27,7 @@ export default new Router({
       component: Welcome
     },
     {
-      path: '/api/v1/posts/creation',
+      path: '/posts/creation',
       name: 'createPost',
       component: CreatePost
     },
@@ -42,17 +42,17 @@ export default new Router({
       component: PostedCourses
     },
     {
-      path: '/api/v1/posts',
+      path: '/posts',
       name: 'post',
       component: PostList
     },
     {
-      path: '/api/v1/posts/:id',
+      path: '/posts/:id',
       name: 'editPost',
       component: EditPost
     },
     {
-      path: '/api/v1/posts/:id/view',
+      path: '/posts/:id/view',
       name: 'viewPost',
       component: ViewPost
     }
