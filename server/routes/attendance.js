@@ -1,12 +1,12 @@
 const router = require("../routers").base
 
 const auth = require("../authMiddleware")
-const attendance = require("../db/controllers/attendance")
-const ResCode = require("../db/helpers").ResCode
+const controller = require("../db/controllers/attendance")
+const {ResCode} = require("../db/helpers")
 
 
 router.patch("/attendance/:courseID", auth, async (req, res) => {
-    const response = await attendance.attend(req.userID, req.params.courseID)
+    const response = await controller.attend(req.userID, req.params.courseID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS: 
@@ -36,7 +36,7 @@ router.patch("/attendance/:courseID", auth, async (req, res) => {
 
 
 router.delete("/attendance/:courseID", auth, async (req, res) => {
-    const response = await attendance.leave(req.userID, req.params.courseID)
+    const response = await controller.leave(req.userID, req.params.courseID)
 
     switch(response.resCode) {
         case ResCode.SUCCESS: 

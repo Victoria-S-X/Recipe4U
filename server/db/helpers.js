@@ -1,5 +1,5 @@
-const mongoose = require("./DBhandler").mongoose
-const ValidationError = require("mongoose").Error.ValidationError
+const mongoose = require('mongoose')
+const ValidationError = mongoose.Error.ValidationError
 
 
 // ==================== RES CODE ====================
@@ -9,7 +9,7 @@ function ResCodeObj(number){
     this.toString = () => {
         return this.number.toString()
     }
-    this.resCode = this
+    this.resCode = this //TODO: comment this
 }
 
 const ResCode = {

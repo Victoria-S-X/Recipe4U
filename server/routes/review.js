@@ -1,9 +1,9 @@
 const postRouter = require("../routers").post
 const reviewRouter = require("../routers").review
 
-const reviewData = require("../db/controllers/review")
+const controller = require("../db/controllers/review")
 const auth = require('../authMiddleware')
-const { ResCode } = require("../db/helpers")
+const {ResCode} = require("../db/helpers")
 
 const Review = require('../db/models/review')
 const Post = require('../db/models/post')
@@ -11,7 +11,7 @@ const Post = require('../db/models/post')
 
 postRouter.post('/:postId/reviews', auth, async (req, res) => {
 
-    const result = await reviewData.create({
+    const result = await controller.create({
         text: req.body.text,
         strPostID: req.params.postId,
         rating: req.body.rating,
@@ -73,7 +73,7 @@ postRouter.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res
 
 reviewRouter.put("/:id", auth, async (req, res) => {
 
-    const result = await reviewData.put({
+    const result = await controller.put({
         strPostID: req.body.postID,
         userID: req.userID,
         text: req.body.text,
