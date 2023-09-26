@@ -9,7 +9,7 @@ function ResCodeObj(number){
     this.toString = () => {
         return this.number.toString()
     }
-    this.resCode = this
+    this.resCode = this //TODO: comment this
 }
 
 const ResCode = {

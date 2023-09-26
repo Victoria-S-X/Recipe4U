@@ -4,7 +4,7 @@ require('dotenv').config()
 var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevelopmentDB';
 
 
-exports.setup = () => {
+exports.connectToDB = () => {
     mongoose.connect(mongoURI).then(
         (_) => {
             console.log(`Connected to MongoDB`)

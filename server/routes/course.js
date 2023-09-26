@@ -7,7 +7,7 @@ const auth = require("../authMiddleware")
 const links = require("../hateoasLinks")
 
 
-//CREATE course
+
 postRouter.post("/:id/courses", auth, async (req, res) => {
 
     const start = new Date(req.body?.start)

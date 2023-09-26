@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const path = require('path')
 const history = require('connect-history-api-fallback')
 
-require("./db/DBhandler").setup()
+require("./db/DBhandler").connectToDB()
 
 
 
