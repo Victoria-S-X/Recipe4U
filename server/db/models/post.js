@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const postImageBasePath = 'uploads/postImages'
 
 const postSchema = new mongoose.Schema({
     postName: {

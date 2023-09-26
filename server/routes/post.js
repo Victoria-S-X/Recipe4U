@@ -7,7 +7,6 @@ const multer = require('multer')
 const links = require("../hateoasLinks")
 const path = require('path')
 const controller = require("../db/controllers/post")
-const uploadPath = path.join('public', Post.postImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const storage = multer.memoryStorage()
 const upload = multer({ 
