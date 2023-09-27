@@ -3,7 +3,7 @@
     <div class="col-md-4" v-for="(post, index) in posts" :key="index">
           <b-container @click="goToEditPost(post._id)">
             <post :post="post"/>
-            </b-container>>
+          </b-container>
     </div>
   </div>
 </template>
@@ -44,5 +44,9 @@ export default ({
 </script>
 
 <style scoped>
-
+  .row {
+    margin-top: 5%;
+    margin-right: 3%;
+    margin-left: 3%;
+  }
 </style>
