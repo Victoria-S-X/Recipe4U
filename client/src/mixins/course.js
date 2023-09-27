@@ -21,19 +21,19 @@ async function attend(course) {
   if (!course) throw new Error('No course provided')
 
   await Api.patch(`/attendance/${course._id}`, {}, {})
-  const user = await this.getUser()
+  const user = this.getUser()
   course.attendees.push(user._id)
-  user.attends.push(course._id) // TODO: this does nothing as user is loaded from server
+  this.loadUser()
 }
 
 async function unattend(course) {
   if (!course) throw new Error('No course provided')
 
   await Api.delete(`/attendance/${course._id}`, {}, {})
-  const user = await this.getUser()
+  const user = this.getUser()
 
   course.attendees.splice(course.attendees.indexOf(user._id), 1)
-  user.attends.splice(user.attends.indexOf(course._id), 1)
+  this.loadUser()
 }
 
 export default {

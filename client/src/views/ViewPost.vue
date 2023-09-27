@@ -26,7 +26,7 @@
         </b-jumbotron>
     </div>
 
-    <Courses v-if="postID" :postID="postID" getFrom="post"></Courses>
+    <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
     </div>
 </template>
 

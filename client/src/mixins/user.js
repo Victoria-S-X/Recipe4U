@@ -1,9 +1,7 @@
 import { Api, errorHandler } from '@/Api'
 
-let user = null
-
 async function isAttendingAsync(course) {
-  const user = await this.getUser()
+  const user = this.getUser()
   if (!user) return false
 
   const isAttending = user?.attends.includes(course._id)
@@ -18,15 +16,21 @@ function ownsCourse(course) {
   return user._id === course.userID
 }
 
-function loadUser() {
-  Api.get('/users')
-    .then((response) => {
-      user = response.data
-    }).catch(errorHandler)
+async function loadUser() {
+  try {
+    const response = await Api.get('/users')
+    const userJson = JSON.stringify(response.data)
+    localStorage.setItem('user', userJson)
+  } catch (error) {
+    errorHandler(error)
+  }
 }
 
 function getUser() {
-  return user
+  const userJson = localStorage.getItem('user')
+  const userObj = JSON.parse(userJson)
+
+  return userObj
 }
 
 export default {

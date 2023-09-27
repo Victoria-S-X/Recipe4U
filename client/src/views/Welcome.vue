@@ -32,19 +32,20 @@ export default {
   },
   methods: {
     async logInUser() {
-      const response = await auth.login({
+      const response = await this.login({
         username: this.username,
         password: this.password
       })
 
-      this.$router.push('/PostsList')
+      this.$router.push('/posts')
       console.log(response)
     },
     goToRegister() {
       this.$router.push('/Welcome/Register')
     }
 
-  }
+  },
+  mixins: [auth]
 }
 </script>
 
