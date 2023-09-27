@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
@@ -18,11 +17,6 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/Welcome',
       name: 'Welcome',
       component: Welcome
     },
@@ -37,8 +31,8 @@ export default new Router({
       component: Register
     },
     {
-      path: '/postedCourses',
-      name: 'postedCourses',
+      path: '/posted-courses',
+      name: 'Posted Courses',
       component: PostedCourses
     },
     {

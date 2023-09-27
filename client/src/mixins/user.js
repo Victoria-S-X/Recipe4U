@@ -1,5 +1,7 @@
 import { Api, errorHandler } from '@/Api'
 
+let user = null
+
 async function isAttendingAsync(course) {
   const user = await this.getUser()
   if (!user) return false
@@ -16,20 +18,22 @@ function ownsCourse(course) {
   return user._id === course.userID
 }
 
-// TODO: don't get from server every time
-async function getUser() {
-  try {
-    const user = await Api.get('/users')
-    return user.data
-  } catch (error) {
-    errorHandler(error)
-  }
+function loadUser() {
+  Api.get('/users')
+    .then((response) => {
+      user = response.data
+    }).catch(errorHandler)
+}
+
+function getUser() {
+  return user
 }
 
 export default {
   methods: {
     isAttendingAsync,
     ownsCourse,
+    loadUser,
     getUser
   }
 }

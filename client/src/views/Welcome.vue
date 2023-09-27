@@ -20,7 +20,8 @@
     </div>
 </template>
 <script>
-import AuthenticationService from '@/AuthenticationService'
+import auth from '@/mixins/auth'
+
 export default {
   name: 'Welcome',
   data() {
@@ -29,21 +30,21 @@ export default {
       password: ''
     }
   },
-  methods:
-{
-  async logInUser() {
-    const response = await AuthenticationService.register({
-      username: this.username,
-      password: this.password
-    })
-    localStorage.setItem('token', 'Bearer ' + response.data.jwt) // store login token
-    console.log(response)
-  },
-  goToRegister() {
-    this.$router.push('/Welcome/Register')
-  }
+  methods: {
+    async logInUser() {
+      const response = await auth.login({
+        username: this.username,
+        password: this.password
+      })
 
-}
+      this.$router.push('/PostsList')
+      console.log(response)
+    },
+    goToRegister() {
+      this.$router.push('/Welcome/Register')
+    }
+
+  }
 }
 </script>
 
