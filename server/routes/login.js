@@ -26,7 +26,8 @@ router.post("/", async (req, res) => {
         res.status(404).json({
             message: "User does not exist",
             _links: {
-                createUser: links.createUser()
+                createUser: links.createUser(),
+                createUserPage: links.createUserPage()
             }
         })
         return
@@ -41,7 +42,11 @@ router.post("/", async (req, res) => {
 
     const jwt = auth.getJWT(user._id)
     res.status(200).json({
-        jwt
+        jwt,
+        _links : {
+            homePage: links.getPostsPage(),
+            getPosts: links.getPosts(),
+        }
     })
 })
 

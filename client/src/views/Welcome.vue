@@ -21,6 +21,7 @@
 </template>
 <script>
 import auth from '@/mixins/auth'
+import { errorHandler } from '../Api'
 
 export default {
   name: 'Welcome',
@@ -32,13 +33,27 @@ export default {
   },
   methods: {
     async logInUser() {
-      const response = await this.login({
-        username: this.username,
-        password: this.password
-      })
+      try {
+        const response = await this.login({
+          username: this.username,
+          password: this.password
+        })
 
-      this.$router.push('/posts')
-      console.log(response)
+        if (response.status === 200) {
+          this.$router.push(response.data._links.homePage.href)
+        }
+      } catch (error) {
+        if (error.response.status === 404) {
+          const createAccount = confirm('Invalid username. Need to create account instead?')
+
+          if (createAccount) {
+            const registerPage = error.response.data._links.createUserPage.href
+            this.$router.push(registerPage)
+          }
+        } else {
+          errorHandler(error)
+        }
+      }
     },
     goToRegister() {
       this.$router.push('/Welcome/Register')
