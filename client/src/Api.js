@@ -10,4 +10,8 @@ export const errorHandler = (error) => {
 }
 
 // Set token in auth headers
-Api.defaults.headers.common.Authorization = localStorage.getItem('token')
+export const loadToken = () => {
+  Api.defaults.headers.common.Authorization = localStorage.getItem('token')
+}
+
+loadToken()
