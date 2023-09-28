@@ -4,7 +4,7 @@
         <b-card no-body class="overflow-hidden" >
           <b-row no-gutters>
             <b-col md="6">
-              <b-card-img :src="`http://localhost:3000/api/v1/posts/image/${this.postID}`" alt="Food Image" class="rounded-0"></b-card-img>
+              <b-card-img id="image" alt="Food Image" :src="imgSRC" class="rounded-0"></b-card-img>
             </b-col>
             <b-col md="6">
               <b-card-body :title="post.postName">
@@ -51,7 +51,8 @@ export default {
     return {
       post: '',
       postID: '',
-      ingres: ''
+      ingres: '',
+      imgSRC: ''
     }
   },
   created() {
@@ -64,8 +65,10 @@ export default {
         .then(response => {
           this.post = response.data
           this.postID = response.data._id
-          // document.getElementsByTagName('b-card-img').src = `http://localhost:3000/api/v1/posts/image/${this.postID}`
-          console.log(document.getElementsByTagName('b-card-img').src)
+          console.log('ifhea', this.postID)
+          this.imgSRC = `http://localhost:3000/api/v1/posts/image/${this.postID}`
+          // document.getElementById('image').src =
+          // console.log(document.getElementsByTagName('b-card-img').src)
           for (let i = 0; i < response.data.ingredients.length; i++) {
             const ingre = JSON.parse(response.data.ingredients[i]).ingredient
             this.ingres += ingre + ' '
