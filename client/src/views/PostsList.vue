@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-4" v-for="(post, index) in posts" :key="index">
-          <b-container @click="goToEditPost(post._id)">
+          <b-container @click="goToViewPost(post._id)">
             <post :post="post"/>
           </b-container>
     </div>
@@ -37,6 +37,9 @@ export default ({
         .catch(error => {
           console.log(error)
         })
+    },
+    goToViewPost(index) {
+      router.push({ path: `/posts/${index}/view` })
     },
     goToEditPost(index) {
       router.push({ path: `/posts/${index}` })

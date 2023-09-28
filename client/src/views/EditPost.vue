@@ -64,7 +64,6 @@ export default {
           this.recipe = response.data.recipe
           this.postID = response.data._id
           document.getElementById('image').src = `http://localhost:3000/api/v1/posts/image/${this.postID}`
-          console.log(response.data.ingredients)
           for (let i = 0; i < response.data.ingredients.length; i++) {
             const ingre = JSON.parse(response.data.ingredients[i]).ingredient
             this.inputs += ingre + ' '
@@ -86,15 +85,13 @@ export default {
         const ingre = ingres[i]
         formData.append('ingredients[' + i + ']', `{"ingredient": "${ingre}"}`)
       }
-
-      console.log(formData.get('postImage'))
-      console.log(formData.get('ingredients[2]'))
       Api.patch(`/posts/${this.postID}`, formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
         this.isSuccessful = true
       }).catch(error => {
         console.log(error)
       })
-      router.push({ path: '/posts' })
+      // router.push({ path: '/posts' })
+      router.push({ path: `/posts/${this.postID}/view` })
     }
   }
 }
