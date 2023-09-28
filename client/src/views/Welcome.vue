@@ -54,7 +54,7 @@ export default {
       }
     },
     goToRegister() {
-      this.$router.push('/Welcome/Register')
+      this.$router.push('/register')
     }
 
   },

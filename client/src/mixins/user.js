@@ -26,6 +26,10 @@ async function loadUser() {
   }
 }
 
+function removeUserFromStorage() {
+  localStorage.removeItem('user')
+}
+
 function getUser() {
   const userJson = localStorage.getItem('user')
   const userObj = JSON.parse(userJson)
@@ -38,6 +42,7 @@ export default {
     isAttendingAsync,
     ownsCourse,
     loadUser,
+    removeUserFromStorage,
     getUser
   }
 }

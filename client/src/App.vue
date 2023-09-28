@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div id="nav">
+
+    <!-- TODO: hide when not logged in -->
+    <div id="nav" v-if="showNavBar()">
       <navbar></navbar>
     </div>
     <!-- Render the content of the current page view -->
@@ -11,6 +13,19 @@
 <script>
 import Navbar from './components/Navbar.vue'
 export default ({
+  mounted() {
+    console.log('App mounted.', this.$route.path)
+  },
+  methods: {
+    showNavBar() {
+      const path = this.$route.path
+
+      return !(
+        path === '/' ||
+        path === '/register'
+      )
+    }
+  },
   components: {
     Navbar
   }
