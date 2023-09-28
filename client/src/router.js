@@ -53,12 +53,12 @@ export default new Router({
       component: ViewPost
     },
     {
-      path: '/api/v1/posts/:id/reviews',
+      path: '/posts/:id/reviews',
       name: 'Reviews',
       component: Reviews
     },
     {
-      path: '/api/v1/posts/:id/CreateReview',
+      path: '/posts/:id/CreateReview',
       name: 'CreateReview',
       component: CreateReview
     }
