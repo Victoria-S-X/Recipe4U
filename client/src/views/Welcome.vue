@@ -39,12 +39,10 @@ export default {
           password: this.password
         })
 
-        if (response.status === 200) {
-          this.$router.push(response.data._links.homePage.href)
-        }
+        this.$router.push(response.data._links.homePage.href)
       } catch (error) {
         if (error.response.status === 404) {
-          const createAccount = confirm('Invalid username. Need to create account instead?')
+          const createAccount = confirm('Invalid username. Create an account instead?')
 
           if (createAccount) {
             const registerPage = error.response.data._links.createUserPage.href
