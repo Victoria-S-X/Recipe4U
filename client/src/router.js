@@ -4,10 +4,12 @@ import Router from 'vue-router'
 import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
+import Reviews from './views/Reviews.vue'
 import PostedCourses from './views/PostedCourses.vue'
 import PostList from './views/PostsList.vue'
 import EditPost from './views/EditPost.vue'
 import ViewPost from './views/ViewPost.vue'
+import CreateReview from './views/CreateReview.vue'
 
 Vue.use(Router)
 
@@ -49,6 +51,16 @@ export default new Router({
       path: '/posts/:id/view',
       name: 'viewPost',
       component: ViewPost
+    },
+    {
+      path: '/api/v1/posts/:id/reviews',
+      name: 'Reviews',
+      component: Reviews
+    },
+    {
+      path: '/api/v1/posts/:id/CreateReview',
+      name: 'CreateReview',
+      component: CreateReview
     }
   ]
 })
