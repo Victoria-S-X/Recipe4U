@@ -4,7 +4,6 @@ import Router from 'vue-router'
 import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
-import Reviews from './views/Reviews.vue'
 import PostedCourses from './views/PostedCourses.vue'
 import PostList from './views/PostsList.vue'
 import EditPost from './views/EditPost.vue'
@@ -51,11 +50,6 @@ export default new Router({
       path: '/posts/:id/view',
       name: 'viewPost',
       component: ViewPost
-    },
-    {
-      path: '/posts/:id/reviews',
-      name: 'Reviews',
-      component: Reviews
     },
     {
       path: '/posts/:id/CreateReview',
