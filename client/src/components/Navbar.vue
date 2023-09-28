@@ -3,15 +3,17 @@
   <b-navbar toggleable="lg" type="light" variant="light">
     <b-navbar-brand href="/posts">Recipe4U</b-navbar-brand>
 
-    <b-navbar-nav>
-      <b-nav-item href="/posts">Posts</b-nav-item>
-      <b-nav-item href="/posts/creation">Create Post</b-nav-item>
-      <b-nav-item href="/posted-courses">Posted Courses</b-nav-item>
-    </b-navbar-nav>
+
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
+
+      <b-navbar-nav>
+        <b-nav-item href="/posts">Posts</b-nav-item>
+        <b-nav-item href="/posts/creation">Create Post</b-nav-item>
+        <b-nav-item href="/posted-courses">Posted Courses</b-nav-item>
+      </b-navbar-nav>
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">

@@ -35,7 +35,10 @@
             </p>
           </b-jumbotron>
       </div>
+
       <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+
+      <Reviews v-if="postID" :postID="postID"/>
     </div>
 </template>
 
@@ -44,6 +47,7 @@ import { Api } from '@/Api'
 import Courses from '@/components/Courses.vue'
 import user from '@/mixins/user.js'
 import router from '../router'
+import Reviews from '@/components/Reviews.vue'
 
 export default {
   name: 'viewPost',
@@ -91,7 +95,8 @@ export default {
   },
   mixins: [user],
   components: {
-    Courses
+    Courses,
+    Reviews
   }
 }
 

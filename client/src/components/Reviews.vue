@@ -21,14 +21,19 @@ export default ({
   },
   methods: {
     populateReviews() {
-      Api.get('/posts/6510445bc59190bc696b7408/reviews')
+      Api.get(`/posts/${this.postID}/reviews`)
         .then(response => { this.reviews = response.data })
         .catch(error => {
           console.log(error)
         })
     }
+  },
+  props: {
+    postID: {
+      type: String,
+      required: true
+    }
   }
-
 })
 </script>
 <style scoped>
