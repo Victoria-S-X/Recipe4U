@@ -1,7 +1,7 @@
 import { Api, errorHandler } from '@/Api'
 
 async function isAttendingAsync(course) {
-  const user = await this.getUser()
+  const user = this.getUser()
   if (!user) return false
 
   const isAttending = user?.attends.includes(course._id)
@@ -16,20 +16,28 @@ function ownsCourse(course) {
   return user._id === course.userID
 }
 
-// TODO: don't get from server every time
-async function getUser() {
+async function loadUser() {
   try {
-    const user = await Api.get('/users')
-    return user.data
+    const response = await Api.get('/users')
+    const userJson = JSON.stringify(response.data)
+    localStorage.setItem('user', userJson)
   } catch (error) {
     errorHandler(error)
   }
+}
+
+function getUser() {
+  const userJson = localStorage.getItem('user')
+  const userObj = JSON.parse(userJson)
+
+  return userObj
 }
 
 export default {
   methods: {
     isAttendingAsync,
     ownsCourse,
+    loadUser,
     getUser
   }
 }

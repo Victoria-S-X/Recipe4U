@@ -5,9 +5,10 @@
       <CourseView v-else :course="course" @onEdit="reload()"/>
     </div>
     <div v-if="!courses.length" class="no-courses-container">
-      <p>No available courses</p>
+      <p v-if="userOwnsPost()">No courses posted</p>
+      <p v-else>No available courses</p>
     </div>
-    <div v-if="getFrom === 'post'" class="button-container">
+    <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
         <button class="add-item-btn add-course-btn" @click="addCourse()">+</button>
       </div>
@@ -23,6 +24,7 @@
 <script>
 
 import { errorHandler } from '@/Api'
+import user from '@/mixins/user'
 import course from '@/mixins/courses'
 import addBtn from '@/styles/addBtn.css'
 import CourseView from '@/components/CourseView.vue'
@@ -43,6 +45,12 @@ export default {
       method(this.postID).then((response) => {
         this.courses = response.data
       }).catch(errorHandler)
+    },
+    userOwnsPost() {
+      const user = this.getUser()
+      if (!this.userID) return false
+
+      return user._id === this.userID
     },
     addCourse() {
       this.courses.push({
@@ -70,7 +78,7 @@ export default {
       }
     }
   },
-  mixins: [course],
+  mixins: [course, user],
   styles: [addBtn],
   components: {
     CourseView,
@@ -78,7 +86,8 @@ export default {
   },
   props: {
     getFrom: String,
-    postID: String
+    postID: String,
+    userID: String
   }
 }
 

@@ -3,6 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const path = require('path')
 const history = require('connect-history-api-fallback')
+const hateoasLinks = require("./hateoasLinks")
 
 require("./db/DBhandler").connectToDB()
 
@@ -13,7 +14,9 @@ require("./db/DBhandler").connectToDB()
 const port = process.env.PORT || 3000
 const baseUrl = `http://localhost:${port}`
 const backendUrl = `${baseUrl}/api/v1`
-require("./hateoasLinks").setBackendUrl(backendUrl)
+
+hateoasLinks.setBaseUrl(baseUrl)
+hateoasLinks.setBackendUrl(backendUrl)
 
 
 // ==================== EXPRESS ====================

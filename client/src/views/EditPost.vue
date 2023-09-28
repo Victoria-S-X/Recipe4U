@@ -94,7 +94,7 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-      router.push({ path: '/api/v1/posts' })
+      router.push({ path: '/posts' })
     }
   }
 }
