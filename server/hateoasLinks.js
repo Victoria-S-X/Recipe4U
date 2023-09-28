@@ -31,7 +31,7 @@ exports.createUser = () => {
 exports.createUserPage = () => {
     return {
         description: "Create user",
-        href: '/Welcome/Register',
+        href: '/register',
         method: "GET"
     }
 }

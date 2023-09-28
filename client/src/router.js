@@ -26,7 +26,7 @@ export default new Router({
       component: CreatePost
     },
     {
-      path: '/Welcome/Register',
+      path: '/register',
       name: 'register',
       component: Register
     },
