@@ -3,8 +3,6 @@
   <b-navbar toggleable="lg" type="light" variant="light">
     <b-navbar-brand href="/posts">Recipe4U</b-navbar-brand>
 
-
-
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
