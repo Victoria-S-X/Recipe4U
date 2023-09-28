@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
@@ -19,16 +18,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/Welcome',
       name: 'Welcome',
       component: Welcome
     },
     {
-      path: '/api/v1/posts/creation',
+      path: '/posts/creation',
       name: 'createPost',
       component: CreatePost
     },
@@ -38,22 +32,22 @@ export default new Router({
       component: Register
     },
     {
-      path: '/postedCourses',
-      name: 'postedCourses',
+      path: '/posted-courses',
+      name: 'Posted Courses',
       component: PostedCourses
     },
     {
-      path: '/api/v1/posts',
+      path: '/posts',
       name: 'post',
       component: PostList
     },
     {
-      path: '/api/v1/posts/:id',
+      path: '/posts/:id',
       name: 'editPost',
       component: EditPost
     },
     {
-      path: '/api/v1/posts/:id/view',
+      path: '/posts/:id/view',
       name: 'viewPost',
       component: ViewPost
     },

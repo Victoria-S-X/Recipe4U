@@ -1,11 +1,12 @@
 const router = require("../routers").post
+
 const auth = require('../authMiddleware')
 const {ResCode, idToObj} = require("../db/helpers")
 const Post = require('../db/models/post')
 const multer = require('multer')
 const links = require("../hateoasLinks")
 const path = require('path')
-const postHandler = require("../db/controllers/post")
+const controller = require("../db/controllers/post")
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
 const storage = multer.memoryStorage()
 const upload = multer({ 
@@ -81,7 +82,7 @@ router.delete('/', auth, async (req, res) => {
     const posts = await Post.find({ user: req.userID })
     const resultsResult = ResCode.SUCCESS
     for(const post of posts) {
-        const result = await postHandler.delete(post)
+        const result = await controller.delete(post)
         if(result !== ResCode.SUCCESS) resultsResult = result
     }
 
@@ -145,7 +146,7 @@ router.patch('/:id', getPost, upload.single(), auth, async (req, res) => {
 router.delete('/:id', getPost, auth, async (req, res) => {
     if(!res.post.user.equals(req.userID)) return res.status(403).json({message: "Unauthorized"})
 
-    const result = await postHandler.delete(res.post)
+    const result = await controller.delete(res.post)
 
     switch(result) {
         case ResCode.SUCCESS:

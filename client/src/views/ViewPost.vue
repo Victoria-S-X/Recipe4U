@@ -24,12 +24,15 @@
             Recipe: {{ post.recipe }}
           </p>
         </b-jumbotron>
-</div>
+    </div>
+
+    <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
     </div>
 </template>
 
 <script>
 import { Api } from '@/Api'
+import Courses from '@/components/Courses.vue'
 // import router from '../router'
 
 export default {
@@ -61,6 +64,9 @@ export default {
           console.log(error)
         })
     }
+  },
+  components: {
+    Courses
   }
 }
 

@@ -1,6 +1,7 @@
 const {ResCode} = require("../helpers")
 const User = require("../models/user")
 
+
 exports.create = async (email, username, password, firstName, lastName, age) => {
 	if(!email || !username || !password) return ResCode.MISSING_ARGUMENT
 
@@ -28,13 +29,13 @@ exports.create = async (email, username, password, firstName, lastName, age) => 
 }
 
 
-exports.find = async (username) => {
-	return await User.findOne({ username:username })
+exports.get = async (id) => {
+	return await User.findById(id)
 }
 
 
-exports.get = async (id) => {
-	return await User.findById(id)
+exports.find = async (username) => {
+	return await User.findOne({ username:username })
 }
 
 

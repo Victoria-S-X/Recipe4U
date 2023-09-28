@@ -20,7 +20,9 @@
     </div>
 </template>
 <script>
-import AuthenticationService from '@/AuthenticationService'
+import auth from '@/mixins/auth'
+import { errorHandler } from '../Api'
+
 export default {
   name: 'Welcome',
   data() {
@@ -29,21 +31,34 @@ export default {
       password: ''
     }
   },
-  methods:
-{
-  async logInUser() {
-    const response = await AuthenticationService.register({
-      username: this.username,
-      password: this.password
-    })
-    localStorage.setItem('token', 'Bearer ' + response.data.jwt) // store login token
-    console.log(response)
-  },
-  goToRegister() {
-    this.$router.push('/Welcome/Register')
-  }
+  methods: {
+    async logInUser() {
+      try {
+        const response = await this.login({
+          username: this.username,
+          password: this.password
+        })
 
-}
+        this.$router.push(response.data._links.homePage.href)
+      } catch (error) {
+        if (error.response.status === 404) {
+          const createAccount = confirm('Invalid username. Create an account instead?')
+
+          if (createAccount) {
+            const registerPage = error.response.data._links.createUserPage.href
+            this.$router.push(registerPage)
+          }
+        } else {
+          errorHandler(error)
+        }
+      }
+    },
+    goToRegister() {
+      this.$router.push('/Welcome/Register')
+    }
+
+  },
+  mixins: [auth]
 }
 </script>
 

@@ -1,7 +1,7 @@
 const router = require("../routers").user
 
-const userData = require("../db/controllers/user")
-const auth = require("../authAlgorithms")
+const controller = require("../db/controllers/user")
+const authAlgorithms = require("../authAlgorithms")
 const authMiddleware = require("../authMiddleware")
 const { ResCode } = require("../db/helpers")
 const links = require("../hateoasLinks")
@@ -19,14 +19,14 @@ router.post("/", async (req, res) => {
 
     let hash
     try {
-        hash = await auth.hash(password)
+        hash = await authAlgorithms.hash(password)
     } catch (error) {
         res.status(500).json({message: "Failed to create account"})
         return
     }
 
 
-    const result = await userData.create(
+    const result = await controller.create(
         req.body?.email, 
         req.body?.username, 
         hash, 
@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
 // READ user info (for the logged in user)
 router.get("/", authMiddleware, async (req, res) => {
 
-    const user = await userData.get(req.userID)
+    const user = await controller.get(req.userID)
     if(!user) {
         res.status(404).json({message: "User not found"})
         return
@@ -81,7 +81,7 @@ router.get("/", authMiddleware, async (req, res) => {
 // UPDATE user info (for the logged in user)
 router.patch("/", authMiddleware, async (req, res) => {
 
-    const response = await userData.patch(
+    const response = await controller.patch(
         req.userID,
         req.body?.email, 
         req.body?.password, 

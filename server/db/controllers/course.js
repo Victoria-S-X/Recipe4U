@@ -1,8 +1,49 @@
-const {idToObj, ResCode} = require("../helpers")
+const {idToObj, ResCode, ValidationError} = require("../helpers")
 const {userRemoveCourse} = require("./attendance")
 const {postValidation} = require("./post")
 const Course = require("../models/course")
-const createCourse = require("./postsCourses").create
+
+
+exports.create = async (userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID=null) => {
+
+	//valid post?
+	const postResponse = await require("./post").postValidation(userID, strPostID)
+	if(postResponse.resCode !== ResCode.SUCCESS) return postResponse
+
+	const course = new Course({
+		userID: userID,
+		postID: postResponse.postID,
+		meetingLink: meetingLink,
+		start: start,
+		duration: duration,
+		city: city,
+		address: address,
+		attendees: [],
+		maxAttendees: maxAttendees
+	})
+
+	
+	try{
+		if(courseID) course._id = courseID
+
+		const data = await course.save()
+		
+		return {
+			resCode: ResCode.SUCCESS,
+			data: data
+		}
+	} catch (err){
+		if(err instanceof ValidationError){
+			return {
+				resCode: ResCode.BAD_INPUT,
+				data: err
+			}
+		} else {
+			console.log(err)
+			return ResCode.ERROR
+		}
+	}
+}
 
 
 exports.get = async (strID) => {
@@ -13,9 +54,28 @@ exports.get = async (strID) => {
 }
 
 
-//posted by user
-exports.getFromUser = async (userID) => {
+exports.getAllFromUser = async (userID) => {
 	return Course.find({userID: userID})
+}
+
+
+exports.getAllFromPost = async (strPostID, requestedFilter) => {
+	const postID = idToObj(strPostID)
+	if(!postID) return ResCode.BAD_INPUT
+
+	const filter = {
+		postID: postID
+	}
+
+	if(requestedFilter === "notFull") filter.$expr = { $lt: [{ $size: '$attendees' }, '$maxAttendees'] } //inspired by ChatGPT
+
+	const courses = await Course.find(filter)
+	if(!courses) return ResCode.NOT_FOUND
+
+	return {
+		resCode: ResCode.SUCCESS,
+		data: courses
+	}
 }
 
 
@@ -35,7 +95,7 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 
 	//create course if it does not exist
 	const course = await Course.findById(courseID)
-	if(!course) return createCourse(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID)
+	if(!course) return exports.create(userID, strPostID, meetingLink, start, duration, city, address, maxAttendees, courseID)
 
 	try{
 		course.meetingLink = meetingLink
@@ -63,7 +123,6 @@ exports.put = async ({strCourseID, userID, strPostID, meetingLink, start, durati
 }
 
 
-//deletes all courses from a user
 exports.deleteAllFromUser = async (userID) => {
 
 	//has courses?
@@ -87,6 +146,22 @@ exports.deleteAllFromUser = async (userID) => {
 	}
 
 	return resCodeResult
+}
+
+
+/**
+	DOES NOT AUTHENTICATE USER
+*/
+exports.deleteAllFromPost = async (postID) => {
+	try{
+		await Course.deleteMany({postID: postID})
+		return ResCode.SUCCESS
+	} catch(err){
+		return {
+			resCode: ResCode.ERROR,
+			error: "Failed to delete course from post"
+		}
+	}
 }
 
 
