@@ -9,6 +9,7 @@ import PostedCourses from './views/PostedCourses.vue'
 import PostList from './views/PostsList.vue'
 import EditPost from './views/EditPost.vue'
 import ViewPost from './views/ViewPost.vue'
+import CreateReview from './views/CreateReview.vue'
 
 Vue.use(Router)
 
@@ -55,6 +56,11 @@ export default new Router({
       path: '/api/v1/posts/:id/reviews',
       name: 'Reviews',
       component: Reviews
+    },
+    {
+      path: '/api/v1/posts/:id/CreateReview',
+      name: 'CreateReview',
+      component: CreateReview
     }
   ]
 })
