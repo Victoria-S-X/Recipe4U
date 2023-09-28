@@ -7,7 +7,7 @@ var mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/animalDevel
 exports.connectToDB = () => {
     mongoose.connect(mongoURI).then(
         (_) => {
-            console.log(`Connected to MongoDB`)
+            console.log(`Connected to MongoDB with URI: ${mongoURI}`)
         }
     ).catch((err) => {
         if (err) {
