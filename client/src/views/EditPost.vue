@@ -94,7 +94,8 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-      router.push({ path: '/posts' })
+      // router.push({ path: '/posts' })
+      router.push({ path: `/posts/${this.postID}/view` })
     }
   }
 }
