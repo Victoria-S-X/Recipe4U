@@ -68,7 +68,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .keyValues{
   display: grid;
   grid-template-columns: max-content 1fr;

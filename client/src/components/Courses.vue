@@ -93,44 +93,36 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 
 .root {
   text-align: center;
 }
 
 .course-item {
-  margin: 1em auto;
+  margin: 0 auto 1.3em auto;
   max-width: 50em;
-  border: .08em solid #838383;
-  padding: 2em 8%;
+  border: .1em solid var(--primary-dark);
+  padding: 2.2em 12%;
   position: relative;
-  box-shadow: .05em .05em .2em #838383dd;
+  box-shadow: .02em .02em .1em #838383dd;
+  transition: box-shadow .2s;
+  background-color: #fcffff;
 }
 
-.course-action-btn {
-  background-color: #fff;
-  padding: .3em 2em;
-  border: .12em solid #838383;
-  transition: box-shadow .1s;
-}
-
-.course-action-btn:hover {
-  box-shadow: .12em .12em .12em #838383;
-}
-
-.course-action-btn:active {
-  box-shadow: none;
-}
-
-.button-container {
-  border-bottom: .1em solid #838383;
-  max-width: 30em;
-  margin: 0 auto 3em auto;
+.course-item:hover {
+  box-shadow: .09em .09em .23em #838383dd;
 }
 
 .no-courses-container{
   margin: 2em;
+}
+
+/* --------------------------- END OF LIST BUTTON --------------------------- */
+.button-container {
+  border-bottom: .1em solid var(--primary-dark);
+  max-width: 30em;
+  margin: 0 auto 3em auto;
 }
 
 .btn-white-block {
@@ -142,7 +134,11 @@ export default {
 }
 
 .add-course-btn {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
   margin: 0 auto;
+  font-weight: 500;
+  background-color: #fcffff;
 }
 
 </style>
