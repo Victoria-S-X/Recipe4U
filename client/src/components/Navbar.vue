@@ -1,13 +1,13 @@
 <template>
     <div>
-  <b-navbar toggleable="lg" type="light" variant="light">
-    <b-navbar-brand href="/posts">Recipe4U</b-navbar-brand>
+  <b-navbar toggleable="lg" type="light" variant="light" class="my-navbar">
+    <b-navbar-brand href="/posts" class="navbar-brand">Recipe4U</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
 
-      <b-navbar-nav>
+      <b-navbar-nav class="navbar-link">
         <b-nav-item href="/posts">Posts</b-nav-item>
         <b-nav-item href="/posts/creation">Create Post</b-nav-item>
         <b-nav-item href="/posted-courses">Posted Courses</b-nav-item>
@@ -45,3 +45,20 @@ export default {
   mixins: [user, auth]
 }
 </script>
+
+<style scoped>
+
+.my-navbar {
+  background-color: var(--primary-dark) !important;
+}
+
+.navbar-brand {
+  color: var(--white) !important;
+}
+
+.navbar-link *{
+  font-weight: 400;
+  color: var(--white) !important;
+}
+
+</style>

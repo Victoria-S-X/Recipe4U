@@ -31,3 +31,15 @@ export default ({
   }
 })
 </script>
+
+<style>
+
+:root {
+  --primary-dark: #277c7d;
+
+}
+
+body {
+}
+
+</style>

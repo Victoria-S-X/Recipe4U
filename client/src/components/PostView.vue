@@ -36,7 +36,7 @@
       </div>
 
       <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
-
+      <CreateReview></CreateReview>
       <Reviews v-if="postID" :postID="postID"/>
       </div>
     </div>
@@ -47,6 +47,7 @@ import { Api } from '@/Api'
 import Courses from '@/components/Courses.vue'
 import user from '@/mixins/user.js'
 import Reviews from '@/components/Reviews.vue'
+import CreateReview from '@/views/CreateReview.vue'
 
 export default {
   name: 'viewPost',
@@ -118,7 +119,8 @@ export default {
   mixins: [user],
   components: {
     Courses,
-    Reviews
+    Reviews,
+    CreateReview
   }
 }
 </script>
