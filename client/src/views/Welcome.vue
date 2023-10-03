@@ -11,7 +11,7 @@
             <input type = "text" class="username-textbox" v-model="username">
 
             <span  class="password-tag">Password:</span>
-            <input type = "text"  class="password-textbox" v-model="password">
+            <input type = "password"  class="password-textbox" v-model="password">
 
             <button class="login-button-tag" @click = logInUser()>Log-in</button>
 
