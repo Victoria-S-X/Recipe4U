@@ -7,14 +7,19 @@
     <p class="keyValues">
       <strong>Max Attendees:</strong>
       <input type="number" ref="maxAttendees" :value="course.maxAttendees"/>
+
       <strong>Meeting Link:</strong>
       <input type="text" ref="meetingLink" :value="course.meetingLink" />
+
       <strong>City:</strong>
       <input type="text" ref="city" :value="course.city" />
+
       <strong>Address:</strong>
       <input type="text" ref="address" :value="course.address" />
+
       <strong>Start:</strong>
       <input type="datetime-local" ref="start" :value="this.myFormatDate(course.start, 'T')"/>
+
       <strong>Duration:</strong>
       <input type="number" ref="duration" :value="course.duration" />
     </p>
@@ -38,6 +43,7 @@ export default {
       course.address = this.$refs.address.value
       course.start = this.$refs.start.value
       course.duration = this.$refs.duration.value
+      course.userID = this.getUser()._id
 
       const method = course._id ? this.putCourse : this.postCourse
 
