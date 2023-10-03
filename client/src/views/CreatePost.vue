@@ -108,7 +108,7 @@ export default {
         this.isSuccessful = true
         const postId = response.data._id
         console.log(postId)
-        router.push({ path: `/posts/${postId}/view` })
+        router.push({ path: `/posts/${postId}` })
       }).catch(error => {
         console.log(error)
       })

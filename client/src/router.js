@@ -6,9 +6,8 @@ import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
 import PostedCourses from './views/PostedCourses.vue'
 import PostList from './views/PostsList.vue'
-import EditPost from './views/EditPost.vue'
-import ViewPost from './views/ViewPost.vue'
 import CreateReview from './views/CreateReview.vue'
+import PostManager from './views/PostManager.vue'
 
 Vue.use(Router)
 
@@ -43,13 +42,8 @@ export default new Router({
     },
     {
       path: '/posts/:id',
-      name: 'editPost',
-      component: EditPost
-    },
-    {
-      path: '/posts/:id/view',
-      name: 'viewPost',
-      component: ViewPost
+      name: 'postManager',
+      component: PostManager
     },
     {
       path: '/posts/:id/CreateReview',
