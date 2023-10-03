@@ -73,10 +73,8 @@ async function courseAddUser(courseID, userID) {
       const course = await Course.findById(courseID)
 
       if (course) {
-        if (course.attendees.length == course.maxAttendees)
-          return ResCode.ALREADY_FULL
-        else if (course.attendees.includes(userID))
-          return ResCode.ITEM_ALREADY_EXISTS
+        if (course.attendees.length == course.maxAttendees) return ResCode.ALREADY_FULL
+        else if (course.attendees.includes(userID)) return ResCode.ITEM_ALREADY_EXISTS
         else return ResCode.ERROR
       } else return ResCode.NOT_FOUND
     }
