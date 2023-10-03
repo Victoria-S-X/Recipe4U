@@ -86,7 +86,6 @@ exports.put = async ({ text, strPostID, rating, userID, id }) => {
       error: 'User does not own review'
     }
 
-  console.log(postID, review.post, 'mfaeeaoigboae')
   //postID matches review?
   if (!postID.equals(review.post))
     return {

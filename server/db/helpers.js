@@ -8,7 +8,25 @@ function ResCodeObj(number) {
   this.toString = () => {
     return this.number.toString()
   }
-  this.resCode = this //TODO: comment this
+
+  /*
+    This is quite a hacky solution. It it means that you can do:
+
+    1)
+      const result = {
+        resCode: ResCode.SUCCESS,
+        data: ...
+      }
+      console.log(result.resCode)
+    2)
+      const result = ResCode.SUCCESS
+      console.log(result.resCode)
+
+    ... Without knowing which of the two you are doing. This reduces the amount of
+      boilerplate code needed to return a result. The downside is mainly understandability.
+      Probably not worth it but changing it would be expensive.
+  */
+  this.resCode = this
 }
 
 const ResCode = {
