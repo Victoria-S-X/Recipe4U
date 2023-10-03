@@ -7,7 +7,7 @@
 
     <b-collapse id="nav-collapse" is-nav>
 
-      <b-navbar-nav class="navbar-link">
+      <b-navbar-nav class="navbar-links">
         <b-nav-item href="/posts">Posts</b-nav-item>
         <b-nav-item href="/posts/creation">Create Post</b-nav-item>
         <b-nav-item href="/posted-courses">Posted Courses</b-nav-item>
@@ -52,13 +52,12 @@ export default {
   background-color: var(--primary-dark) !important;
 }
 
-.navbar-brand {
+.my-navbar *{
   color: var(--white) !important;
 }
 
-.navbar-link *{
-  font-weight: 400;
-  color: var(--white) !important;
+.navbar-links {
+  margin-left: 1em;
 }
 
 </style>
