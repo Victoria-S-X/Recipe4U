@@ -79,7 +79,7 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
 
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
-import bImg from '../../public/createPostBackground.jpg'
+import bImg from '../assets/createPostBackground.jpg'
 // Create component
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
