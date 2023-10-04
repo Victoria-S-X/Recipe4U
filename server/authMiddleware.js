@@ -14,7 +14,6 @@ module.exports = async (req, res, next) => {
       }
     })
 
-  const hi = 'hi'
   try {
     //valid token?
     const data = auth.verifyJWT(token)
