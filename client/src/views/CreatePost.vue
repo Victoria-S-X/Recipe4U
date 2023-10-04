@@ -209,7 +209,4 @@ export default {
 .text-ingredient {
   text-align: start;
 }
-.file-pond .filepond--drop-label{
-    height: 20em;
-}
 </style>
