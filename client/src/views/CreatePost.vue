@@ -106,7 +106,9 @@ export default {
       }
       Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
         this.isSuccessful = true
-        router.push({ path: '/posts' })
+        const postId = response.data._id
+        console.log(postId)
+        router.push({ path: `/posts/${postId}` })
       }).catch(error => {
         console.log(error)
       })

@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
         if (postName != null) query.postName = postName
         if (reviews != null) query.reviews = reviews
         
-        let result = await Post.find(query)
+        let result = await Post.find(query).select('-postImage')
 
         // Paging with offset and limit
         let currentOffset = 0
@@ -69,7 +69,9 @@ router.get("/image/:id", async (req, res) => {
 
         res.setHeader("Expires", "-1");
         res.setHeader("Cache-Control", "must-revalidate, private");
-        if (post.postImage != null) {
+        if (post.postImage == null) {
+            res.status(404).send()
+        } else {
             res.type(post.postImageType).send(post.postImage);
         }
     } catch (err) {
@@ -125,7 +127,6 @@ router.patch('/:id', getPost, upload.single(), auth, async (req, res) => {
     }
     if (req.body.ingredients != null) {
         res.post.ingredients = req.body.ingredients
-        console.log(res.post.ingredients)
     }
     if (req.body.description != null) {
         res.post.description = req.body.description
@@ -172,7 +173,7 @@ async function getPost(req, res, next) {
             postID: req.params.id
         })
 
-        post = await Post.findById(postID)
+        post = await Post.findById(postID).select('-postImage')
         if (post == null) {
             return res.status(404).json({ message: 'Cannot find post'})
         }
