@@ -50,7 +50,7 @@ router.delete('/attendance/:courseID', auth, async (req, res) => {
       res.status(404).json({ message: 'Course not found' })
       break
     case ResCode.NOT_FOUND_1:
-      res.status(200).json({ message: 'Already removed' })
+      res.status(200).json({ message: "Wasn't attending" })
       break
 
     default:
