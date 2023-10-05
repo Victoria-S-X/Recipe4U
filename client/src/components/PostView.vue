@@ -166,12 +166,14 @@ export default {
   border-radius: 2%;
   min-width: 14em;
   min-height: 18em;
+  max-width: 20em;
+  max-height: 28em;
 }
 @media only screen and (max-width: 768px) {
   #image {
     position: relative;
     max-width: 14em;
-    max-height: 18em;
+    max-height: 19em;
     margin-top: -3%;
     margin-bottom: 0;
     margin-left: 15%;
