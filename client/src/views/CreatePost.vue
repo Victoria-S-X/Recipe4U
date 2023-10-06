@@ -18,8 +18,14 @@
       <br/>
         <div class="alert alert-success" v-if="isSuccessful">Post Created Successfully</div>
         <form @submit.prevent="onCreatePost">
+          <p v-if="errors.length">
+            <b>Please fill in the following required field(s):</b>
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+          </p>
           <div class="form-group">
-                <label class="form-label">Post Name</label>
+                <label class="form-label">Post Name *</label>
                 <input type="text" class="form-control" v-model="postName"/>
             </div>
             <div class="form-group">
@@ -27,7 +33,7 @@
                 <input type="text" class="form-control" v-model="cookingTime"/>
             </div><br/>
             <div>
-              <label class="form-label">Ingredients</label>
+              <label class="form-label">Ingredients *</label>
               <div class="form-group" v-for="(input,k) in inputs" :key="k">
                 <div class="input-group mb-3">
                   <input type="text" class="form-control text-ingredient" placeholder="Ingredient" aria-label="Ingredient" aria-describedby="basic-addon2" v-model="input.ingredient">
@@ -49,7 +55,7 @@
                 <textarea class="form-control" rows="3" v-model="description"></textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Recipe</label>
+                <label class="form-label">Recipe *</label>
                 <textarea class="form-control" rows="3" v-model="recipe"></textarea>
             </div><br/>
             <file-pond
@@ -106,30 +112,52 @@ export default {
         ingredient: ''
       }],
       postImage: '',
-      backgroundImg: bImg
+      backgroundImg: bImg,
+      errors: []
     }
   },
 
   methods: {
-    onCreatePost() {
-      const formData = new FormData()
-      formData.append('postImage', this.postImage)
-      formData.append('postName', this.postName)
-      formData.append('description', this.description)
-      formData.append('recipe', this.recipe)
-      formData.append('cookingTime', this.cookingTime)
-      for (let i = 0; i < this.inputs.length; i++) {
-        const ingre = this.inputs[i]
-        formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+    checkForm: function (e) {
+      if (this.postName && this.recipe && this.inputs && this.inputs[0].ingredient) {
+        return true
       }
-      Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
-        this.isSuccessful = true
-        const postId = response.data._id
-        console.log(postId)
-        router.push({ path: `/posts/${postId}` })
-      }).catch(error => {
-        console.log(error)
-      })
+
+      this.errors = []
+
+      if (!this.postName) {
+        this.errors.push('Post Name required.')
+      }
+      if (!this.recipe) {
+        this.errors.push('Recipe required.')
+      }
+      if (!this.inputs || !this.inputs[0].ingredient) {
+        this.errors.push('Ingredients required.')
+      }
+    },
+    onCreatePost() {
+      if (this.checkForm() === true) {
+        const formData = new FormData()
+        formData.append('postImage', this.postImage)
+        formData.append('postName', this.postName)
+        formData.append('description', this.description)
+        formData.append('recipe', this.recipe)
+        formData.append('cookingTime', this.cookingTime)
+        for (let i = 0; i < this.inputs.length; i++) {
+          const ingre = this.inputs[i]
+          if (!ingre) {
+            formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+          }
+        }
+        Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
+          this.isSuccessful = true
+          const postId = response.data._id
+          console.log(postId)
+          router.push({ path: `/posts/${postId}` })
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     },
     add() {
       this.inputs.push({
