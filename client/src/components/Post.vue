@@ -8,7 +8,7 @@
         img-top
         tag="article"
         style="max-width: 30rem;"
-        class="mb-2"
+        class="mb-2 post-card"
         >
         <b-card-text>
           {{ truncatedDescription }}
@@ -41,3 +41,9 @@ export default ({
   }
 })
 </script>
+
+<style scoped>
+  .post-card img{
+    object-fit: cover;
+  }
+</style>
