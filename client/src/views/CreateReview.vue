@@ -14,6 +14,8 @@
 </template>
 <script>
 import { Api } from '@/Api'
+import user from '@/mixins/user'
+
 export default {
   name: 'CreateReview',
   data() {
@@ -31,13 +33,16 @@ export default {
       }
     },
     async submitReview() {
+      const username = this.getUser().username
       Api.post(`/posts/${this.$route.params.id}/reviews`, {
+        username: username,
         rating: this.rating,
         text: this.text
       }
       )
     }
-  }
+  },
+  mixins: [user]
 
 }
 

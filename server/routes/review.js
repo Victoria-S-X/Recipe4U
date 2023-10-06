@@ -11,6 +11,7 @@ const Post = require('../db/models/post')
 postRouter.post('/:postId/reviews', auth, async (req, res) => {
   const result = await controller.create({
     text: req.body.text,
+    username: req.body.username,
     strPostID: req.params.postId,
     rating: req.body.rating,
     userID: req.userID
@@ -37,10 +38,12 @@ postRouter.post('/:postId/reviews', auth, async (req, res) => {
 
 postRouter.get('/:postId/reviews', async (req, res) => {
   try {
-    let reviews = await Review.find()
-    if (reviews != null) {
-      reviews = reviews.filter((re) => re.post.equals(req.params.postId))
-    }
+    const reviews = await Review.find({
+      post: req.params.postId
+    })
+
+    if (reviews === null) throw new Error('Cannot find reviews')
+
     res.status(200).json(reviews)
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -69,6 +72,7 @@ postRouter.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res
 reviewRouter.put('/:id', auth, async (req, res) => {
   const result = await controller.put({
     strPostID: req.body.postID,
+    username: req.body.username,
     userID: req.userID,
     text: req.body.text,
     rating: req.body.rating,
