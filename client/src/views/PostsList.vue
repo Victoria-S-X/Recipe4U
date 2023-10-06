@@ -39,9 +39,6 @@ export default ({
         })
     },
     goToViewPost(index) {
-      router.push({ path: `/posts/${index}/view` })
-    },
-    goToEditPost(index) {
       router.push({ path: `/posts/${index}` })
     }
   }

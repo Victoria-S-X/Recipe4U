@@ -68,7 +68,9 @@ router.get('/image/:id', async (req, res) => {
 
     res.setHeader('Expires', '-1')
     res.setHeader('Cache-Control', 'must-revalidate, private')
-    if (post.postImage != null) {
+    if (post.postImage == null) {
+      res.status(404).send()
+    } else {
       res.type(post.postImageType).send(post.postImage)
     }
   } catch (err) {
@@ -124,7 +126,6 @@ router.patch('/:id', getPost, upload.single(), auth, async (req, res) => {
   }
   if (req.body.ingredients != null) {
     res.post.ingredients = req.body.ingredients
-    console.log(res.post.ingredients)
   }
   if (req.body.description != null) {
     res.post.description = req.body.description
