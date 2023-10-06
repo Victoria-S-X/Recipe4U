@@ -68,7 +68,7 @@ router.get('/image/:id', async (req, res) => {
 
     res.setHeader('Expires', '-1')
     res.setHeader('Cache-Control', 'must-revalidate, private')
-    if (post.postImage == null) {
+    if (!post || !post.postImage) {
       res.status(404).send()
     } else {
       res.type(post.postImageType).send(post.postImage)
