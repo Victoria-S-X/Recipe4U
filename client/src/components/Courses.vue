@@ -108,7 +108,7 @@ export default {
   position: relative;
   box-shadow: .02em .02em .1em #838383dd;
   transition: box-shadow .2s;
-  background-color: #fcffff;
+  background-color: var(--soft-white);
 }
 
 .course-item:hover {
@@ -127,7 +127,7 @@ export default {
 }
 
 .btn-white-block {
-  background-color: #f5f3f0;
+  background-color: var(--primary-background);
   width: 5em;
   margin: 0 auto;
   transform: translateY(1.5em);
@@ -139,7 +139,7 @@ export default {
   border-color: var(--primary-color);
   margin: 0 auto;
   font-weight: 500;
-  background-color: #fcffff;
+  background-color: var(--soft-white);
 }
 
 </style>

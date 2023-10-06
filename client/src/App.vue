@@ -37,15 +37,17 @@ export default ({
 :root {
   --primary-color: #EB6A1A;
   --primary-dark: #277c7d;
+  --primary-background: #f5f3f0;
+  --soft-white: #fcffff;
 
 }
 
 body {
-  background-color: #f5f3f0 !important;
+  background-color: var(--primary-background) !important;
 }
 
 #app {
-  background-color: #f5f3f0;
+  background-color: var(--primary-background);
 }
 
 </style>

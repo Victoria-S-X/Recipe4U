@@ -46,7 +46,8 @@ export default ({
     overflow: hidden;
     color: var(--primary-dark);
     box-shadow: .015em .015em .1em #838383dd;
-    transition: box-shadow .2s;;
+    transition: box-shadow .2s;
+    background-color: var(--soft-white);
   }
 
   .post-card:hover {
