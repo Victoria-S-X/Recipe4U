@@ -49,4 +49,7 @@ width: 500px;
 flex-direction: column;
 align-items: left;
 }
+.background{
+padding:10px;
+}
 </style>

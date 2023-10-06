@@ -62,7 +62,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .Background { overflow:hidden;}
 .Background {
 background-color:rgba(16.46874949336052, 197.62499392032623, 56.32314272224903, 1);
