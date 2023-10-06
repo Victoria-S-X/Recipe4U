@@ -1,6 +1,6 @@
 <template>
     <div class="outer-container">
-      <div class="upper-card" style="padding-top: 3%;">
+      <div style="padding-top: 3%;">
         <b-card no-body class="food-card">
           <b-row no-gutters>
             <b-col md="4">
@@ -29,7 +29,7 @@
             </div>
            <hr class="my-4">
             <h5>
-              Cooking time: {{ post.cookingTime }}
+              <img :src="timerIcon"> Cooking time: {{ post.cookingTime }}
             </h5>
             <hr class="my-4">
             <div>
@@ -56,6 +56,7 @@ import Reviews from '@/components/Reviews.vue'
 import CreateReview from '@/views/CreateReview.vue'
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'
+import timerIcon from '@/assets/Timer.png'
 
 export default {
   name: 'viewPost',
@@ -77,13 +78,15 @@ export default {
         recipe: null
       },
       ingredientsIcon: '',
-      cookingBookIcon: ''
+      cookingBookIcon: '',
+      timerIcon: ''
     }
   },
   mounted() {
     this.populatePost()
     this.ingredientsIcon = ingredientsIcon
     this.cookingBookIcon = cookingBookIcon
+    this.timerIcon = timerIcon
   },
   computed: {
     descriptionContent: function () {
@@ -100,6 +103,7 @@ export default {
         .then(response => {
           this.post = response.data
           console.log(response.data.ingredients)
+          this.postID = this.$route.params.id
           this.imgSRC = `http://localhost:3000/api/v1/posts/image/${this.$route.params.id}`
           for (let i = 0; i < response.data.ingredients.length; i++) {
             const ingre = JSON.parse(response.data.ingredients[i]).ingredient
