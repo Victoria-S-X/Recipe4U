@@ -32,7 +32,7 @@ export default {
     },
     async submitReview() {
       Api.post(`/posts/${this.$route.params.id}/reviews`, {
-        review: this.review,
+        rating: this.rating,
         text: this.text
       }
       )
@@ -48,5 +48,8 @@ display: flex;
 width: 500px;
 flex-direction: column;
 align-items: left;
+}
+.background{
+padding:10px;
 }
 </style>
