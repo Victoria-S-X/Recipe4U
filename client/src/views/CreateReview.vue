@@ -32,7 +32,7 @@ export default {
     },
     async submitReview() {
       Api.post(`/posts/${this.$route.params.id}/reviews`, {
-        review: this.review,
+        rating: this.rating,
         text: this.text
       }
       )

@@ -1,9 +1,11 @@
 <template>
     <div class="Background" >
         <div  class="comment-box" v-for="(review, index) in reviews" :key="index">
-          <span  class="User">Anonymous user: </span>
+        <div class="user-rating">
+        <span class="User">Anonymous User </span>
+        <span class="Rate">{{ review.rating }}/5</span>
+        </div>
           <p  class="Comment">{{review.text}}</p>
-          <p  class="Rate">{{review.rating}}</p>
         </div>
     </div>
 </template>
@@ -56,6 +58,6 @@ font-weight:bold;
 }
 .Rate{
 font-weight: bold;
-color: yellow;
+color: mediumaquamarine;
 }
 </style>
