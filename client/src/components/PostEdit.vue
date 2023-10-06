@@ -1,11 +1,11 @@
 <template>
-  <b-card no-body class="overflow-hidden" >
+  <b-card no-body class="overflow-hidden outer-box" >
           <b-row no-gutters>
             <b-col md="6">
               <b-card-img id="image" alt="Food Image" :src="imgSRC" class="rounded-0"></b-card-img>
             </b-col>
             <b-col md="6">
-              <b-card-body>
+              <b-card-body class="edit-container">
                 <div class="container mb-3">
                   <div class="container">
                     <h2>Edit {{ value.postName }}</h2>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group">
                       <b-row align-h="center">
-                        <b-col md="4" class="pb-2"><b-button variant="outline-success" type="submit">Save Post</b-button></b-col>
+                        <b-col md="4" class="pb-2"><b-button variant="outline-info" type="submit">Save Post</b-button></b-col>
                         <b-col md="4" class="pb-2"><b-button variant="outline-secondary" @click="cancel()">Cancel</b-button></b-col>
                       </b-row>
                     </div>
@@ -112,3 +112,26 @@ export default ({
   }
 })
 </script>
+
+<style scoped>
+.outer-box {
+  color: var(--primary-dark);
+  background-image: linear-gradient(to bottom left, #f0f0ed , rgb(253, 253, 250));
+}
+  #image {
+  position: relative;
+  margin-left: 15%;
+  margin-top: 5%;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.372), 0 16px 20px 0 rgba(0, 0, 0, 0.475);
+  border-radius: 2%;
+  min-width: 14em;
+  min-height: 18em;
+  max-width: 30em;
+  max-height: 38em;
+}
+.edit-container {
+  padding-top: 3%;
+  padding-right: 20%;
+  font-weight: 600;
+}
+</style>
