@@ -4,10 +4,8 @@
         :title="truncatedPostName"
         :img-src="`http://localhost:3000/api/v1/posts/image/${post._id}`"
         img-alt="Food Image"
-        img-height="400"
         img-top
         tag="article"
-        style="max-width: 30rem;"
         class="mb-2 post-card"
         >
         <b-card-text>
@@ -43,7 +41,25 @@ export default ({
 </script>
 
 <style scoped>
-  .post-card img{
+  .post-card {
+    border-radius: .5em;
+    overflow: hidden;
+    color: var(--primary-dark);
+    box-shadow: .015em .015em .1em #838383dd;
+    transition: box-shadow .2s;
+  }
+
+  .post-card:hover {
+    box-shadow: .09em .09em .23em #838383dd;
+  }
+
+  .post-card img {
     object-fit: cover;
+    height: 40vh;
+    max-height: 40em;
+  }
+
+  .post-card p {
+    color: #1c1c1c;
   }
 </style>

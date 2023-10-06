@@ -48,9 +48,18 @@ export default ({
 <style scoped>
 
 .postList {
-  margin: 5% 3%;
+  margin: 3% auto;
+  padding: 0 1em;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));
+  width: auto;
+  row-gap: 1em;
 }
 
+@media screen and (max-width: 30em) {
+  .postList {
+    grid-template-columns: auto;
+    padding: 0;
+  }
+}
 </style>
