@@ -118,13 +118,11 @@ export default {
   },
 
   methods: {
-    checkForm: function (e) {
+    checkForm: function () {
       if (this.postName && this.recipe && this.inputs && this.inputs[0].ingredient) {
         return true
       }
-
       this.errors = []
-
       if (!this.postName) {
         this.errors.push('Post Name required.')
       }
