@@ -45,7 +45,9 @@ router.get('/', async (req, res) => {
     if (postName != null) query.postName = postName
     if (reviews != null) query.reviews = reviews
 
-    let result = await Post.find(query)
+    let result = await Post.find(query, {
+      postImage: 0
+    })
 
     // Paging with offset and limit
     let currentOffset = 0
