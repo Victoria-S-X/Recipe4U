@@ -46,7 +46,8 @@ export default ({
     overflow: hidden;
     color: var(--primary-dark);
     box-shadow: .015em .015em .1em #838383dd;
-    transition: box-shadow .2s;;
+    transition: box-shadow .2s;
+    background-color: var(--soft-white);
   }
 
   .post-card:hover {
@@ -58,8 +59,7 @@ export default ({
     height: 40vh;
     max-height: 10em;
     text-align: center;
-    display: block;
-    line-height: 40vh;
+    line-height: min(40vh, 10em);
     font-size: 3em;
     background-color: #dfdfdf;
   }

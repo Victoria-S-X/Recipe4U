@@ -15,7 +15,9 @@
     </div>
     <div v-else-if="getFrom === 'user'" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">🗑</button> <!-- TODO: rename classes-->
+        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">
+          <b-icon icon="trash"></b-icon>
+        </button> <!-- TODO: rename classes-->
       </div>
     </div>
   </div>
@@ -108,7 +110,7 @@ export default {
   position: relative;
   box-shadow: .02em .02em .1em #838383dd;
   transition: box-shadow .2s;
-  background-color: #fcffff;
+  background-color: var(--soft-white);
 }
 
 .course-item:hover {
@@ -127,7 +129,7 @@ export default {
 }
 
 .btn-white-block {
-  background-color: #fff;
+  background-color: var(--primary-background);
   width: 5em;
   margin: 0 auto;
   transform: translateY(1.5em);
@@ -139,7 +141,7 @@ export default {
   border-color: var(--primary-color);
   margin: 0 auto;
   font-weight: 500;
-  background-color: #fcffff;
+  background-color: var(--soft-white);
 }
 
 </style>

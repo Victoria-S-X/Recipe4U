@@ -41,7 +41,10 @@
           </b-jumbotron>
       </div>
 
+      <h3>Courses</h3>
       <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+
+      <h3>Reviews</h3>
       <CreateReview></CreateReview>
       <Reviews v-if="postID" :postID="postID"/>
       </div>
@@ -152,7 +155,7 @@ export default {
 
 <style scoped>
 .outer-container {
-  background-image: linear-gradient(to bottom right, #f8f6f5 , rgb(245, 243, 240));
+  background-color: #f5f3f0;
   padding: 3%;
 }
 .food-card {

@@ -51,7 +51,7 @@ export default ({
   margin: 1% auto;
   padding: 0 1em;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(30em, 40vh), 1fr));
   width: auto;
   row-gap: 1em;
 }
