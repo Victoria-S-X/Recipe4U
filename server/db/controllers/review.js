@@ -3,7 +3,7 @@ const Review = require('../models/review')
 const mongoose = require('mongoose')
 const ValidationError = mongoose.Error.ValidationError
 
-exports.create = async ({ text, strPostID, rating, userID, reviewID = null }) => {
+exports.create = async ({ text, strPostID, rating, userID, username, reviewID = null }) => {
   //valid postID?
   const postID = idToObj(strPostID)
   if (!postID)
@@ -24,7 +24,8 @@ exports.create = async ({ text, strPostID, rating, userID, reviewID = null }) =>
     text: text,
     post: postID,
     rating: rating,
-    user: userID
+    user: userID,
+    username: username
   })
 
   try {
@@ -51,7 +52,7 @@ exports.create = async ({ text, strPostID, rating, userID, reviewID = null }) =>
   }
 }
 
-exports.put = async ({ text, strPostID, rating, userID, id }) => {
+exports.put = async ({ text, strPostID, rating, userID, id, username }) => {
   //has postID?
   if (!strPostID)
     return {
@@ -77,7 +78,7 @@ exports.put = async ({ text, strPostID, rating, userID, id }) => {
 
   //review exists?
   const review = await Review.findById(reviewID)
-  if (!review) return await exports.create({ text, strPostID, rating, userID, reviewID })
+  if (!review) return await exports.create({ text, strPostID, rating, userID, reviewID, username })
 
   //user owns review?
   if (!userID.equals(review.user))
