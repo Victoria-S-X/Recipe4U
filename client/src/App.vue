@@ -41,6 +41,11 @@ export default ({
 }
 
 body {
+  background-color: #f5f3f0 !important;
+}
+
+#app {
+  background-color: #f5f3f0;
 }
 
 </style>

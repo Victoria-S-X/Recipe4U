@@ -127,7 +127,7 @@ export default {
 }
 
 .btn-white-block {
-  background-color: #fff;
+  background-color: #f5f3f0;
   width: 5em;
   margin: 0 auto;
   transform: translateY(1.5em);

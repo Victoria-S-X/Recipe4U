@@ -152,7 +152,7 @@ export default {
 
 <style scoped>
 .outer-container {
-  background-image: linear-gradient(to bottom right, #f8f6f5 , rgb(245, 243, 240));
+  background-color: #f5f3f0;
   padding: 3%;
 }
 .food-card {
