@@ -24,7 +24,7 @@
     </div>
 
     <button v-if="isAttendingBool === true" @click="onUnAttend()" class="attendance-btn" >Unregister</button>
-    <button v-else-if="isAttendingBool === false" @click="onAttend()" class="attendance-btn" >Register</button>
+    <button v-else-if="isAttendingBool === false && !ownsCourse(course)" @click="onAttend()" class="attendance-btn" >Register</button>
   </div>
 </template>
 

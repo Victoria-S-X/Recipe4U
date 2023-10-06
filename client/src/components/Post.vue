@@ -58,7 +58,6 @@ export default ({
     height: 40vh;
     max-height: 10em;
     text-align: center;
-    display: block;
     line-height: min(40vh, 10em);
     font-size: 3em;
     background-color: #dfdfdf;
