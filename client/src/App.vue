@@ -35,6 +35,7 @@ export default ({
 <style>
 
 :root {
+  --primary-color: #EB6A1A;
   --primary-dark: #277c7d;
 
 }
