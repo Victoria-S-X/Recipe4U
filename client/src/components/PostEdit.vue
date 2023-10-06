@@ -1,13 +1,14 @@
 <template>
-  <b-card no-body class="overflow-hidden" >
+  <b-card no-body class="overflow-hidden outer-box" >
+    <b-card no-body class="food-card">
           <b-row no-gutters>
             <b-col md="6">
               <b-card-img id="image" alt="Food Image" :src="imgSRC" class="rounded-0"></b-card-img>
             </b-col>
             <b-col md="6">
-              <b-card-body>
+              <b-card-body class="edit-container">
                 <div class="container mb-3">
-                  <div class="container">
+                  <div class="container"  id="post-title">
                     <h2>Edit {{ value.postName }}</h2>
                   </div>
                   <hr/>
@@ -19,19 +20,22 @@
                     <div class="form-group">
                       <label class="form-label">Cooking Time</label>
                       <input type="text" class="form-control" ref="cookingTime" :value="value.cookingTime" @input="updatePost()"/>
-                    </div><br/>
-                    <div class="form-group" ref="inputs" :value="value.inputs"  v-for="(input,k) in inputs" :key="k">
-                      <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Ingredient" aria-label="Ingredient" aria-describedby="basic-addon2" v-model="input.ingredient">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" type="button" @click="add(k)" v-show="k == value.ingredients.length-1">
-                            <b-icon icon="plus-circle" aria-label="Add"></b-icon>
-                          </button>
-                        </div>
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" type="button" @click="remove(k)" v-show="k || ( !k && value.ingredients.length > 1)">
-                            <b-icon icon="trash" aria-label="Remove"></b-icon>
-                          </button>
+                    </div>
+                    <div>
+                      <label class="form-label">Ingredients</label>
+                      <div class="form-group" ref="inputs" :value="value.inputs"  v-for="(input,k) in inputs" :key="k">
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Ingredient" aria-label="Ingredient" aria-describedby="basic-addon2" v-model="input.ingredient">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" @click="add(k)" v-show="k == value.ingredients.length-1">
+                              <b-icon icon="plus-circle" aria-label="Add"></b-icon>
+                            </button>
+                          </div>
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" @click="remove(k)" v-show="k || ( !k && value.ingredients.length > 1)">
+                              <b-icon icon="trash" aria-label="Remove"></b-icon>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -45,8 +49,8 @@
                     </div>
                     <div class="form-group">
                       <b-row align-h="center">
-                        <b-col md="4" class="pb-2"><b-button variant="outline-success" type="submit">Save Post</b-button></b-col>
-                        <b-col md="4" class="pb-2"><b-button variant="outline-secondary" @click="cancel()">Cancel</b-button></b-col>
+                        <b-col md="3" cols="auto" class="pb-2"><b-button variant="outline-info" type="submit">Save Post</b-button></b-col>
+                        <b-col md="2" cols="auto" class="pb-2"><b-button variant="outline-secondary" @click="cancel()">Cancel</b-button></b-col>
                       </b-row>
                     </div>
                   </form>
@@ -54,8 +58,9 @@
               </b-card-body>
             </b-col>
           </b-row>
-            </b-card>
-          </template>
+          </b-card>
+    </b-card>
+</template>
 
 <script>
 
@@ -112,3 +117,50 @@ export default ({
   }
 })
 </script>
+
+<style scoped>
+.outer-box {
+  color: var(--primary-dark);
+  background-image: linear-gradient(to bottom left, #f0f0ed , rgb(253, 253, 250));
+  position: relative;
+  padding: 4%;
+  padding-top: 4%;
+}
+.food-card {
+  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 1%;
+  border: none;
+}
+  #image {
+  position: relative;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.372), 0 16px 20px 0 rgba(0, 0, 0, 0.475);
+  border-radius: 2%;
+  min-width: 14em;
+  min-height: 18em;
+  max-width: 30em;
+  max-height: 38em;
+  margin-top: 4%;
+  margin-bottom: 5%;
+  margin: 8%;
+}
+@media only screen and (max-width: 768px) {
+  #image {
+    position: relative;
+    max-width: 24em;
+    max-height: 29em;
+    margin-top: -3%;
+    margin-left: 11%;
+  }
+}
+.edit-container {
+  font-weight: 600;
+}
+.form-control {
+  font-weight: 600;
+}
+#post-title {
+  text-align: center;
+}
+
+</style>
