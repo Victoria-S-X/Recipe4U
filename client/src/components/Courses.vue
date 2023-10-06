@@ -15,7 +15,9 @@
     </div>
     <div v-else-if="getFrom === 'user'" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">🗑</button> <!-- TODO: rename classes-->
+        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">
+          <b-icon icon="trash"></b-icon>
+        </button> <!-- TODO: rename classes-->
       </div>
     </div>
   </div>
