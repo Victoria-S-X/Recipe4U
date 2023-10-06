@@ -175,7 +175,9 @@ async function getPost(req, res, next) {
         postID: req.params.id
       })
 
-    post = await Post.findById(postID)
+    post = await Post.findById(postID, {
+      postImage: 0
+    })
     if (post == null) {
       return res.status(404).json({ message: 'Cannot find post' })
     }
