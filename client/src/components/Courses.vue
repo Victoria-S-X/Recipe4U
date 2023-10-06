@@ -96,6 +96,7 @@ export default {
 <style scoped>
 
 .root {
+  margin-top: 1.3em;
   text-align: center;
 }
 
