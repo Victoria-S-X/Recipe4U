@@ -41,7 +41,10 @@
           </b-jumbotron>
       </div>
 
+      <h3>Courses</h3>
       <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+
+      <h3>Reviews</h3>
       <CreateReview></CreateReview>
       <Reviews v-if="postID" :postID="postID"/>
       </div>
