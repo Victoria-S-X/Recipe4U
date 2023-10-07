@@ -63,6 +63,36 @@ exports.getAllFromUser = async (userID) => {
   return Course.find({ userID: userID })
 }
 
+exports.getAllUserAttends = async (strUserID) => {
+  const userID = idToObj(strUserID)
+  if (!userID)
+    return {
+      resCode: ResCode.BAD_INPUT,
+      error: 'Invalid user ID'
+    }
+
+  const user = await require('./user').get(userID)
+  if (!user) return ResCode.NOT_FOUND
+
+  const courseIDs = user?.attends
+  if (!courseIDs)
+    return {
+      resCode: ResCode.SUCCESS,
+      data: []
+    }
+
+  const courses = []
+  for (const courseID of courseIDs) {
+    const course = await exports.get(courseID)
+    if (course) courses.push(course)
+  }
+
+  return {
+    resCode: ResCode.SUCCESS,
+    data: courses
+  }
+}
+
 exports.getAllFromPost = async (strPostID, requestedFilter) => {
   const postID = idToObj(strPostID)
   if (!postID) return ResCode.BAD_INPUT

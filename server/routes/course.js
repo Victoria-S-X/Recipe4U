@@ -70,18 +70,36 @@ postRouter.get('/:id/courses', auth, async (req, res) => {
 courseRouter.get('/posted-courses', auth, async (req, res) => {
   const courses = await controller.getAllFromUser(req.userID)
 
-  if (!courses) {
+  if (courses === null) {
     res.status(500).json({ message: 'Something went wrong' })
     return
   }
 
-  const result = []
+  res.status(200).json(courses)
+})
 
-  for (const course of courses) {
-    result.push(course)
+//GET courses attending by logged in user
+courseRouter.get('/attending-courses', auth, async (req, res) => {
+  const result = await controller.getAllUserAttends(req.userID)
+
+  switch (result.resCode) {
+    case ResCode.BAD_INPUT:
+      res.status(400).json({
+        message: 'Bad input',
+        error: result?.error
+      })
+      break
+    case ResCode.NOT_FOUND:
+      res.status(404).json({ message: 'User not found' })
+      break
+    case ResCode.SUCCESS:
+      res.status(200).json(result.data)
+      break
+
+    default:
+      res.status(500).json({ message: 'Internal server error' })
+      break
   }
-
-  res.status(200).json(result)
 })
 
 courseRouter.get('/:id', async (req, res) => {

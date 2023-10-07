@@ -5,8 +5,8 @@ const controller = require('../db/controllers/review')
 const auth = require('../authMiddleware')
 const { ResCode } = require('../db/helpers')
 
-const Review = require('../db/models/review')
-const Post = require('../db/models/post')
+// const Review = require('../db/models/review')
+// const Post = require('../db/models/post')
 
 postRouter.post('/:postId/reviews', auth, async (req, res) => {
   const result = await controller.create({
@@ -38,9 +38,7 @@ postRouter.post('/:postId/reviews', auth, async (req, res) => {
 
 postRouter.get('/:postId/reviews', async (req, res) => {
   try {
-    const reviews = await Review.find({
-      post: req.params.postId
-    })
+    const reviews = await controller.getAllFromPost(req.params.postId)
 
     if (reviews === null) throw new Error('Cannot find reviews')
 
@@ -50,22 +48,33 @@ postRouter.get('/:postId/reviews', async (req, res) => {
   }
 })
 
-postRouter.get('/:postId/reviews/:reviewId', getReview, async (req, res) => {
+postRouter.get('/:postId/reviews/:index', getReview, async (req, res) => {
   res.send(res.review)
 })
 
-postRouter.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res) => {
-  if (!res.review.user.equals(req.userID)) return res.status(403).json({ message: 'Unauthorized' })
-  try {
-    const post = await Post.findById(req.params.postId)
-    const newReviews = await post.reviews.filter((re) => !re.equals(req.params.reviewId))
-    console.log(newReviews)
-    post.reviews = newReviews
-    await post.save()
-    await res.review.deleteOne()
-    res.status(200).json({ message: 'The review is deleted.' })
-  } catch (err) {
-    return res.status(500).json({ message: err.message })
+postRouter.delete('/:postId/reviews/:index', auth, getReview, async (req, res) => {
+  const result = await controller.delete(res.review, req.params.postId, req.userID)
+
+  switch (result.resCode) {
+    case ResCode.SUCCESS:
+      res.status(200).json(result?.data)
+      break
+    case ResCode.NOT_FOUND:
+      res.status(404).json({ message: result?.error })
+      break
+    case ResCode.BAD_INPUT:
+      res.status(400).json({ message: result?.error })
+      break
+    case ResCode.UNAUTHORIZED:
+      res.status(403).json({ message: result?.error })
+      break
+
+    default:
+      res.status(500).json({
+        message: 'Failed to delete review',
+        resCode: result?.resCode.number
+      })
+      break
   }
 })
 
@@ -103,15 +112,22 @@ reviewRouter.put('/:id', auth, async (req, res) => {
 })
 
 async function getReview(req, res, next) {
-  let review
-  try {
-    review = await Review.findById(req.params.reviewId)
-    if (review == null) {
-      return res.status(404).json({ message: 'Cannot find review' })
-    }
-  } catch (err) {
-    return res.status(500).json({ message: err.message })
+  const result = await controller.getByPostIndex(req.params.postId, req.params.index)
+
+  switch (result.resCode) {
+    case ResCode.SUCCESS:
+      res.review = result?.data
+      next()
+      break
+    case ResCode.NOT_FOUND:
+      res.status(404).json({ message: result?.error })
+      break
+    case ResCode.BAD_INPUT:
+      res.status(400).json({ message: result?.error })
+      break
+
+    default:
+      res.status(500).json({ message: 'Failed to get review' })
+      break
   }
-  res.review = review
-  next()
 }

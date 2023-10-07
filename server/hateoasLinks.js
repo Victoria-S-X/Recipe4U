@@ -41,6 +41,14 @@ exports.getPosts = () => {
   }
 }
 
+exports.getPostPage = (postID) => {
+  return {
+    description: 'Get post page',
+    href: `/posts/${postID}`,
+    method: 'GET'
+  }
+}
+
 exports.getPostsPage = () => {
   return {
     description: 'Get posts page',

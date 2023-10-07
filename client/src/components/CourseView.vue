@@ -1,8 +1,9 @@
 <template>
   <div>
-    <button v-if="ownsCourse(course)" class="edit-btn" @click="editCourse(course)">✎</button>
+    <button v-if="ownsCourse(course)" class="edit-btn" @click="editCourse(course)">EDIT</button>
 
     <div class="info-container">
+      <h4><a :href="postURL">{{ postName }}</a></h4>
       <p>
         <strong>Attendance:</strong>
         {{ attendanceRatioStr }}
@@ -38,16 +39,21 @@ import courseItemStyle from '@/styles/courseItem.css'
 export default {
   props: {
     course: Object,
-    reload: Function
+    reload: Function,
+    showCourseName: Boolean
   },
   data() {
     return {
       isAttendingBool: undefined,
-      attendanceRatioStr: this.attendanceRatio()
+      attendanceRatioStr: this.attendanceRatio(),
+      postName: null,
+      postURL: null
     }
   },
   mounted() {
     this.isAttending()
+
+    if (this.showCourseName) this.loadCourseName()
   },
   methods: {
     onAttend() {
@@ -85,6 +91,12 @@ export default {
       this.isAttendingAsync(this.course).then((response) => {
         this.isAttendingBool = response
       })
+    },
+    loadCourseName() {
+      this.getPostLink(this.course).then((response) => {
+        this.postName = response.name
+        this.postURL = response.url
+      }).catch(errorHandler)
     }
   },
   mixins: [myFormatDate, user, course],
@@ -103,6 +115,10 @@ export default {
   color: #0e4647;
 }
 
+.info-container a {
+  color: var(--primary-dark) !important;
+}
+
 .info-container span {
   margin: 0 0.2em;
 }
@@ -117,8 +133,7 @@ export default {
   position: absolute;
   right: .5em;
   top: .5em;
-  font-size: 1.5em;
-  font-weight: 500;
+  font-size: 1.4em;
   border: none;
   background-color: transparent;
   color: var(--primary-color);

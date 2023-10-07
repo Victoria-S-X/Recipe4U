@@ -13,6 +13,14 @@
                   </div>
                   <hr/>
                   <form @submit.prevent="save">
+                    <div class="validation-msg">
+                        <p v-if="errors.length">
+                          <b>Please fill in the following required field(s):</b>
+                          <ul>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
+                          </ul>
+                        </p>
+                      </div>
                     <div class="form-group">
                       <label class="form-label">Post Name</label>
                       <input type="text" class="form-control" ref="postNameInput" :value="value.postName" @input="updatePost()"/>
@@ -72,7 +80,8 @@ export default ({
       inputs: [{
         ingredient: ''
       }],
-      imgSRC: ''
+      imgSRC: '',
+      errors: []
     }
   },
   mounted() {
@@ -80,18 +89,32 @@ export default ({
     this.imgSRC = `http://localhost:3000/api/v1/posts/image/${this.$route.params.id}`
   },
   methods: {
+    checkForm: function () {
+      if (this.$refs.postNameInput.value && this.$refs.recipe.value && this.inputs && this.inputs[0].ingredient) {
+        return true
+      }
+      this.errors = []
+      if (!this.$refs.postNameInput.value) {
+        this.errors.push('Post Name required.')
+      }
+      if (!this.$refs.recipe.value) {
+        this.errors.push('Recipe required.')
+      }
+      if (!this.inputs || !this.inputs[0].ingredient) {
+        this.errors.push('Ingredients required.')
+      }
+    },
     save() {
-      // const ingredients = this.inputs.map(t => t.ingredient)
-      const ingredients = this.inputs
-      console.log(this.inputs)
-      console.error(ingredients, 'in post create')
-      this.$emit('savePost', {
-        postName: this.$refs.postNameInput.value,
-        cookingTime: this.$refs.cookingTime.value,
-        ingredients,
-        description: this.$refs.description.value,
-        recipe: this.$refs.recipe.value
-      })
+      if (this.checkForm() === true) {
+        const ingredients = this.inputs
+        this.$emit('savePost', {
+          postName: this.$refs.postNameInput.value,
+          cookingTime: this.$refs.cookingTime.value,
+          ingredients,
+          description: this.$refs.description.value,
+          recipe: this.$refs.recipe.value
+        })
+      }
     },
     cancel() {
       this.$emit('cancel')
@@ -162,5 +185,7 @@ export default ({
 #post-title {
   text-align: center;
 }
-
+.validation-msg {
+  color: rgb(181, 92, 25);
+}
 </style>

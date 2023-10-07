@@ -514,7 +514,7 @@
 							"formdata": [
 								{
 									"key": "postName",
-									"value": "Swedish meatballs",
+									"value": "Swedish meatballs user 24",
 									"type": "text"
 								},
 								{
@@ -902,12 +902,17 @@
 								},
 								{
 									"key": "start",
-									"value": "2023-10-21",
+									"value": "2023-10-21T10:30:10Z",
 									"type": "text"
 								},
 								{
 									"key": "duration",
 									"value": "180",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Stockholm other course",
 									"type": "text"
 								}
 							]
@@ -1336,13 +1341,7 @@
 							]
 						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NGZjMGYyMDcxNjIyNGNkODgxMzU2ZGUiLCJpYXQiOjE2OTQyNDA1Njl9.hf6NaxIoES7r0vq5GxDCAcr0udGct6Cg-mlgRbgPda8",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "localhost:3000/api/v1/courses",
 							"host": [
@@ -1739,7 +1738,8 @@
 									"})",
 									"",
 									"const response = pm.response.json()",
-									"pm.collectionVariables.set(\"reviewId\", response._id);",
+									"pm.collectionVariables.set(\"reviewId\", response._id)",
+									"pm.collectionVariables.set(\"reviewIndex\", response.index);",
 									"",
 									"pm.test(\"Rating is 5\", () => {",
 									"    pm.expect(response.rating).to.equal(5)",
@@ -1889,7 +1889,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewIndex}}",
 							"host": [
 								"localhost"
 							],
@@ -1900,7 +1900,7 @@
 								"posts",
 								"{{postID}}",
 								"reviews",
-								"{{reviewId}}"
+								"{{reviewIndex}}"
 							]
 						}
 					},
@@ -1935,7 +1935,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewId}}",
+							"raw": "localhost:3000/api/v1/posts/{{postID}}/reviews/{{reviewIndex}}",
 							"host": [
 								"localhost"
 							],
@@ -1946,7 +1946,7 @@
 								"posts",
 								"{{postID}}",
 								"reviews",
-								"{{reviewId}}"
+								"{{reviewIndex}}"
 							]
 						}
 					},
@@ -2191,6 +2191,10 @@
 		},
 		{
 			"key": "userIDNo",
+			"value": ""
+		},
+		{
+			"key": "reviewIndex",
 			"value": ""
 		}
 	]
