@@ -28,9 +28,9 @@
 import { errorHandler } from '@/Api'
 import user from '@/mixins/user'
 import course from '@/mixins/courses'
-import roundBtn from '@/styles/roundBtn.css'
 import CourseView from '@/components/CourseView.vue'
 import CourseEdit from '@/components/CourseEdit.vue'
+import roundBtnStyle from '@/styles/roundBtn.css'
 
 export default {
   mounted() {
@@ -81,7 +81,7 @@ export default {
     }
   },
   mixins: [course, user],
-  styles: [roundBtn],
+  styles: [roundBtnStyle],
   components: {
     CourseView,
     CourseEdit
@@ -100,21 +100,6 @@ export default {
 .root {
   margin-top: 1.3em;
   text-align: center;
-}
-
-.course-item {
-  margin: 0 auto 1.3em auto;
-  max-width: 50em;
-  border: .1em solid var(--primary-dark);
-  padding: 2.2em 12%;
-  position: relative;
-  box-shadow: .02em .02em .1em #838383dd;
-  transition: box-shadow .2s;
-  background-color: var(--soft-white);
-}
-
-.course-item:hover {
-  box-shadow: .09em .09em .23em #838383dd;
 }
 
 .no-courses-container{

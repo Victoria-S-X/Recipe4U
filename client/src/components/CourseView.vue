@@ -33,6 +33,7 @@ import { errorHandler } from '@/Api'
 import myFormatDate from '@/mixins/helpers'
 import user from '@/mixins/user'
 import course from '@/mixins/course'
+import courseItemStyle from '@/styles/courseItem.css'
 
 export default {
   props: {
@@ -86,7 +87,8 @@ export default {
       })
     }
   },
-  mixins: [myFormatDate, user, course]
+  mixins: [myFormatDate, user, course],
+  styles: [courseItemStyle]
 }
 </script>
 
