@@ -3,11 +3,11 @@
 <form class="form-content" @submit.prevent="submitReview">
   <div class="review-text-input">
           <span class="input-tag">Leave a review</span>
-          <input type="text" class="textbox" v-model="text">
+          <input type="text" class="text-textbox" v-model="text">
   </div>
   <div class="rating-input">
           <span class="input-tag">Rate this receipe out of 5</span>
-          <input type="number" class="textbox" v-model="rating">
+          <input type="number" class="rate-textbox" v-model="rating">
   </div>
   <div class = "submit-review-btn">
         <button type="submit">Submit</button>
@@ -57,12 +57,19 @@ export default {
 }
 .submit-review-btn{
 margin-top:3%;
-margin-left:30%;
+margin-left:35%;
 }
 .input-tag{
   margin-left: 10%;
 }
-.textbox{
-margin-left:10%;
+.text-textbox{
+  margin-left:10%;
+  padding:10%;
+
 }
+.rate-textbox{
+  margin-left:10%;
+  padding-right:20%
+}
+
 </style>
