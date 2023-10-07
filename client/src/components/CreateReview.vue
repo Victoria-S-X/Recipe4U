@@ -10,7 +10,7 @@
           <input type="number" class="rate-textbox" v-model="rating">
   </div>
   <div class = "submit-review-btn">
-        <button type="submit" style= "background-color: rgb(36,124,125)" >Submit</button>
+        <button type="submit" class="submit-btn">Submit</button>
   </div>
 
 </form>
@@ -18,7 +18,9 @@
 </template>
 <script>
 import { Api } from '@/Api'
+import user from '@/mixins/user'
 export default {
+  mixins: [user],
   name: 'CreateReview',
   data() {
     return {
@@ -35,21 +37,26 @@ export default {
       }
     },
     async submitReview() {
-      if (this.rating === 0 || this.text === '') {
-        const emptyReview = confirm('Review is empty, please enter something before submitting!')
-        if (emptyReview) {
+      try {
+        if (this.rating === 0 || this.text === '') {
+          const emptyReview = confirm('Review is empty, please enter something before submitting!')
+          if (emptyReview) {
+            window.location.reload()
+          }
+        } else {
+          const retrivedUser = this.getUser().username
+          Api.post(`/posts/${this.$route.params.id}/reviews`, {
+            username: retrivedUser,
+            rating: this.rating,
+            text: this.text
+          })
           window.location.reload()
         }
-      } else {
-        Api.post(`/posts/${this.$route.params.id}/reviews`, {
-          rating: this.rating,
-          text: this.text
-        })
-        window.location.reload()
+      } catch (error) {
+        console.error(error)
       }
     }
   }
-
 }
 
 </script>
@@ -58,7 +65,7 @@ export default {
   align-items: center;
   margin-top:5%;
   margin-bottom:5;
-  margin-left:35%;
+  margin-left:37.5%;
   background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -66,6 +73,10 @@ export default {
 margin-top:3%;
 margin-left:30%;
 margin-right: 70%;
+}
+.submit-btn{
+  background-color: rgb(121,209,210);
+  border-radius: 20%;
 }
 .input-tag{
   margin-left: 10%;
@@ -75,5 +86,8 @@ margin-right: 70%;
 }
 .rate-textbox{
   margin-left:10%;
+}
+.form-content{
+margin-left:5%;
 }
 </style>
