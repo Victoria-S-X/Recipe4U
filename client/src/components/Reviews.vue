@@ -2,7 +2,7 @@
     <div class="Background" >
         <div  class="comment-box" v-for="(review, index) in reviews" :key="index">
         <div class="user-rating">
-        <span class="User">Anonymous User </span>
+        <span class="User">{{review.username}} </span>
         <span class="Rate">{{ review.rating }}/5</span>
         </div>
           <p  class="Comment">{{review.text}}</p>

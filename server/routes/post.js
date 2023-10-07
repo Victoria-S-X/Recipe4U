@@ -162,6 +162,7 @@ router.delete('/:id', getPost, auth, async (req, res) => {
   if (!res.post.user.equals(req.userID)) return res.status(403).json({ message: 'Unauthorized' })
 
   const result = await controller.delete(res.post)
+  console.error(result)
 
   switch (result.resCode) {
     case ResCode.SUCCESS:
