@@ -1,4 +1,4 @@
-.add-item-btn {
+.round-btn {
   border-radius: 50%;
   width: 3em;
   height: 3em;
@@ -8,10 +8,10 @@
   transition: box-shadow .1s;
 }
 
-.add-item-btn:hover {
+.round-btn:hover {
   box-shadow: .12em .12em .12em #838383;
 }
 
-.add-item-btn:active {
+.round-btn:active {
   box-shadow: none;
 }
