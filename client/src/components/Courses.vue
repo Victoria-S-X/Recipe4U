@@ -2,7 +2,7 @@
   <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
       <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="onDeleteCourse(course)"/>
-      <CourseView v-else :course="course" @onEdit="reload()"/>
+      <CourseView v-else :course="course" @onEdit="reload()" :showCourseName="showCourseName"/>
     </div>
     <div v-if="!courses.length" class="no-courses-container">
       <p v-if="userOwnsPost()">No courses posted</p>
@@ -17,7 +17,7 @@
       <div class="btn-white-block">
         <button class="round-btn courses-action-button" @click="onDeleteCourses()">
           <b-icon icon="trash"></b-icon>
-        </button> <!-- TODO: rename classes-->
+        </button>
       </div>
     </div>
   </div>
@@ -38,7 +38,8 @@ export default {
   },
   data() {
     return {
-      courses: []
+      courses: [],
+      showCourseName: this.getFrom === 'user' || this.getFrom === 'userAttendance'
     }
   },
   methods: {
@@ -100,8 +101,8 @@ export default {
   },
   props: {
     getFrom: String,
-    postID: String,
-    userID: String
+    userID: String,
+    postID: String
   }
 }
 

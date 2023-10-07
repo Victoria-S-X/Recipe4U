@@ -116,7 +116,8 @@ router.get('/:id', getPost, (req, res) => {
   if (res.post) {
     const result = { ...res.post }._doc
     result._links = {
-      self: links.getPost(req.params.id)
+      self: links.getPost(req.params.id),
+      selfPage: links.getPostPage(req.params.id)
     }
     res.status(200).json(result)
   } else {

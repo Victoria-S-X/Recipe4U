@@ -3,6 +3,7 @@
     <button v-if="ownsCourse(course)" class="edit-btn" @click="editCourse(course)">✎</button>
 
     <div class="info-container">
+      <h4><a :href="postURL">{{ postName }}</a></h4>
       <p>
         <strong>Attendance:</strong>
         {{ attendanceRatioStr }}
@@ -38,16 +39,21 @@ import courseItemStyle from '@/styles/courseItem.css'
 export default {
   props: {
     course: Object,
-    reload: Function
+    reload: Function,
+    showCourseName: Boolean
   },
   data() {
     return {
       isAttendingBool: undefined,
-      attendanceRatioStr: this.attendanceRatio()
+      attendanceRatioStr: this.attendanceRatio(),
+      postName: null,
+      postURL: null
     }
   },
   mounted() {
     this.isAttending()
+
+    if (this.showCourseName) this.loadCourseName()
   },
   methods: {
     onAttend() {
@@ -85,6 +91,12 @@ export default {
       this.isAttendingAsync(this.course).then((response) => {
         this.isAttendingBool = response
       })
+    },
+    loadCourseName() {
+      this.getPostLink(this.course).then((response) => {
+        this.postName = response.name
+        this.postURL = response.url
+      }).catch(errorHandler)
     }
   },
   mixins: [myFormatDate, user, course],
