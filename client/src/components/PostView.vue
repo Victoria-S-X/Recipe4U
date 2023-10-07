@@ -45,8 +45,10 @@
       <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
 
       <h3>Reviews</h3>
-      <CreateReview></CreateReview>
+      <b-card class="scroll-container">
       <Reviews v-if="postID" :postID="postID"/>
+      </b-card>
+      <CreateReview></CreateReview>
       </div>
     </div>
 </template>
@@ -56,10 +58,10 @@ import { Api } from '@/Api'
 import Courses from '@/components/Courses.vue'
 import user from '@/mixins/user.js'
 import Reviews from '@/components/Reviews.vue'
-import CreateReview from '@/views/CreateReview.vue'
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'
 import timerIcon from '@/assets/Timer.png'
+import CreateReview from '../components/CreateReview.vue'
 
 export default {
   name: 'viewPost',
@@ -254,5 +256,10 @@ p {
   background-color: var(--primary-dark);;
   box-shadow: 0 4px #666;
   transform: translateY(4px);
+}
+.scroll-container{
+height:500px;
+overflow-y:scroll;
+border:1px solid;
 }
 </style>

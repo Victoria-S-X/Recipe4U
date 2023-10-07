@@ -6,7 +6,7 @@ import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
 import PostedCourses from './views/PostedCourses.vue'
 import PostList from './views/PostsList.vue'
-import CreateReview from './views/CreateReview.vue'
+import CreateReview from './components/CreateReview.vue'
 import PostManager from './views/PostManager.vue'
 
 Vue.use(Router)
