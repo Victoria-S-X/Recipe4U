@@ -30,6 +30,7 @@
 import { errorHandler } from '@/Api'
 import helpers from '@/mixins/helpers'
 import courseMixin from '@/mixins/course'
+import courseItemStyle from '@/styles/courseItem.css'
 
 export default {
   props: {
@@ -64,7 +65,7 @@ export default {
       }).catch(errorHandler)
     }
   },
-  mixins: [courseMixin, helpers]
+  mixins: [courseMixin, helpers, courseItemStyle]
 }
 </script>
 
