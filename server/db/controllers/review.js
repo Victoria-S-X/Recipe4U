@@ -1,6 +1,7 @@
 const { idToObj, ResCode } = require('../helpers')
 const Review = require('../models/review')
 const mongoose = require('mongoose')
+const { logError } = require('../helpers')
 const ValidationError = mongoose.Error.ValidationError
 
 exports.create = async ({ text, strPostID, rating, userID, username, reviewID = null }) => {
@@ -53,6 +54,8 @@ exports.create = async ({ text, strPostID, rating, userID, username, reviewID = 
 }
 
 exports.getAllFromPost = (post) => Review.find({ post: post })
+
+exports.get = (id) => Review.findById(id)
 
 exports.put = async ({ text, strPostID, rating, userID, id, username }) => {
   //has postID?
@@ -115,6 +118,46 @@ exports.put = async ({ text, strPostID, rating, userID, id, username }) => {
     } else {
       console.log(err)
       return ResCode.ERROR
+    }
+  }
+}
+
+exports.delete = async (review, strPostID, userID) => {
+  if (!review.user.equals(userID))
+    return {
+      resCode: ResCode.UNAUTHORIZED,
+      error: 'User does not own review'
+    }
+
+  const postID = idToObj(strPostID)
+  if (!postID)
+    return {
+      resCode: ResCode.BAD_INPUT,
+      error: 'Invalid post ID'
+    }
+
+  const post = await require('./post').get(postID)
+  if (!post)
+    return {
+      resCode: ResCode.NOT_FOUND,
+      error: 'Post not found'
+    }
+
+  const newReviews = post.reviews.filter((re) => !re.equals(review._id))
+  post.reviews = newReviews
+
+  try {
+    await post.save()
+    await review.deleteOne()
+
+    return {
+      resCode: ResCode.SUCCESS,
+      data: review
+    }
+  } catch (err) {
+    logError(err)
+    return {
+      resCode: ResCode.ERROR
     }
   }
 }

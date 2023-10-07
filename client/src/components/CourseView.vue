@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-if="ownsCourse(course)" class="edit-btn" @click="editCourse(course)">✎</button>
+    <button v-if="ownsCourse(course)" class="edit-btn" @click="editCourse(course)">EDIT</button>
 
     <div class="info-container">
       <h4><a :href="postURL">{{ postName }}</a></h4>
@@ -115,6 +115,10 @@ export default {
   color: #0e4647;
 }
 
+.info-container a {
+  color: var(--primary-dark) !important;
+}
+
 .info-container span {
   margin: 0 0.2em;
 }
@@ -129,8 +133,7 @@ export default {
   position: absolute;
   right: .5em;
   top: .5em;
-  font-size: 1.5em;
-  font-weight: 500;
+  font-size: 1.4em;
   border: none;
   background-color: transparent;
   color: var(--primary-color);
