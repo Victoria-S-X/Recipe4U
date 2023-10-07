@@ -1,7 +1,13 @@
 const { ResCode, idToObj } = require('../helpers')
+const { ValidationError } = require('mongoose').Error
 
 const Post = require('../models/post')
 const Review = require('../models/review')
+
+const validImageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
+
+/* --------------------------------- HELPERS -------------------------------- */
+exports.isValidMimeType = (mimeType) => validImageMimeTypes.includes(mimeType)
 
 exports.postValidation = async (userID, strPostID) => {
   //valid postID?
@@ -33,8 +39,88 @@ exports.postValidation = async (userID, strPostID) => {
   }
 }
 
-exports.get = async (postID) => {
-  return await Post.findById(postID)
+const saveImageFile = (post, imageFile) => {
+  const isValidMimeType = exports.isValidMimeType(imageFile?.mimetype)
+
+  if (imageFile != null && isValidMimeType) {
+    post.postImage = imageFile.buffer
+    post.postImageType = imageFile.mimetype
+  }
+}
+
+/* ------------------------------ DB OPERATIONS ------------------------------ */
+exports.create = async (postName, cookingTime, ingredients, description, recipe, user, image) => {
+  const newPost = new Post({
+    postName,
+    cookingTime,
+    ingredients,
+    description,
+    recipe,
+    user
+  })
+
+  saveImageFile(newPost, image)
+
+  try {
+    const savedPost = await newPost.save()
+
+    return {
+      resCode: ResCode.SUCCESS,
+      data: savedPost
+    }
+  } catch (err) {
+    if (err instanceof ValidationError)
+      return {
+        resCode: ResCode.BAD_INPUT,
+        error: err.message
+      }
+    else console.error(err.stack)
+    return {
+      resCode: ResCode.ERROR
+    }
+  }
+}
+
+//** Does not return image */
+exports.get = (postID) => Post.findById(postID, { postImage: 0 })
+
+//** Does not return images */
+exports.find = (query) => Post.find(query, { postImage: 0 })
+
+exports.getImage = (postID) => Post.findById(postID, { postImage: 1, postImageType: 1 })
+
+exports.findByUser = (userID) => Post.find({ user: userID })
+
+exports.patch = async (postID, postName, cookingTime, ingredients, description, recipe, userID) => {
+  const update = {}
+
+  if (postName !== undefined) update['postName'] = postName
+  if (cookingTime !== undefined) update['cookingTime'] = cookingTime
+  if (ingredients !== undefined) update['ingredients'] = ingredients
+  if (description !== undefined) update['description'] = description
+  if (recipe !== undefined) update['recipe'] = recipe
+
+  try {
+    const item = await Post.findOneAndUpdate(
+      {
+        _id: postID,
+        user: userID
+      },
+      update,
+      { new: true }
+    )
+
+    if (item) return ResCode.SUCCESS
+    else {
+      if (await Post.findById(postID)) return ResCode.UNAUTHORIZED
+      else return ResCode.NOT_FOUND
+    }
+  } catch (error) {
+    return {
+      resCode: ResCode.ERROR,
+      error: error.message
+    }
+  }
 }
 
 //DOESN'T AUTHENTICATE USER

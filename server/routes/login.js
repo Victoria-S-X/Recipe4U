@@ -1,6 +1,6 @@
 const router = require('../routers').login
 
-const userController = require('../db/controllers/user')
+const controller = require('../db/controllers/user')
 const auth = require('../authAlgorithms')
 const links = require('../hateoasLinks')
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   }
 
   //does user exist?
-  const user = await userController.find(username)
+  const user = await controller.find(username)
   if (!user) {
     res.status(404).json({
       message: 'User does not exist',
