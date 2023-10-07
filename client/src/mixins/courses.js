@@ -10,6 +10,7 @@ export default {
     },
     deleteCourses() {
       return Api.delete('/courses')
-    }
+    },
+    getAttendingCourses: () => Api.get('/courses/attending-courses')
   }
 }

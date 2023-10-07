@@ -43,10 +43,22 @@ export default {
   },
   methods: {
     loadCourses() {
-      const method = this.getFrom === 'post' ? this.getVacantCourses : this.getMyCourses
+      const method = this.getCourseSourceMethod()
       method(this.postID).then((response) => {
         this.courses = response.data
       }).catch(errorHandler)
+    },
+    getCourseSourceMethod() {
+      switch (this.getFrom) {
+        case 'post':
+          return this.getVacantCourses
+        case 'user':
+          return this.getMyCourses
+        case 'userAttendance':
+          return this.getAttendingCourses
+        default:
+          throw new Error('Invalid getFrom value')
+      }
     },
     userOwnsPost() {
       const user = this.getUser()
