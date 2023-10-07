@@ -28,7 +28,10 @@
           <span class="input-tag">Password:</span>
           <input type="password" class="textbox" v-model="password">
         </div>
-
+        <div class="pass-input">
+          <span class="input-tag">Re-enter Password:</span>
+          <input type="password" class="textbox" v-model="redoPass">
+        </div>
         <div class = "register-btn">
         <button type="submit">Register</button>
         </div>
@@ -47,6 +50,7 @@ export default {
     return {
       username: '',
       password: '',
+      redoPass: '',
       email: '',
       firstName: '',
       lastName: ''
@@ -55,16 +59,29 @@ export default {
   methods: {
     async registerUser() {
       try {
-        Api.post('/users', {
-          username: this.username,
-          password: this.password,
-          email: this.email,
-          firstName: this.firstName,
-          lastName: this.lastName
-        })
-        const redirect = confirm('Account created! Would you like to go back to login?')
-        if (redirect) {
-          this.$router.push('/')
+        if (this.username === '' || this.password === '' || this.email === '' || this.firstName === '' || this.lastName === '' || this.redoPass === '') {
+          const emptyReview = confirm('Missing credentials :( make sure all details are filled')
+          if (emptyReview) {
+            window.location.reload()
+          }
+        } else if (this.redoPass !== this.password) {
+          const nonmatchingPassword = confirm('The passwords do not match, please reenter the passwords correctly')
+          if (nonmatchingPassword) {
+            this.password = ''
+            this.redoPass = ''
+          }
+        } else {
+          Api.post('/users', {
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName
+          })
+          const redirect = confirm('Account created! Would you like to go back to login?')
+          if (redirect) {
+            this.$router.push('/')
+          }
         }
       } catch (error) {
         console.error('Error', error)
