@@ -48,11 +48,11 @@ postRouter.get('/:postId/reviews', async (req, res) => {
   }
 })
 
-postRouter.get('/:postId/reviews/:reviewId', getReview, async (req, res) => {
+postRouter.get('/:postId/reviews/:index', getReview, async (req, res) => {
   res.send(res.review)
 })
 
-postRouter.delete('/:postId/reviews/:reviewId', auth, getReview, async (req, res) => {
+postRouter.delete('/:postId/reviews/:index', auth, getReview, async (req, res) => {
   const result = await controller.delete(res.review, req.params.postId, req.userID)
 
   switch (result.resCode) {
@@ -112,15 +112,22 @@ reviewRouter.put('/:id', auth, async (req, res) => {
 })
 
 async function getReview(req, res, next) {
-  let review
-  try {
-    review = await controller.get(req.params.reviewId)
-    if (review == null) {
-      return res.status(404).json({ message: 'Cannot find review' })
-    }
-  } catch (err) {
-    return res.status(500).json({ message: err.message })
+  const result = await controller.getByPostIndex(req.params.postId, req.params.index)
+
+  switch (result.resCode) {
+    case ResCode.SUCCESS:
+      res.review = result?.data
+      next()
+      break
+    case ResCode.NOT_FOUND:
+      res.status(404).json({ message: result?.error })
+      break
+    case ResCode.BAD_INPUT:
+      res.status(400).json({ message: result?.error })
+      break
+
+    default:
+      res.status(500).json({ message: 'Failed to get review' })
+      break
   }
-  res.review = review
-  next()
 }
