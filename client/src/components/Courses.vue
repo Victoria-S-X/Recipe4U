@@ -10,12 +10,12 @@
     </div>
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="addCourse()">+</button>
+        <button class="round-btn courses-action-button" @click="addCourse()">+</button>
       </div>
     </div>
     <div v-else-if="getFrom === 'user'" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">
+        <button class="round-btn courses-action-button" @click="onDeleteCourses()">
           <b-icon icon="trash"></b-icon>
         </button> <!-- TODO: rename classes-->
       </div>
@@ -28,7 +28,7 @@
 import { errorHandler } from '@/Api'
 import user from '@/mixins/user'
 import course from '@/mixins/courses'
-import addBtn from '@/styles/addBtn.css'
+import roundBtn from '@/styles/roundBtn.css'
 import CourseView from '@/components/CourseView.vue'
 import CourseEdit from '@/components/CourseEdit.vue'
 
@@ -81,7 +81,7 @@ export default {
     }
   },
   mixins: [course, user],
-  styles: [addBtn],
+  styles: [roundBtn],
   components: {
     CourseView,
     CourseEdit
@@ -136,7 +136,7 @@ export default {
   display: grid
 }
 
-.add-course-btn {
+.courses-action-button {
   color: var(--primary-color);
   border-color: var(--primary-color);
   margin: 0 auto;
