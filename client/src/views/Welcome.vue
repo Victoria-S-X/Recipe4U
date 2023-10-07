@@ -1,24 +1,30 @@
 <template>
-    <div class="Background">
-        <span  class="tagline">Master the Art of Cooking.</span>
-        <span  class="tagline-2">at</span>
-        <span  class="Brand-Name">FOOD4U</span>
-
-    <div   class="login-background"></div>
-        <span  class="Login-tag">Login</span>
-
-            <span  class="username-tag">Username:</span>
-            <input type = "text" class="username-textbox" v-model="username">
-
-            <span  class="password-tag">Password:</span>
-            <input type = "password"  class="password-textbox" v-model="password">
-
-            <button class="login-button-tag" @click = logInUser()>Log-in</button>
-
-            <button class="register-button-tag" @click = goToRegister()>Register</button>
-            <span  class="login-options">or</span>
-    </div>
+  <div class="Background">
+    <h1 class="Header">Recipes4U</h1>
+    <div class = "center-grid">
+    <b-card title="Log in" style="max-width: 20rem" class="login-container">
+      <form class="form-contents" @submit.prevent="logInUser">
+        <div class="user-input">
+          <span class="input-tag">Username:</span>
+          <input type="text" class="textbox" v-model="username">
+        </div>
+        <div class="pass-input">
+          <span class="input-tag">Password:</span>
+          <input type="password" class="textbox" v-model="password">
+        </div>
+        <div class = "login-btn">
+        <button type="submit">Log In</button>
+        </div>
+        <p class = "card-text">or</p>
+        <div class="register-btn">
+          <button type="button" @click="goToRegister">Register</button>
+        </div>
+      </form>
+    </b-card>
+  </div>
+  </div>
 </template>
+
 <script>
 import auth from '@/mixins/auth'
 import { errorHandler } from '../Api'
@@ -42,7 +48,7 @@ export default {
         this.$router.push(response.data._links.homePage.href)
       } catch (error) {
         if (error.response.status === 404) {
-          const createAccount = confirm('Invalid username. Create an account instead?')
+          const createAccount = confirm('Invalid credentials. Create an account instead?')
 
           if (createAccount) {
             const registerPage = error.response.data._links.createUserPage.href
@@ -56,161 +62,47 @@ export default {
     goToRegister() {
       this.$router.push('/register')
     }
-
   },
   mixins: [auth]
 }
 </script>
 
 <style scoped>
-.Background { overflow:hidden;}
-.Background {
-background-color:rgba(16.46874949336052, 197.62499392032623, 56.32314272224903, 1);
-width: 100%;
-height:100%;
-position:absolute;
+.Header {
+  text-align: center;
+  font-size: 50px;
 }
-.Brand-Name {
-color:rgba(255, 255, 255, 1);
-width:457px;
-height:170px;
-position:absolute;
-left:315px;
-top:391px;
-font-family:Francois One;
-text-align:left;
-font-size:100px;
-letter-spacing:0;
+.center-grid{
+display:flex;
+align-items: center;
+justify-content: center;
+height: 50vh;
 }
-.tagline {
-color:rgba(255, 255, 255, 1);
-width:201px;
-height:109px;
-position:absolute;
-left:326px;
-top:45px;
-font-family:Francois One;
-text-align:left;
-font-size:52.4px;
-letter-spacing:0;
+.input-tag {
+  margin-left: 0%;
+  margin-right: 10%;
 }
-.tagline-2 {
-color:rgba(255, 255, 255, 1);
-width:59px;
-height:99px;
-position:absolute;
-left:326px;
-top:290px;
-font-family:Francois One;
-text-align:left;
-font-size:70px;
-letter-spacing:0;
+.login-container {
+  align-items: center;
+  margin-top:20%;
+  margin-left:2%;
 }
-.login-background {
-background-color:rgba(255, 255, 255, 1);
-width:408px;
-height:546px;
-position:absolute;
-left:822px;
-top:100px;
+.login-btn{
+margin-left:25%;
+margin-top:10%
 }
-.username-tag {
-color:rgba(12.750000189989805, 12.165624797344208, 12.165624797344208, 1);
-width:99px;
-height:24px;
-position:absolute;
-left:835px;
-top:196px;
-font-family:Francois One;
-text-align:left;
-font-size:20px;
-letter-spacing:0;
-line-height:px;
+.register-btn{
+margin-left:22%;
+margin-top:5%
 }
-.username-textbox {
-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-background-color:rgba(245.00000059604645, 245.00000059604645, 245.00000059604645, 1);
-width:366px;
-height:39px;
-position:absolute;
-left:835px;
-top:234px;
+.card-text{
+margin-left:34%;
+margin-top:5%;
 }
-
-.password-textbox {
-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-background-color:rgba(245.00000059604645, 245.00000059604645, 245.00000059604645, 1);
-width:366px;
-height:39px;
-position:absolute;
-left:835px;
-top:339px;
+.form-contents{
+margin-left:10%;
 }
-
-.password-tag {
-color:rgba(12.750000189989805, 12.165624797344208, 12.165624797344208, 1);
-width:105px;
-height:23px;
-position:absolute;
-left:839px;
-top:304px;
-font-family:Francois One;
-text-align:left;
-font-size:20px;
-letter-spacing:0;
-line-height:px;
-}
-.Login-tag {
-color:rgba(0, 0, 0, 1);
-width:92px;
-height:32px;
-position:absolute;
-left:835px;
-top:130px;
-font-family:Francois One;
-text-align:left;
-font-size:35px;
-letter-spacing:0;
-line-height:px;
-}
-.register-button-tag {
-background-color:rgba(89.58203226327896, 152.4780508875847, 226.31249696016312, 1);
-width:200px;
-height:74px;
-position:absolute;
-left:917px;
-top:510px;
-font-weight: bolder;
-border-top-left-radius:90px;
-border-top-right-radius:90px;
-border-bottom-left-radius:90px;
-border-bottom-right-radius:90px;
-}
-
-.login-options {
-color:rgba(0, 0, 0, 1);
-width:25px;
-height:32px;
-position:absolute;
-left:1005px;
-top:460px;
-font-family:Inter;
-text-align:left;
-font-size:24px;
-letter-spacing:0;
-line-height:px;
-}
-.login-button-tag {
-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
-background-color:rgba(237.8288733959198, 252.87500202655792, 145.40311932563782, 1);
-width:200px;
-height:60px;
-position:absolute;
-left:915px;
-top:390px;
-border-top-left-radius:90px;
-border-top-right-radius:90px;
-border-bottom-left-radius:90px;
-border-bottom-right-radius:90px;
+.Background{
+color: rgb(36,124,125);
 }
 </style>
