@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button class="course-edit-btn" @click="saveCourse(course)">SAVE</button>
-    <button class="course-delete-btn" @click="onDeleteCourse(course)">DELETE</button>
+    <button class="course-action-btn course-edit-btn" @click="saveCourse(course)">SAVE</button>
+    <button class="course-action-btn course-save-btn" @click="onDeleteCourse(course)">DELETE</button>
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
@@ -30,6 +30,7 @@
 import { errorHandler } from '@/Api'
 import helpers from '@/mixins/helpers'
 import courseMixin from '@/mixins/course'
+import courseItemStyle from '@/styles/courseItem.css'
 
 export default {
   props: {
@@ -64,7 +65,7 @@ export default {
       }).catch(errorHandler)
     }
   },
-  mixins: [courseMixin, helpers]
+  mixins: [courseMixin, helpers, courseItemStyle]
 }
 </script>
 
@@ -83,21 +84,20 @@ export default {
   padding-right: 10px;
 }
 
-.course-edit-btn {
-  position: absolute;
-  right: .5em;
-  top: .5em;
+.course-action-btn {
   font-size: 1.4em;
   border: none;
+  top: .5em;
   background-color: transparent;
+  color: var(--primary-color);
+  position: absolute;
 }
 
-.course-delete-btn {
-  position: absolute;
+.course-edit-btn {
+  right: .5em;
+}
+
+.course-save-btn {
   left: .5em;
-  top: .5em;
-  font-size: 1.4em;
-  border: none;
-  background-color: transparent;
 }
 </style>

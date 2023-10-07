@@ -5,6 +5,7 @@ import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
 import PostedCourses from './views/PostedCourses.vue'
+import AttendingCourses from './views/AttendingCourses.vue'
 import PostList from './views/PostsList.vue'
 import CreateReview from './components/CreateReview.vue'
 import PostManager from './views/PostManager.vue'
@@ -31,9 +32,14 @@ export default new Router({
       component: Register
     },
     {
-      path: '/posted-courses',
+      path: '/courses/posted',
       name: 'Posted Courses',
       component: PostedCourses
+    },
+    {
+      path: '/courses/attending',
+      name: 'Attending Courses',
+      component: AttendingCourses
     },
     {
       path: '/posts',

@@ -48,7 +48,7 @@ export default ({
 <style scoped>
 
 .postList {
-  margin: 1% auto;
+  margin: 1% auto; /* add horisontal percentage margin */
   padding: 0 1em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(30em, 40vh), 1fr));

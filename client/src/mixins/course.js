@@ -1,5 +1,6 @@
 import { Api } from '@/Api'
 import user from '@/mixins/user'
+import post from '@/mixins/post'
 
 // ============== COURSE ==================
 
@@ -36,13 +37,22 @@ async function unattend(course) {
   this.loadUser()
 }
 
+async function getPostLink(course) {
+  const post = await this.getPost(course.postID)
+  return {
+    name: post.postName,
+    url: post._links.selfPage.href
+  }
+}
+
 export default {
   methods: {
     postCourse,
     putCourse,
     deleteCourse,
     attend,
-    unattend
+    unattend,
+    getPostLink
   },
-  mixins: [user]
+  mixins: [user, post]
 }

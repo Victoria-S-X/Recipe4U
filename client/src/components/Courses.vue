@@ -2,7 +2,7 @@
   <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
       <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="onDeleteCourse(course)"/>
-      <CourseView v-else :course="course" @onEdit="reload()"/>
+      <CourseView v-else :course="course" @onEdit="reload()" :showCourseName="showCourseName"/>
     </div>
     <div v-if="!courses.length" class="no-courses-container">
       <p v-if="userOwnsPost()">No courses posted</p>
@@ -10,14 +10,14 @@
     </div>
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="addCourse()">+</button>
+        <button class="round-btn courses-action-button" @click="addCourse()">+</button>
       </div>
     </div>
     <div v-else-if="getFrom === 'user'" class="button-container">
       <div class="btn-white-block">
-        <button class="add-item-btn add-course-btn" @click="onDeleteCourses()">
+        <button class="round-btn courses-action-button" @click="onDeleteCourses()">
           <b-icon icon="trash"></b-icon>
-        </button> <!-- TODO: rename classes-->
+        </button>
       </div>
     </div>
   </div>
@@ -28,9 +28,9 @@
 import { errorHandler } from '@/Api'
 import user from '@/mixins/user'
 import course from '@/mixins/courses'
-import addBtn from '@/styles/addBtn.css'
 import CourseView from '@/components/CourseView.vue'
 import CourseEdit from '@/components/CourseEdit.vue'
+import roundBtnStyle from '@/styles/roundBtn.css'
 
 export default {
   mounted() {
@@ -38,15 +38,28 @@ export default {
   },
   data() {
     return {
-      courses: []
+      courses: [],
+      showCourseName: this.getFrom === 'user' || this.getFrom === 'userAttendance'
     }
   },
   methods: {
     loadCourses() {
-      const method = this.getFrom === 'post' ? this.getVacantCourses : this.getMyCourses
+      const method = this.getCourseSourceMethod()
       method(this.postID).then((response) => {
         this.courses = response.data
       }).catch(errorHandler)
+    },
+    getCourseSourceMethod() {
+      switch (this.getFrom) {
+        case 'post':
+          return this.getVacantCourses
+        case 'user':
+          return this.getMyCourses
+        case 'userAttendance':
+          return this.getAttendingCourses
+        default:
+          throw new Error('Invalid getFrom value')
+      }
     },
     userOwnsPost() {
       const user = this.getUser()
@@ -81,15 +94,15 @@ export default {
     }
   },
   mixins: [course, user],
-  styles: [addBtn],
+  styles: [roundBtnStyle],
   components: {
     CourseView,
     CourseEdit
   },
   props: {
     getFrom: String,
-    postID: String,
-    userID: String
+    userID: String,
+    postID: String
   }
 }
 
@@ -100,21 +113,6 @@ export default {
 .root {
   margin-top: 1.3em;
   text-align: center;
-}
-
-.course-item {
-  margin: 0 auto 1.3em auto;
-  max-width: 50em;
-  border: .1em solid var(--primary-dark);
-  padding: 2.2em 12%;
-  position: relative;
-  box-shadow: .02em .02em .1em #838383dd;
-  transition: box-shadow .2s;
-  background-color: var(--soft-white);
-}
-
-.course-item:hover {
-  box-shadow: .09em .09em .23em #838383dd;
 }
 
 .no-courses-container{
@@ -136,7 +134,7 @@ export default {
   display: grid
 }
 
-.add-course-btn {
+.courses-action-button {
   color: var(--primary-color);
   border-color: var(--primary-color);
   margin: 0 auto;
