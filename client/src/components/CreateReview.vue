@@ -2,15 +2,15 @@
 <b-card style="max-width: 20rem" class="review-container">
 <form class="form-content" @submit.prevent="submitReview">
   <div class="review-text-input">
-          <span class="input-tag">Leave a review</span>
+          <span class="input-tag" style="color:rgb(36,124,125)">Leave a review</span>
           <input type="text" class="text-textbox" v-model="text">
   </div>
   <div class="rating-input">
-          <span class="input-tag">Rate this receipe out of 5</span>
+          <span class="input-tag" style="color:rgb(36,124,125)">Rate this receipe out of 5</span>
           <input type="number" class="rate-textbox" v-model="rating">
   </div>
   <div class = "submit-review-btn">
-        <button type="submit">Submit</button>
+        <button type="submit" style= "background-color: rgb(36,124,125)" >Submit</button>
   </div>
 
 </form>
@@ -35,11 +35,18 @@ export default {
       }
     },
     async submitReview() {
-      Api.post(`/posts/${this.$route.params.id}/reviews`, {
-        rating: this.rating,
-        text: this.text
-      })
-      window.location.reload()
+      if (this.rating === 0 || this.text === '') {
+        const emptyReview = confirm('Review is empty, please enter something before submitting!')
+        if (emptyReview) {
+          window.location.reload()
+        }
+      } else {
+        Api.post(`/posts/${this.$route.params.id}/reviews`, {
+          rating: this.rating,
+          text: this.text
+        })
+        window.location.reload()
+      }
     }
   }
 
@@ -57,19 +64,16 @@ export default {
 }
 .submit-review-btn{
 margin-top:3%;
-margin-left:35%;
+margin-left:30%;
+margin-right: 70%;
 }
 .input-tag{
   margin-left: 10%;
 }
 .text-textbox{
   margin-left:10%;
-  padding:10%;
-
 }
 .rate-textbox{
   margin-left:10%;
-  padding-right:20%
 }
-
 </style>
