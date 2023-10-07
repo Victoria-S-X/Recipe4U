@@ -1,49 +1,61 @@
 <template>
   <div class="box">
     <div class="backgroundImg">
-      <b-card id="backImg"
-        overlay
-        :img-src="backgroundImg"
-        border-variant="light"
-        img-alt="Card Image"
-        img-height="450em"
-        title="Create Post"
-      >
-      </b-card>
+      <b-row>
+        <b-col md-4>
+          <p>Create Post</p>
+        </b-col>
+        <b-col md-4>
+          <b-card id="backImg"
+            :img-src="backgroundImg"
+            img-alt="Card Image"
+          >
+        </b-card>
+        </b-col>
+      </b-row>
     </div>
     <div class="container md=4 outer-container translate-middle text-center">
       <br/>
         <div class="alert alert-success" v-if="isSuccessful">Post Created Successfully</div>
         <form @submit.prevent="onCreatePost">
+          <p v-if="errors.length">
+            <b>Please fill in the following required field(s):</b>
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+          </p>
           <div class="form-group">
-                <label class="form-label">Post Name</label>
+                <label class="form-label">Post Name *</label>
                 <input type="text" class="form-control" v-model="postName"/>
             </div>
             <div class="form-group">
                 <label class="form-label">Cooking Time</label>
                 <input type="text" class="form-control" v-model="cookingTime"/>
             </div><br/>
-            <div class="form-group" v-for="(input,k) in inputs" :key="k">
-              <div class="input-group mb-3">
-                <input type="text" class="form-control text-ingredient" placeholder="Ingredient" aria-label="Ingredient" aria-describedby="basic-addon2" v-model="input.ingredient">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary btn-ingredient" type="button" @click="add(k)" v-show="k == inputs.length-1">
-                    <b-icon icon="plus-circle" aria-label="Add"></b-icon>
-                  </button>
+            <div>
+              <label class="form-label">Ingredients *</label>
+              <div class="form-group" v-for="(input,k) in inputs" :key="k">
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control text-ingredient" placeholder="Ingredient" aria-label="Ingredient" aria-describedby="basic-addon2" v-model="input.ingredient">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-ingredient" type="button" @click="add(k)" v-show="k == inputs.length-1">
+                      <b-icon icon="plus-circle" aria-label="Add"></b-icon>
+                    </button>
+                  </div>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-ingredient" type="button" @click="remove(k)" v-show="k || ( !k && inputs.length > 1)">
+                      <b-icon icon="trash" aria-label="Remove"></b-icon>
+                    </button>
+                  </div>
                 </div>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary btn-ingredient" type="button" @click="remove(k)" v-show="k || ( !k && inputs.length > 1)">
-                    <b-icon icon="trash" aria-label="Remove"></b-icon>
-                  </button>
-                </div>
-              </div>
-            </div><br/>
+              </div><br/>
+            </div>
             <div class="form-group">
                 <label class="form-label">Description</label>
                 <textarea class="form-control" rows="3" v-model="description"></textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Recipe</label>
+                <label class="form-label">Recipe *</label>
                 <textarea class="form-control" rows="3" v-model="recipe"></textarea>
             </div><br/>
             <file-pond
@@ -79,7 +91,7 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
 
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
-import bImg from '../assets/createPostBackground.jpg'
+import bImg from '../assets/createPostBackground.png'
 // Create component
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
@@ -100,30 +112,50 @@ export default {
         ingredient: ''
       }],
       postImage: '',
-      backgroundImg: bImg
+      backgroundImg: bImg,
+      errors: []
     }
   },
 
   methods: {
-    onCreatePost() {
-      const formData = new FormData()
-      formData.append('postImage', this.postImage)
-      formData.append('postName', this.postName)
-      formData.append('description', this.description)
-      formData.append('recipe', this.recipe)
-      formData.append('cookingTime', this.cookingTime)
-      for (let i = 0; i < this.inputs.length; i++) {
-        const ingre = this.inputs[i]
-        formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+    checkForm: function () {
+      if (this.postName && this.recipe && this.inputs && this.inputs[0].ingredient) {
+        return true
       }
-      Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
-        this.isSuccessful = true
-        const postId = response.data._id
-        console.log(postId)
-        router.push({ path: `/posts/${postId}` })
-      }).catch(error => {
-        console.log(error)
-      })
+      this.errors = []
+      if (!this.postName) {
+        this.errors.push('Post Name required.')
+      }
+      if (!this.recipe) {
+        this.errors.push('Recipe required.')
+      }
+      if (!this.inputs || !this.inputs[0].ingredient) {
+        this.errors.push('Ingredients required.')
+      }
+    },
+    onCreatePost() {
+      if (this.checkForm() === true) {
+        const formData = new FormData()
+        formData.append('postImage', this.postImage)
+        formData.append('postName', this.postName)
+        formData.append('description', this.description)
+        formData.append('recipe', this.recipe)
+        formData.append('cookingTime', this.cookingTime)
+        for (let i = 0; i < this.inputs.length; i++) {
+          const ingre = this.inputs[i]
+          if (!ingre) {
+            formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+          }
+        }
+        Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
+          this.isSuccessful = true
+          const postId = response.data._id
+          console.log(postId)
+          router.push({ path: `/posts/${postId}` })
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     },
     add() {
       this.inputs.push({
@@ -154,24 +186,39 @@ export default {
 <style scoped>
 .box {
   background-image: linear-gradient(to bottom left, #ecece9 , rgb(253, 253, 250));
-  color: var(--primary-dark)
+  color: var(--primary-dark);
+  padding-bottom: 5%;
 }
 .outer-container {
   position: relative;
-  margin-top: -12%;
+  margin-top: -10%;
   border-radius: 3px;
   font-weight: 600;
+  padding: 10%;
   padding-top: 2%;
-  padding-bottom: 2%;
+  padding-bottom: 4%;
   background: rgb(253, 253, 253);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: linear-gradient(to bottom right, #f8f6f574 , #277c7d6e);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 40px 0 rgba(0, 0, 0, 0.19);
+  max-width: 55em;
+  font-size: 1em;
 }
 .backgroundImg {
-  border-radius: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding-top: 2%;
+  padding-bottom: 6%;
+  padding: 2%;
+  padding-left: 20%;
+  background-image: linear-gradient(to bottom right, #c3edf188 , #b6936c46);
+  box-shadow: 0 8px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 #backImg {
-  padding-top: 0.5%;
+  margin-right: 38%;
+  padding-bottom: 20%;
+  padding-right: 30%;
+  background-color: #277c7d00;
+  max-width: 30em;
+  max-height: 20em;
+  border: none;
 }
 .form-group {
   margin-left: 10%;
@@ -193,7 +240,7 @@ export default {
   background-color: rgb(80, 151, 165);
   border: none;
   border-radius: 5px;
-  box-shadow: 0 4px #d7d6d6;
+  box-shadow: 0 4px #61a8a95e;
 }
 .btn-submit:hover {background-color: var(--primary-dark); color: #fff;}
 
@@ -209,6 +256,20 @@ export default {
   text-align: center;
 }
 .text-ingredient {
-  text-align: start;
+  text-align: center;
+}
+p {
+  padding-top: 10%;
+  padding-left: 60%;
+  padding: 8%;
+  font-size: 2em;
+  font-weight: 800;
+  color: rgb(181, 92, 25);
+  text-shadow: -0.5px 0 black, 0 0.5px rgba(0, 0, 0, 0), 0.5px 0 rgba(0, 0, 0, 0), 0 -0.5px rgba(0, 0, 0, 0.075);
+}
+@media only screen and (max-width: 768px) {
+  p {
+    font-size: 1.5em;
+  }
 }
 </style>
