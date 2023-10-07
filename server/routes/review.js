@@ -38,9 +38,7 @@ postRouter.post('/:postId/reviews', auth, async (req, res) => {
 
 postRouter.get('/:postId/reviews', async (req, res) => {
   try {
-    const reviews = await Review.find({
-      post: req.params.postId
-    })
+    const reviews = await controller.getAllFromPost(req.params.postId)
 
     if (reviews === null) throw new Error('Cannot find reviews')
 

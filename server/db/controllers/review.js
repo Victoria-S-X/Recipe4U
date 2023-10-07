@@ -52,6 +52,8 @@ exports.create = async ({ text, strPostID, rating, userID, username, reviewID = 
   }
 }
 
+exports.getAllFromPost = (post) => Review.find({ post: post })
+
 exports.put = async ({ text, strPostID, rating, userID, id, username }) => {
   //has postID?
   if (!strPostID)
