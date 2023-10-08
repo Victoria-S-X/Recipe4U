@@ -57,29 +57,15 @@ export default {
   }
 }
 </script>
+
 <style scoped>
-@media only screen and (min-width:768px)
-{
 .review-container {
   align-items: center;
-  margin-top:5%;
-  margin-bottom:5;
-  margin-left:37.5%;
+  margin: 5% auto;
   background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-}
-@media only screen and (max-width:768px) {
-  .review-container {
-  align-items: center;
-  margin-top:5%;
-  margin-bottom:5%;
-  margin-left:20%;
-  position: relative;
-  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-}
+
 .submit-review-btn{
 margin-top:3%;
 margin-left:30%;
