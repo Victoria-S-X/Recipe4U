@@ -50,4 +50,21 @@ body {
   background-color: var(--primary-background);
 }
 
+/* ---------------------------------- TEXT ---------------------------------- */
+
+h3 {
+  color: rgb(68, 67, 67);
+  font-size: 3em;
+  box-shadow: 10px 10px 5px #277c7d2b;
+  box-decoration-break: slice;
+  padding: 1%;
+  margin: 1%;
+  font-weight: 300;
+}
+
+h3::first-letter {
+  color: var(--primary-dark);
+  font-size: 123%
+}
+
 </style>

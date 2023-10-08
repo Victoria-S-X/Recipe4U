@@ -9,10 +9,7 @@
 
           <b-navbar-nav class="navbar-links">
             <b-nav-item href="/posts">Posts</b-nav-item>
-            <b-nav-item href="/posts/posted">My Posts</b-nav-item>
             <b-nav-item href="/posts/creation">Create Post</b-nav-item>
-            <b-nav-item href="/courses/posted">Posted Courses</b-nav-item>
-            <b-nav-item href="/courses/attending">Attending Courses</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
@@ -24,6 +21,7 @@
                 <em>{{getUser().username}}</em>
               </template>
 
+              <b-dropdown-item href="/user">Profile Page</b-dropdown-item>
               <b-dropdown-item href="#" @click="onSignOut()">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
