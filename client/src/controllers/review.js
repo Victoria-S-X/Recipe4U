@@ -7,6 +7,9 @@ const createReview = (postID, username, rating, text) =>
     text
   })
 
-const getReviews = async (postID) => Api.get(`/posts/${postID}/reviews`).data
+const getReviews = async (postID) => {
+  const result = await Api.get(`/posts/${postID}/reviews`)
+  return result.data
+}
 
 export default { methods: { createReview, getReviews } }
