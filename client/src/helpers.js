@@ -1,6 +1,5 @@
 export default {
   methods: {
-    // TODO: fix time zone issue
     myFormatDate(dateStr) {
       if (!dateStr) return ''
 

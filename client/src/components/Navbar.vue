@@ -10,8 +10,6 @@
           <b-navbar-nav class="navbar-links">
             <b-nav-item href="/posts">Posts</b-nav-item>
             <b-nav-item href="/posts/creation">Create Post</b-nav-item>
-            <b-nav-item href="/courses/posted">Posted Courses</b-nav-item>
-            <b-nav-item href="/courses/attending">Attending Courses</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
@@ -23,6 +21,7 @@
                 <em>{{getUser().username}}</em>
               </template>
 
+              <b-dropdown-item href="/user">Profile Page</b-dropdown-item>
               <b-dropdown-item href="#" @click="onSignOut()">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
@@ -32,8 +31,8 @@
 </template>
 
 <script>
-import user from '@/mixins/user'
-import auth from '@/mixins/auth'
+import userController from '@/controllers/user'
+import authController from '@/controllers/auth'
 
 export default {
   methods: {
@@ -43,7 +42,7 @@ export default {
       this.$router.replace('/')
     }
   },
-  mixins: [user, auth]
+  mixins: [userController, authController]
 }
 </script>
 

@@ -4,11 +4,10 @@ import Router from 'vue-router'
 import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
-import PostedCourses from './views/PostedCourses.vue'
-import AttendingCourses from './views/AttendingCourses.vue'
-import PostList from './views/PostsList.vue'
+import AllPosts from './views/AllPosts.vue'
 import CreateReview from './components/CreateReview.vue'
 import PostManager from './views/PostManager.vue'
+import User from './views/User.vue'
 
 Vue.use(Router)
 
@@ -22,6 +21,11 @@ export default new Router({
       component: Welcome
     },
     {
+      path: '/user',
+      name: 'User',
+      component: User
+    },
+    {
       path: '/posts/creation',
       name: 'createPost',
       component: CreatePost
@@ -32,19 +36,9 @@ export default new Router({
       component: Register
     },
     {
-      path: '/courses/posted',
-      name: 'Posted Courses',
-      component: PostedCourses
-    },
-    {
-      path: '/courses/attending',
-      name: 'Attending Courses',
-      component: AttendingCourses
-    },
-    {
       path: '/posts',
       name: 'post',
-      component: PostList
+      component: AllPosts
     },
     {
       path: '/posts/:id',
