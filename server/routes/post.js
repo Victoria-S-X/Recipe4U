@@ -88,36 +88,14 @@ router.get('/image/:id', async (req, res) => {
   }
 })
 
-// Delete all posts from the logged in user
-router.delete('/', auth, async (req, res) => {
-  const posts = await controller.findByUser(req.userID)
-  const resultsResult = ResCode.SUCCESS
-  for (const post of posts) {
-    const result = await controller.delete(post)
-    if (result !== ResCode.SUCCESS) resultsResult = result
-  }
-
-  switch (resultsResult) {
-    case ResCode.SUCCESS:
-      res.status(200).json({ message: 'Deleted' })
-      break
-
-    default:
-      res.status(500).json({
-        message: 'Server error',
-        error: result?.error
-      })
-      break
-  }
-})
-
 // Get one post with its id
 router.get('/:id', getPost, (req, res) => {
   if (res.post) {
     const result = { ...res.post }._doc
     result._links = {
       self: links.getPost(req.params.id),
-      selfPage: links.getPostPage(req.params.id)
+      selfPage: links.getPostPage(req.params.id),
+      image: links.getPostImage(req.params.id)
     }
     res.status(200).json(result)
   } else {
@@ -146,6 +124,29 @@ router.patch('/:id', upload.single(), auth, async (req, res) => {
       break
     case ResCode.NOT_FOUND:
       res.status(404).json({ message: 'Cannot find post' })
+      break
+
+    default:
+      res.status(500).json({
+        message: 'Server error',
+        error: result?.error
+      })
+      break
+  }
+})
+
+// Delete all posts from the logged in user
+router.delete('/', auth, async (req, res) => {
+  const posts = await controller.findByUser(req.userID)
+  const resultsResult = ResCode.SUCCESS
+  for (const post of posts) {
+    const result = await controller.delete(post)
+    if (result !== ResCode.SUCCESS) resultsResult = result
+  }
+
+  switch (resultsResult) {
+    case ResCode.SUCCESS:
+      res.status(200).json({ message: 'Deleted' })
       break
 
     default:

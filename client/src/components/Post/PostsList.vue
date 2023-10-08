@@ -33,9 +33,7 @@ export default ({
 
       this.getPosts(params)
         .then(posts => { this.posts = posts })
-        .catch(error => {
-          errorHandler(error)
-        })
+        .catch(error => { errorHandler(error) })
     },
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
