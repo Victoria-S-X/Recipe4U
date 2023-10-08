@@ -16,6 +16,7 @@ import userController from './controllers/user.js'
 
 export default ({
   mounted() {
+    // Redirect to login page if not logged in
     if (!this.getUser() && this.$route.path !== '/') {
       this.$router.push('/')
     }
