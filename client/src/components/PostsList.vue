@@ -1,7 +1,7 @@
 <template>
   <div class="postList">
     <div v-for="(post, index) in posts" :key="index">
-          <b-container @click="goToViewPost(post._id)">
+          <b-container class="post-container" @click="goToViewPost(post._id)">
             <post :post="post"/>
           </b-container>
     </div>
@@ -11,7 +11,8 @@
 <script>
 import { Api } from '@/Api'
 import router from '../router'
-import Post from '../components/Post.vue'
+import Post from '../components/PostListItem.vue'
+import userController from '@/controllers/user'
 
 export default ({
   components: {
@@ -27,7 +28,9 @@ export default ({
   },
   methods: {
     populatePosts() {
-      Api.get('/posts', {
+      const url = this.getFrom === 'userPosted' ? `/posts?user=${this.getUser()._id}` : '/posts'
+
+      Api.get(url, {
         cashe: false
       })
         .then(response => {
@@ -41,7 +44,9 @@ export default ({
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
     }
-  }
+  },
+  props: { getFrom: String },
+  mixins: [userController]
 })
 </script>
 
@@ -60,6 +65,10 @@ export default ({
   .postList {
     grid-template-columns: auto;
     padding: 0;
+  }
+
+  .post-container {
+    padding: 0.3em;
   }
 }
 </style>

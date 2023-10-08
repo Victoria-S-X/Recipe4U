@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import auth from '@/mixins/auth'
+import auth from '@/controllers/auth'
 import { errorHandler } from '../Api'
 
 export default {

@@ -12,9 +12,14 @@
 
 <script>
 import Navbar from './components/Navbar.vue'
+import userController from './controllers/user.js'
+
 export default ({
   mounted() {
-    console.log('App mounted.', this.$route.path)
+    // Redirect to login page if not logged in
+    if (!this.getUser() && this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   },
   methods: {
     showNavBar() {
@@ -28,7 +33,8 @@ export default ({
   },
   components: {
     Navbar
-  }
+  },
+  mixins: [userController]
 })
 </script>
 
@@ -48,6 +54,23 @@ body {
 
 #app {
   background-color: var(--primary-background);
+}
+
+/* ---------------------------------- TEXT ---------------------------------- */
+
+h3 {
+  color: rgb(68, 67, 67);
+  font-size: 3em;
+  box-shadow: 10px 10px 5px #277c7d2b;
+  box-decoration-break: slice;
+  padding: 1%;
+  margin: 1%;
+  font-weight: 300;
+}
+
+h3::first-letter {
+  color: var(--primary-dark);
+  font-size: 123%
 }
 
 </style>
