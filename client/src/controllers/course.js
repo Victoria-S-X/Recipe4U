@@ -1,6 +1,6 @@
 import { Api } from '@/Api'
-import user from '@/controllers/user'
-import post from '@/controllers/post'
+import userController from '@/controllers/user'
+import postController from '@/controllers/post'
 
 /* --------------------------------- COURSE --------------------------------- */
 
@@ -26,5 +26,5 @@ export default {
     deleteCourse,
     getPostLink
   },
-  mixins: [user, post]
+  mixins: [userController, postController]
 }

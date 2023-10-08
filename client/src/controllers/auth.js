@@ -1,5 +1,5 @@
 import { Api, loadToken } from '@/Api'
-import user from '@/controllers/user'
+import userController from '@/controllers/user'
 
 async function login(credentials) {
   const response = await Api.post('login', credentials)
@@ -21,5 +21,5 @@ export default {
     login,
     signOut
   },
-  mixins: [user]
+  mixins: [userController]
 }

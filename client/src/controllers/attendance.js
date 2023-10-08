@@ -1,7 +1,7 @@
 import { Api } from '@/Api'
 
-import user from '@/controllers/user'
-import post from '@/controllers/post'
+import userController from '@/controllers/user'
+import postController from '@/controllers/post'
 
 async function attend(course) {
   if (!course) throw new Error('No course provided')
@@ -27,5 +27,5 @@ export default {
     attend,
     unattend
   },
-  mixins: [user, post]
+  mixins: [userController, postController]
 }
