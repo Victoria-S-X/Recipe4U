@@ -7,4 +7,6 @@ const createReview = (postID, username, rating, text) =>
     text
   })
 
-export default { methods: { createReview } }
+const getReviews = async (postID) => Api.get(`/posts/${postID}/reviews`)
+
+export default { methods: { createReview, getReviews } }
