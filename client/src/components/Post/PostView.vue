@@ -41,14 +41,16 @@
           </b-jumbotron>
       </div>
 
-      <h3>Courses</h3>
-      <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+      <b-tabs>
+        <b-tab title="Courses" title-link-class="tabview-tab-link">
+          <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+        </b-tab>
 
-      <h3>Reviews</h3>
-      <b-card class="scroll-container">
-      <Reviews v-if="postID" :postID="postID"/>
-      </b-card>
-      <CreateReview></CreateReview>
+        <b-tab title="Reviews" title-link-class="tabview-tab-link">
+          <Reviews v-if="postID" :postID="postID"/>
+          <CreateReview/>
+        </b-tab>
+      </b-tabs>
       </div>
     </div>
 </template>
@@ -250,5 +252,12 @@ p {
 height:500px;
 overflow-y:scroll;
 border:1px solid;
+}
+
+</style>
+
+<style>
+.tabview-tab-link {
+  color: var(--primary-dark) !important;
 }
 </style>
