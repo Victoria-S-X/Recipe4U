@@ -5,8 +5,8 @@
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
-      <strong>Max Attendees :</strong>
-      <input type="number" ref="maxAttendees" :value="course.maxAttendees"/>
+      <strong>Max Attendees* :</strong>
+      <input type="number" ref="maxAttendees" :value="course.maxAttendees" required/>
 
       <strong>Meeting Link :</strong>
       <input type="text" ref="meetingLink" :value="course.meetingLink" />
