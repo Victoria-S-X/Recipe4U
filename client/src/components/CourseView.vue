@@ -31,7 +31,7 @@
 
 <script>
 import { errorHandler } from '@/Api'
-import myFormatDate from '@/controllers/helpers'
+import myFormatDate from '@/helpers'
 import courseItemStyle from '@/styles/courseItem.css'
 /* ------------------------------- CONTROLLERS ------------------------------ */
 import user from '@/controllers/user'
@@ -58,22 +58,18 @@ export default {
     if (this.showCourseName) this.loadCourseName()
   },
   methods: {
-    onAttend() {
-      this.attend(this.course).then((_) => {
-        this.isAttendingBool = true
-        this.attendanceRatioStr = this.attendanceRatio()
-      }).catch(errorHandler)
-    },
-    onUnAttend() {
-      this.unattend(this.course).then((_) => {
-        this.isAttendingBool = false
-        this.attendanceRatioStr = this.attendanceRatio()
-      }).catch(errorHandler)
-    },
+    /* ------------------------------ SETUP METHODS ----------------------------- */
     attendanceRatio() {
       const { attendees, maxAttendees } = this.course
       return `${attendees.length}/${maxAttendees}`
     },
+
+    isAttending() {
+      this.isAttendingAsync(this.course).then((response) => {
+        this.isAttendingBool = response
+      })
+    },
+
     durationStr(duration) {
       if (!duration) return ''
       const hours = Math.floor(duration / 60)
@@ -85,20 +81,33 @@ export default {
 
       return result
     },
-    editCourse(course) {
-      course.editing = true
-      this.$emit('onEdit')
-    },
-    isAttending() {
-      this.isAttendingAsync(this.course).then((response) => {
-        this.isAttendingBool = response
-      })
-    },
+
     loadCourseName() {
       this.getPostLink(this.course).then((response) => {
         this.postName = response.name
         this.postURL = response.url
       }).catch(errorHandler)
+    },
+
+    /* ------------------------------- ATTENDANCE ------------------------------- */
+    onAttend() {
+      this.attend(this.course).then((_) => {
+        this.isAttendingBool = true
+        this.attendanceRatioStr = this.attendanceRatio()
+      }).catch(errorHandler)
+    },
+
+    onUnAttend() {
+      this.unattend(this.course).then((_) => {
+        this.isAttendingBool = false
+        this.attendanceRatioStr = this.attendanceRatio()
+      }).catch(errorHandler)
+    },
+
+    /* ------------------------- EVENT TRIGGERED METHODS ------------------------ */
+    editCourse(course) {
+      course.editing = true
+      this.$emit('onEdit')
     }
   },
   mixins: [myFormatDate, user, course, attendance],
@@ -147,7 +156,7 @@ export default {
   margin-top: 0.5em;
   color: var(--primary-color);
   background-color: #fcffff;
-  padding: .4em 2.7em;
+  padding: .4em min(5%, 2.7em);
   font-weight: 400;
   border: .1em solid var(--primary-color);
   letter-spacing: .06em;

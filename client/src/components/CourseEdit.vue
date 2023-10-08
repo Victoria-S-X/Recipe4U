@@ -28,7 +28,7 @@
 
 <script>
 import { errorHandler } from '@/Api'
-import helpers from '@/controllers/helpers'
+import helpers from '@/helpers'
 import courseMixin from '@/controllers/course'
 import courseItemStyle from '@/styles/courseItem.css'
 
@@ -77,6 +77,7 @@ export default {
   justify-content: center;
   row-gap: .4em;
   margin: 1em 10%;
+  color: #0e4647;
 }
 
 .keyValues strong{
