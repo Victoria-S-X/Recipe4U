@@ -10,6 +10,9 @@
           <span class="input-tag" style="color:rgb(36,124,125)">Rate this receipe out of 5</span>
           <input type="number" class="rate-textbox" v-model="rating" @input="isRatingValid">
   </div>
+  <div class = "Error-Message">
+          <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
+  </div>
   <div class = "submit-review-btn">
         <button type="submit" class="submit-btn">Submit</button>
   </div>
@@ -26,7 +29,8 @@ export default {
   data() {
     return {
       rating: 0,
-      text: ''
+      text: '',
+      errorMessage: ''
     }
   },
   methods: {
@@ -39,11 +43,8 @@ export default {
     },
     async submitReview() {
       try {
-        if (this.rating === 0 || this.text === '') {
-          const emptyReview = confirm('Review is empty, please enter something before submitting!')
-          if (emptyReview) {
-            window.location.reload()
-          }
+        if (this.text === '') {
+          this.errorMessage = 'Missing parameters'
         } else {
           const retrivedUser = this.getUser().username
           Api.post(`/posts/${this.$route.params.id}/reviews`, {
@@ -54,12 +55,13 @@ export default {
           window.location.reload()
         }
       } catch (error) {
-        console.error(error)
+        if (error.response.status === 404) {
+          this.errorMessage = 'Post may have been deleted'
+        }
       }
     }
   }
 }
-
 </script>
 <style scoped>
 @media only screen and (min-width:768px)
@@ -104,5 +106,8 @@ margin-right: 70%;
 }
 .form-content{
 margin-left:5%;
+}
+.error-text{
+color:red;
 }
 </style>
