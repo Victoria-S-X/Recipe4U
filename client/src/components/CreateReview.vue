@@ -21,14 +21,16 @@
 </b-card>
 </template>
 <script>
-import { Api } from '@/Api'
-import user from '@/controllers/user'
+import { errorHandler } from '@/Api'
+import userController from '@/controllers/user'
+import reviewController from '@/controllers/review'
+
 export default {
-  mixins: [user],
+  mixins: [userController, reviewController],
   name: 'CreateReview',
   data() {
     return {
-      rating: 0,
+      rating: 1,
       text: '',
       errorMessage: ''
     }
@@ -37,27 +39,19 @@ export default {
     isRatingValid() {
       // Ensures that the rating input is between 0 and 5
       const inputRating = parseFloat(this.rating)
-      if (inputRating <= -1 || inputRating > 5) {
-        this.rating = 0
+      if (inputRating < 1 || inputRating > 5) {
+        this.rating = 1
       }
     },
+
     async submitReview() {
-      try {
-        if (this.text === '') {
-          this.errorMessage = 'Missing parameters'
-        } else {
-          const retrivedUser = this.getUser().username
-          Api.post(`/posts/${this.$route.params.id}/reviews`, {
-            username: retrivedUser,
-            rating: this.rating,
-            text: this.text
-          })
-          window.location.reload()
-        }
-      } catch (error) {
-        if (error.response.status === 404) {
-          this.errorMessage = 'Post may have been deleted'
-        }
+      if (this.text === '') {
+        this.errorMessage = 'Missing parameters'
+      } else {
+        const username = this.getUser().username
+        this.createReview(this.$route.params.id, username, this.rating, this.text).then(() => {
+          window.location.reload() // TODO: fix this
+        }).catch(errorHandler)
       }
     }
   }

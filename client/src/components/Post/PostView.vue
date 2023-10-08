@@ -54,14 +54,18 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
+import { errorHandler } from '@/Api'
+/* ------------------------------- CONTROLLERS ------------------------------ */
+import userController from '@/controllers/user.js'
+import postController from '@/controllers/post.js'
+/* ------------------------------- COMPONENTS ------------------------------- */
 import Courses from '@/components/Course/Courses.vue'
-import user from '@/controllers/user.js'
 import Reviews from '@/components/Reviews.vue'
+import CreateReview from '@/components/CreateReview.vue'
+/* --------------------------------- ICONS --------------------------------- */
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'
 import timerIcon from '@/assets/Timer.png'
-import CreateReview from '../components/CreateReview.vue'
 
 export default {
   name: 'viewPost',
@@ -104,14 +108,14 @@ export default {
   },
   methods: {
     populatePost() {
-      Api.get(`/posts/${this.$route.params.id}`)
-        .then(response => {
-          this.post = response.data
-          console.log(response.data.ingredients)
-          this.postID = this.$route.params.id
-          this.imgSRC = `http://localhost:3000/api/v1/posts/image/${this.$route.params.id}`
-          for (let i = 0; i < response.data.ingredients.length; i++) {
-            const ingre = JSON.parse(response.data.ingredients[i]).ingredient
+      this.postID = this.$route.params.id
+
+      this.getPost(this.postID)
+        .then(post => {
+          this.post = post
+          this.imgSRC = post._links.image.href
+          for (let i = 0; i < post.ingredients.length; i++) {
+            const ingre = JSON.parse(post.ingredients[i]).ingredient
             this.ingres[i] = ingre
             if (this.inputs[0].ingredient === '') {
               this.inputs[0].ingredient = ingre
@@ -120,9 +124,7 @@ export default {
             }
           }
         })
-        .catch(error => {
-          console.log(error)
-        })
+        .catch(error => errorHandler(error))
     },
     isPostOwner() {
       const user = this.getUser()
@@ -146,7 +148,7 @@ export default {
       })
     }
   },
-  mixins: [user],
+  mixins: [userController, postController],
   components: {
     Courses,
     Reviews,

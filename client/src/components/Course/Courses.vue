@@ -5,7 +5,7 @@
       <CourseView v-else :course="course" @onEdit="reloadCourseList()" :showCourseName="showCourseName"/>
     </div>
     <div v-if="!courses.length" class="no-courses-container">
-      <p v-if="userOwnsPost()">No courses posted</p>
+      <p v-if="userOwnsPost() || getFrom === 'user'">No courses posted</p>
       <p v-else>No available courses</p>
     </div>
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
@@ -13,7 +13,7 @@
         <button class="round-btn courses-action-button" @click="addCourseToLocalList()">+</button>
       </div>
     </div>
-    <div v-else-if="getFrom === 'user'" class="button-container">
+    <div v-else-if="getFrom === 'user' && courses.length !== 0" class="button-container">
       <div class="btn-white-block">
         <button class="round-btn courses-action-button" @click="onDeleteCoursesPressed()">
           <b-icon icon="trash"></b-icon>

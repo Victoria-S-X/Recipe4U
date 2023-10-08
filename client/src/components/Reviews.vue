@@ -11,7 +11,9 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
+import { errorHandler } from '@/Api'
+import reviewController from '@/controllers/review'
+
 export default ({
   name: 'Reviews',
   data() {
@@ -24,17 +26,9 @@ export default ({
   },
   methods: {
     populateReviews() {
-      try {
-        Api.get(`/posts/${this.postID}/reviews`)
-          .then(response => {
-            this.reviews = response.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      } catch (error) {
-        console.error(error)
-      }
+      this.getReviews(this.postID)
+        .then(reviews => { this.reviews = reviews })
+        .catch(errorHandler)
     }
   },
   props: {
@@ -42,9 +36,11 @@ export default ({
       type: String,
       required: true
     }
-  }
+  },
+  mixins: [reviewController]
 })
 </script>
+
 <style scoped>
 .comment-box{
 border: 1px solid white;

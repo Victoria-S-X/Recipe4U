@@ -5,22 +5,22 @@
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
-      <strong>Max Attendees:</strong>
-      <input type="number" ref="maxAttendees" :value="course.maxAttendees"/>
+      <strong>Max Attendees* :</strong>
+      <input type="number" ref="maxAttendees" :value="course.maxAttendees" required/>
 
-      <strong>Meeting Link:</strong>
+      <strong>Meeting Link :</strong>
       <input type="text" ref="meetingLink" :value="course.meetingLink" />
 
-      <strong>City:</strong>
+      <strong>City :</strong>
       <input type="text" ref="city" :value="course.city" />
 
-      <strong>Address:</strong>
+      <strong>Address :</strong>
       <input type="text" ref="address" :value="course.address" />
 
-      <strong>Start:</strong>
-      <input type="datetime-local" ref="start" :value="this.myFormatDate(course.start, 'T')"/>
+      <strong>Start* :</strong>
+      <input type="datetime-local" ref="start" :value="this.myFormatDate(course.start, 'T')" required/>
 
-      <strong>Duration:</strong>
+      <strong>Duration :</strong>
       <input type="number" ref="duration" :value="course.duration" />
     </p>
   </div>
@@ -80,10 +80,16 @@ export default {
   color: #0e4647;
 }
 
-.keyValues strong{
+.keyValues strong {
   text-align: right;
   padding-right: 10px;
 }
+
+.keyValues input:invalid {
+  border: .15em solid var(--primary-color);
+}
+
+/* ----------------------------- ACTION BUTTONS ----------------------------- */
 
 .course-action-btn {
   font-size: 1.4em;

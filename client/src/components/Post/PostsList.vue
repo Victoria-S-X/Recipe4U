@@ -9,10 +9,11 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
-import router from '../router'
-import Post from '../components/PostListItem.vue'
+import { errorHandler } from '@/Api'
+import router from '@/router'
+import Post from '@/components/Post/PostListItem.vue'
 import userController from '@/controllers/user'
+import postController from '@/controllers/post'
 
 export default ({
   components: {
@@ -28,25 +29,18 @@ export default ({
   },
   methods: {
     populatePosts() {
-      const url = this.getFrom === 'userPosted' ? `/posts?user=${this.getUser()._id}` : '/posts'
+      const params = this.getFrom === 'userPosted' ? { user: this.getUser()._id } : {}
 
-      Api.get(url, {
-        cashe: false
-      })
-        .then(response => {
-          this.posts = response.data
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      this.getPosts(params)
+        .then(posts => { this.posts = posts })
+        .catch(error => { errorHandler(error) })
     },
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
     }
   },
   props: { getFrom: String },
-  mixins: [userController]
+  mixins: [userController, postController]
 })
 </script>
 

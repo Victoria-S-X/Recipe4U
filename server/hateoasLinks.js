@@ -49,6 +49,14 @@ exports.getPostPage = (postID) => {
   }
 }
 
+exports.getPostImage = (postID) => {
+  return {
+    description: 'Get post image',
+    href: `${backendUrl}/posts/image/${postID}`,
+    method: 'GET'
+  }
+}
+
 exports.getPostsPage = () => {
   return {
     description: 'Get posts page',

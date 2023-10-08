@@ -4,7 +4,7 @@
 
 <script>
 
-import PostsList from '@/components/PostsList.vue'
+import PostsList from '@/components/Post/PostsList.vue'
 
 export default {
   components: {
