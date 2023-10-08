@@ -1,4 +1,5 @@
 <template>
+
 <b-card style="max-width: 20rem" class="review-container">
 <form class="form-content" @submit.prevent="submitReview">
   <div class="review-text-input">
@@ -7,10 +8,13 @@
   </div>
   <div class="rating-input">
           <span class="input-tag" style="color:rgb(36,124,125)">Rate this receipe out of 5</span>
-          <input type="number" class="rate-textbox" v-model="rating">
+          <input type="number" class="rate-textbox" v-model="rating" @input="isRatingValid">
+  </div>
+  <div class = "Error-Message">
+          <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
   </div>
   <div class = "submit-review-btn">
-        <button type="submit" style= "background-color: rgb(36,124,125)" >Submit</button>
+        <button type="submit" class="submit-btn">Submit</button>
   </div>
 
 </form>
@@ -18,12 +22,15 @@
 </template>
 <script>
 import { Api } from '@/Api'
+import user from '@/controllers/user'
 export default {
+  mixins: [user],
   name: 'CreateReview',
   data() {
     return {
       rating: 0,
-      text: ''
+      text: '',
+      errorMessage: ''
     }
   },
   methods: {
@@ -35,37 +42,58 @@ export default {
       }
     },
     async submitReview() {
-      if (this.rating === 0 || this.text === '') {
-        const emptyReview = confirm('Review is empty, please enter something before submitting!')
-        if (emptyReview) {
+      try {
+        if (this.text === '') {
+          this.errorMessage = 'Missing parameters'
+        } else {
+          const retrivedUser = this.getUser().username
+          Api.post(`/posts/${this.$route.params.id}/reviews`, {
+            username: retrivedUser,
+            rating: this.rating,
+            text: this.text
+          })
           window.location.reload()
         }
-      } else {
-        Api.post(`/posts/${this.$route.params.id}/reviews`, {
-          rating: this.rating,
-          text: this.text
-        })
-        window.location.reload()
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.errorMessage = 'Post may have been deleted'
+        }
       }
     }
   }
-
 }
-
 </script>
 <style scoped>
+@media only screen and (min-width:768px)
+{
 .review-container {
   align-items: center;
   margin-top:5%;
   margin-bottom:5;
-  margin-left:35%;
+  margin-left:37.5%;
   background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+}
+@media only screen and (max-width:768px) {
+  .review-container {
+  align-items: center;
+  margin-top:5%;
+  margin-bottom:5%;
+  margin-left:20%;
+  position: relative;
+  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 }
 .submit-review-btn{
 margin-top:3%;
 margin-left:30%;
 margin-right: 70%;
+}
+.submit-btn{
+  background-color: rgb(121,209,210);
+  border-radius: 20%;
 }
 .input-tag{
   margin-left: 10%;
@@ -75,5 +103,11 @@ margin-right: 70%;
 }
 .rate-textbox{
   margin-left:10%;
+}
+.form-content{
+margin-left:5%;
+}
+.error-text{
+color:red;
 }
 </style>
