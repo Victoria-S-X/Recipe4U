@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { errorHandler } from '@/Api'
 import reviewController from '@/controllers/review'
 
 export default ({
@@ -25,17 +26,9 @@ export default ({
   },
   methods: {
     populateReviews() {
-      try {
-        this.getReviews(this.postID)
-          .then(response => {
-            this.reviews = response.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      } catch (error) {
-        console.error(error)
-      }
+      this.getReviews(this.postID)
+        .then(reviews => { this.reviews = reviews })
+        .catch(errorHandler)
     }
   },
   props: {

@@ -54,16 +54,18 @@
 </template>
 
 <script>
-import Courses from '@/components/Course/Courses.vue'
-import Reviews from '@/components/Reviews.vue'
-import ingredientsIcon from '@/assets/Ingredients.png'
-import cookingBookIcon from '@/assets/Cooking Book.png'
-import timerIcon from '@/assets/Timer.png'
-import CreateReview from '@/components/CreateReview.vue'
 import { errorHandler } from '@/Api'
 /* ------------------------------- CONTROLLERS ------------------------------ */
 import userController from '@/controllers/user.js'
 import postController from '@/controllers/post.js'
+/* ------------------------------- COMPONENTS ------------------------------- */
+import Courses from '@/components/Course/Courses.vue'
+import Reviews from '@/components/Reviews.vue'
+import CreateReview from '@/components/CreateReview.vue'
+/* --------------------------------- ICONS --------------------------------- */
+import ingredientsIcon from '@/assets/Ingredients.png'
+import cookingBookIcon from '@/assets/Cooking Book.png'
+import timerIcon from '@/assets/Timer.png'
 
 export default {
   name: 'viewPost',
