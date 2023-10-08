@@ -12,6 +12,7 @@
 import { Api } from '@/Api'
 import router from '../router'
 import Post from '../components/PostListItem.vue'
+import userController from '@/controllers/user'
 
 export default ({
   components: {
@@ -27,7 +28,9 @@ export default ({
   },
   methods: {
     populatePosts() {
-      Api.get('/posts', {
+      const url = this.getFrom === 'userPosted' ? `/posts?user=${this.getUser()._id}` : '/posts'
+
+      Api.get(url, {
         cashe: false
       })
         .then(response => {
@@ -41,7 +44,9 @@ export default ({
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
     }
-  }
+  },
+  props: { getFrom: String },
+  mixins: [userController]
 })
 </script>
 

@@ -9,6 +9,7 @@
 
           <b-navbar-nav class="navbar-links">
             <b-nav-item href="/posts">Posts</b-nav-item>
+            <b-nav-item href="/posts/posted">My Posts</b-nav-item>
             <b-nav-item href="/posts/creation">Create Post</b-nav-item>
             <b-nav-item href="/courses/posted">Posted Courses</b-nav-item>
             <b-nav-item href="/courses/attending">Attending Courses</b-nav-item>
