@@ -6,7 +6,7 @@
 
 <script>
 
-import Courses from '@/components/Courses.vue'
+import Courses from '@/components/course/Courses.vue'
 
 export default {
   components: {

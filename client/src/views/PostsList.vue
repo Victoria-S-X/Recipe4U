@@ -11,7 +11,7 @@
 <script>
 import { Api } from '@/Api'
 import router from '../router'
-import Post from '../components/Post.vue'
+import Post from '../components/PostListItem.vue'
 
 export default ({
   components: {
