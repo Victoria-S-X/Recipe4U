@@ -22,7 +22,7 @@
 </template>
 <script>
 import { Api } from '@/Api'
-import user from '@/mixins/user'
+import user from '@/controllers/user'
 export default {
   mixins: [user],
   name: 'CreateReview',

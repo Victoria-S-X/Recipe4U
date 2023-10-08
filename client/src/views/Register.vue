@@ -74,6 +74,18 @@ export default {
           this.redoPass = ''
         } else if (this.age < 13 && this.age !== '') {
           this.errorMessage = 'You need to be atleast 13 to create an account'
+        } else if (this.username === '' ||
+                   this.password === '' ||
+                   this.redoPass === '' ||
+                   this.email === '' ||
+                   this.firstName === '' ||
+                   this.lastName === '' ||
+                   this.age === '') {
+          const error = new Error('Missing parameters')
+          error.response = {
+            status: 422
+          }
+          throw error
         } else {
           await Api.post('/users', {
             username: this.username,
