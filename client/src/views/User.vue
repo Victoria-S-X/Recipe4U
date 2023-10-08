@@ -16,7 +16,7 @@
 
 <script>
 
-import Courses from '@/components/course/Courses.vue'
+import Courses from '@/components/Course/Courses.vue'
 import PostsList from '@/components/PostsList.vue'
 
 export default {

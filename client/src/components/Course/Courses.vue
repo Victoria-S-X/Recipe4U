@@ -31,8 +31,8 @@ import roundBtnStyle from '@/styles/roundBtn.css'
 import userController from '@/controllers/user'
 import courseController from '@/controllers/courses'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import CourseView from '@/components/course/CourseView.vue'
-import CourseEdit from '@/components/course/CourseEdit.vue'
+import CourseView from '@/components/Course/CourseView.vue'
+import CourseEdit from '@/components/Course/CourseEdit.vue'
 
 export default {
   mounted() {
