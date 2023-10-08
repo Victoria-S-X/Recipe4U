@@ -1,4 +1,5 @@
 <template>
+
 <b-card style="max-width: 20rem" class="review-container">
 <form class="form-content" @submit.prevent="submitReview">
   <div class="review-text-input">
@@ -7,7 +8,7 @@
   </div>
   <div class="rating-input">
           <span class="input-tag" style="color:rgb(36,124,125)">Rate this receipe out of 5</span>
-          <input type="number" class="rate-textbox" v-model="rating">
+          <input type="number" class="rate-textbox" v-model="rating" @input="isRatingValid">
   </div>
   <div class = "submit-review-btn">
         <button type="submit" class="submit-btn">Submit</button>
@@ -61,6 +62,8 @@ export default {
 
 </script>
 <style scoped>
+@media only screen and (min-width:768px)
+{
 .review-container {
   align-items: center;
   margin-top:5%;
@@ -68,6 +71,18 @@ export default {
   margin-left:37.5%;
   background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+}
+@media only screen and (max-width:768px) {
+  .review-container {
+  align-items: center;
+  margin-top:5%;
+  margin-bottom:5%;
+  margin-left:15%;
+  position: relative;
+  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 }
 .submit-review-btn{
 margin-top:3%;
