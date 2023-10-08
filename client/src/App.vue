@@ -12,9 +12,13 @@
 
 <script>
 import Navbar from './components/Navbar.vue'
+import userController from './controllers/user.js'
+
 export default ({
   mounted() {
-    console.log('App mounted.', this.$route.path)
+    if (!this.getUser() && this.$route.path !== '/') {
+      this.$router.push('/')
+    }
   },
   methods: {
     showNavBar() {
@@ -28,7 +32,8 @@ export default ({
   },
   components: {
     Navbar
-  }
+  },
+  mixins: [userController]
 })
 </script>
 

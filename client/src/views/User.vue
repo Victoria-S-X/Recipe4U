@@ -1,7 +1,9 @@
 <template>
   <div>
     <h3>My Posts</h3>
-    <PostsList getFrom="userPosted"/>
+    <div class="postListContainer">
+      <PostsList getFrom="userPosted"/>
+    </div>
 
     <h3>Attending Courses</h3>
     <Courses getFrom="userAttendance"></Courses>
@@ -25,3 +27,11 @@ export default {
 }
 
 </script>
+
+<style scoped>
+
+.postListContainer {
+  margin: 0 3%;
+}
+
+</style>
