@@ -1,7 +1,7 @@
 <template>
   <div class="postList">
     <div v-for="(post, index) in posts" :key="index">
-          <b-container @click="goToViewPost(post._id)">
+          <b-container class="post-container" @click="goToViewPost(post._id)">
             <post :post="post"/>
           </b-container>
     </div>
@@ -60,6 +60,10 @@ export default ({
   .postList {
     grid-template-columns: auto;
     padding: 0;
+  }
+
+  .post-container {
+    padding: 0.3em;
   }
 }
 </style>

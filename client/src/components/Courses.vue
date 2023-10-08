@@ -26,11 +26,13 @@
 <script>
 
 import { errorHandler } from '@/Api'
-import user from '@/controllers/user'
-import course from '@/controllers/courses'
+import roundBtnStyle from '@/styles/roundBtn.css'
+/* ------------------------------- CONTROLLERS ------------------------------ */
+import userController from '@/controllers/user'
+import courseController from '@/controllers/courses'
+/* ------------------------------- COMPONENTS ------------------------------- */
 import CourseView from '@/components/CourseView.vue'
 import CourseEdit from '@/components/CourseEdit.vue'
-import roundBtnStyle from '@/styles/roundBtn.css'
 
 export default {
   mounted() {
@@ -45,7 +47,6 @@ export default {
   methods: {
 
     /* ------------------------------ SETUP METHODS ----------------------------- */
-
     loadCourses() {
       this.getCourses(this.getFrom, this.postID).then((response) => {
         this.courses = response.data
@@ -89,7 +90,7 @@ export default {
       }
     }
   },
-  mixins: [course, user],
+  mixins: [courseController, userController],
   styles: [roundBtnStyle],
   components: {
     CourseView,

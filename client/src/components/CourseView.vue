@@ -31,12 +31,12 @@
 
 <script>
 import { errorHandler } from '@/Api'
-import myFormatDate from '@/helpers'
+import helpers from '@/helpers'
 import courseItemStyle from '@/styles/courseItem.css'
 /* ------------------------------- CONTROLLERS ------------------------------ */
-import user from '@/controllers/user'
-import course from '@/controllers/course'
-import attendance from '@/controllers/attendance'
+import userController from '@/controllers/user'
+import courseControllers from '@/controllers/course'
+import attendanceController from '@/controllers/attendance'
 
 export default {
   props: {
@@ -110,7 +110,7 @@ export default {
       this.$emit('onEdit')
     }
   },
-  mixins: [myFormatDate, user, course, attendance],
+  mixins: [helpers, userController, courseControllers, attendanceController],
   styles: [courseItemStyle]
 }
 </script>

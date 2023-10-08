@@ -29,7 +29,7 @@
 <script>
 import { errorHandler } from '@/Api'
 import helpers from '@/helpers'
-import courseMixin from '@/controllers/course'
+import courseController from '@/controllers/course'
 import courseItemStyle from '@/styles/courseItem.css'
 
 export default {
@@ -65,7 +65,7 @@ export default {
       }).catch(errorHandler)
     }
   },
-  mixins: [courseMixin, helpers, courseItemStyle]
+  mixins: [courseController, helpers, courseItemStyle]
 }
 </script>
 

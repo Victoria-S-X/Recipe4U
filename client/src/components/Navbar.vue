@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import user from '@/controllers/user'
-import auth from '@/controllers/auth'
+import userController from '@/controllers/user'
+import authController from '@/controllers/auth'
 
 export default {
   methods: {
@@ -43,7 +43,7 @@ export default {
       this.$router.replace('/')
     }
   },
-  mixins: [user, auth]
+  mixins: [userController, authController]
 }
 </script>
 
