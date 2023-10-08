@@ -66,14 +66,23 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.review-container *{
+  color: var(--primary-dark);
+}
+
+.review-container input[type="text"]{
+  background-color: var(--soft-white);
+}
+
 .submit-review-btn{
-margin-top:3%;
-margin-left:30%;
-margin-right: 70%;
+  margin-top:3%;
+  margin-left: 22%;
 }
 .submit-btn{
-  background-color: rgb(121,209,210);
-  border-radius: 20%;
+  background-color: var(--soft-white);
+  color: var(--primary-dark);
+  padding: .3em 1.8em;
+  border: 0.1em solid var(--primary-dark);
 }
 .input-tag{
   margin-left: 10%;
