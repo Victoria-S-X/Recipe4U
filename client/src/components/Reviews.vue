@@ -24,14 +24,17 @@ export default ({
   },
   methods: {
     populateReviews() {
-      Api.get(`/posts/${this.postID}/reviews`)
-        .then(response => {
-          this.reviews = response.data
-          console.log(this.reviews.rating)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      try {
+        Api.get(`/posts/${this.postID}/reviews`)
+          .then(response => {
+            this.reviews = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   props: {
