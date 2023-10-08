@@ -14,6 +14,10 @@
           <span class="input-tag">Last Name:</span>
           <input type="text" class="textbox" v-model="lastName">
         </div>
+        <div class="Age-input">
+        <span class="input-tag">Your age:</span>
+        <input type="Number" class="textbox" v-model="age">
+        </div>
         <div class="email-input">
           <span class="input-tag">Email address:</span>
           <input type="text" class="textbox" v-model="email">
@@ -31,6 +35,9 @@
         <div class="pass-input">
           <span class="input-tag">Re-enter Password:</span>
           <input type="password" class="textbox" v-model="redoPass">
+        </div>
+        <div class = "Error-Message">
+          <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
         </div>
         <div class = "register-btn">
         <button type="submit">Register</button>
@@ -53,43 +60,50 @@ export default {
       redoPass: '',
       email: '',
       firstName: '',
-      lastName: ''
+      lastName: '',
+      age: '',
+      errorMessage: ''
     }
   },
   methods: {
     async registerUser() {
       try {
-        if (this.username === '' || this.password === '' || this.email === '' || this.firstName === '' || this.lastName === '' || this.redoPass === '') {
-          const emptyReview = confirm('Missing credentials :( make sure all details are filled')
-          if (emptyReview) {
-            window.location.reload()
-          }
-        } else if (this.redoPass !== this.password) {
-          const nonmatchingPassword = confirm('The passwords do not match, please reenter the passwords correctly')
-          if (nonmatchingPassword) {
-            this.password = ''
-            this.redoPass = ''
-          }
+        if (this.redoPass !== this.password) {
+          this.errorMessage = 'The passwords do not match, please reenter the passwords correctly'
+          this.password = ''
+          this.redoPass = ''
+        } else if (this.age < 13 && this.age !== '') {
+          this.errorMessage = 'You need to be atleast 13 to create an account'
         } else {
-          Api.post('/users', {
+          await Api.post('/users', {
             username: this.username,
             password: this.password,
             email: this.email,
             firstName: this.firstName,
-            lastName: this.lastName
+            lastName: this.lastName,
+            age: this.age
           })
-          const redirect = confirm('Account created! Would you like to go back to login?')
+          const redirect = confirm('Account created! Would you like to go to the login?')
           if (redirect) {
             this.$router.push('/')
           }
         }
       } catch (error) {
-        console.error('Error', error)
+        if (error.response.status === 403) {
+          this.errorMessage = 'Username is taken'
+        } if (error.response.status === 422) {
+          this.errorMessage = 'Missing parameters'
+        } if (error.response.status === 500) {
+          this.errorMessage = 'Failed to create an account'
+        } else {
+          console.log(error)
+        }
       }
     }
   }
 }
 </script>
+
 <style scoped>
 .Background{
   color: rgb(36,124,125);
@@ -119,6 +133,9 @@ margin-top:10%
 }
 .form-contents{
 margin-left:10%;
+}
+.error-text{
+color:red;
 }
 
 </style>
