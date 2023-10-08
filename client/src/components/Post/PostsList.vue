@@ -10,8 +10,8 @@
 
 <script>
 import { Api } from '@/Api'
-import router from '../router'
-import Post from '../components/PostListItem.vue'
+import router from '@/router'
+import Post from '@/components/Post/PostListItem.vue'
 import userController from '@/controllers/user'
 
 export default ({

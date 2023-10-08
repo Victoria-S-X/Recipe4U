@@ -12,8 +12,8 @@
 
 <script>
 import { Api } from '@/Api'
-import PostEdit from '../components/PostEdit.vue'
-import PostView from '../components/PostView.vue'
+import PostEdit from '../components/Post/PostEdit.vue'
+import PostView from '../components/Post/PostView.vue'
 
 export default ({
   name: 'postManager',

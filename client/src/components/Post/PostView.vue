@@ -61,7 +61,7 @@ import Reviews from '@/components/Reviews.vue'
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'
 import timerIcon from '@/assets/Timer.png'
-import CreateReview from '../components/CreateReview.vue'
+import CreateReview from '@/components/CreateReview.vue'
 
 export default {
   name: 'viewPost',
