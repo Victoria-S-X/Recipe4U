@@ -1,5 +1,5 @@
 import { Api, loadToken } from '@/Api'
-import user from '@/mixins/user'
+import user from '@/controllers/user'
 
 async function login(credentials) {
   const response = await Api.post('login', credentials)

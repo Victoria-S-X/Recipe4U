@@ -56,7 +56,7 @@
 <script>
 import { Api } from '@/Api'
 import Courses from '@/components/Courses.vue'
-import user from '@/mixins/user.js'
+import user from '@/controllers/user.js'
 import Reviews from '@/components/Reviews.vue'
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'

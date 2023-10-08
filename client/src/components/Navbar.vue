@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import user from '@/mixins/user'
-import auth from '@/mixins/auth'
+import user from '@/controllers/user'
+import auth from '@/controllers/auth'
 
 export default {
   methods: {

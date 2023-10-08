@@ -31,10 +31,12 @@
 
 <script>
 import { errorHandler } from '@/Api'
-import myFormatDate from '@/mixins/helpers'
-import user from '@/mixins/user'
-import course from '@/mixins/course'
+import myFormatDate from '@/controllers/helpers'
 import courseItemStyle from '@/styles/courseItem.css'
+/* ------------------------------- CONTROLLERS ------------------------------ */
+import user from '@/controllers/user'
+import course from '@/controllers/course'
+import attendance from '@/controllers/attendance'
 
 export default {
   props: {
@@ -99,7 +101,7 @@ export default {
       }).catch(errorHandler)
     }
   },
-  mixins: [myFormatDate, user, course],
+  mixins: [myFormatDate, user, course, attendance],
   styles: [courseItemStyle]
 }
 </script>

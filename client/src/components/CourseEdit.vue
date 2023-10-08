@@ -28,8 +28,8 @@
 
 <script>
 import { errorHandler } from '@/Api'
-import helpers from '@/mixins/helpers'
-import courseMixin from '@/mixins/course'
+import helpers from '@/controllers/helpers'
+import courseMixin from '@/controllers/course'
 import courseItemStyle from '@/styles/courseItem.css'
 
 export default {

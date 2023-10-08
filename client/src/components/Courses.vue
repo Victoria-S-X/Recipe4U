@@ -26,8 +26,8 @@
 <script>
 
 import { errorHandler } from '@/Api'
-import user from '@/mixins/user'
-import course from '@/mixins/courses'
+import user from '@/controllers/user'
+import course from '@/controllers/courses'
 import CourseView from '@/components/CourseView.vue'
 import CourseEdit from '@/components/CourseEdit.vue'
 import roundBtnStyle from '@/styles/roundBtn.css'
