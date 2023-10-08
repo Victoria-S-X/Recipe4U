@@ -1,8 +1,8 @@
 <template>
   <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <CourseEdit v-if="course.editing" :course="course" @save="reload()" @delete="onDeleteCourse(course)"/>
-      <CourseView v-else :course="course" @onEdit="reload()" :showCourseName="showCourseName"/>
+      <CourseEdit v-if="course.editing" :course="course" @save="reloadCourseList()" @delete="removeCourseFromList(course)"/>
+      <CourseView v-else :course="course" @onEdit="reloadCourseList()" :showCourseName="showCourseName"/>
     </div>
     <div v-if="!courses.length" class="no-courses-container">
       <p v-if="userOwnsPost()">No courses posted</p>
@@ -10,12 +10,12 @@
     </div>
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
-        <button class="round-btn courses-action-button" @click="addCourse()">+</button>
+        <button class="round-btn courses-action-button" @click="addCourseToLocalList()">+</button>
       </div>
     </div>
     <div v-else-if="getFrom === 'user'" class="button-container">
       <div class="btn-white-block">
-        <button class="round-btn courses-action-button" @click="onDeleteCourses()">
+        <button class="round-btn courses-action-button" @click="onDeleteCoursesPressed()">
           <b-icon icon="trash"></b-icon>
         </button>
       </div>
@@ -43,31 +43,24 @@ export default {
     }
   },
   methods: {
+
+    /* ------------------------------ SETUP METHODS ----------------------------- */
+
     loadCourses() {
-      const method = this.getCourseSourceMethod()
-      method(this.postID).then((response) => {
+      this.getCourses(this.getFrom, this.postID).then((response) => {
         this.courses = response.data
       }).catch(errorHandler)
     },
-    getCourseSourceMethod() {
-      switch (this.getFrom) {
-        case 'post':
-          return this.getVacantCourses
-        case 'user':
-          return this.getMyCourses
-        case 'userAttendance':
-          return this.getAttendingCourses
-        default:
-          throw new Error('Invalid getFrom value')
-      }
-    },
+
     userOwnsPost() {
       const user = this.getUser()
       if (!this.userID) return false
 
       return user._id === this.userID
     },
-    addCourse() {
+
+    /* ------------------------- EVENT TRIGGERED METHODS ------------------------ */
+    addCourseToLocalList() {
       this.courses.push({
         editing: true,
         start: new Date(),
@@ -78,18 +71,21 @@ export default {
         postID: this.postID
       })
     },
-    reload() {
+
+    reloadCourseList() {
       this.$forceUpdate()
     },
-    onDeleteCourse(course) {
+
+    removeCourseFromList(course) {
       this.courses.splice(this.courses.indexOf(course), 1)
-      this.reload()
+      this.reloadCourseList()
     },
-    onDeleteCourses() {
+
+    onDeleteCoursesPressed() {
       if (confirm('Are you sure you want to delete ALL courses?')) {
         this.courses = []
         this.deleteCourses()
-        this.reload()
+        this.reloadCourseList()
       }
     }
   },

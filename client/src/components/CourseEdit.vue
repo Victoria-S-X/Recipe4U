@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button class="course-action-btn course-edit-btn" @click="saveCourse(course)">SAVE</button>
-    <button class="course-action-btn course-save-btn" @click="onDeleteCourse(course)">DELETE</button>
+    <button class="course-action-btn course-edit-btn" @click="onSaveCoursePressed(course)">SAVE</button>
+    <button class="course-action-btn course-save-btn" @click="onDeleteCoursePressed(course)">DELETE</button>
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
@@ -37,7 +37,7 @@ export default {
     course: Object
   },
   methods: {
-    saveCourse(course) {
+    onSaveCoursePressed(course) {
       course.maxAttendees = this.$refs.maxAttendees.value
       course.meetingLink = this.$refs.meetingLink.value
       course.city = this.$refs.city.value
@@ -54,12 +54,12 @@ export default {
         this.$emit('save')
       }).catch(errorHandler)
     },
-    onDeleteCourse(course) {
+
+    onDeleteCoursePressed(course) {
       if (!course._id) {
         this.$emit('delete')
         return
       }
-
       this.deleteCourse(course).then(() => {
         this.$emit('delete')
       }).catch(errorHandler)
