@@ -76,10 +76,8 @@ router.get('/image/:id', async (req, res) => {
   try {
     const post = await controller.getImage(req.params.id)
 
-    res.setHeader('Expires', '-1')
-    res.setHeader('Cache-Control', 'must-revalidate, private')
     if (!post || !post.postImage) {
-      res.status(404).send()
+      res.redirect('http://localhost:8080/tableware.svg')
     } else {
       res.type(post.postImageType).send(post.postImage)
     }
