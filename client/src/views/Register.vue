@@ -2,7 +2,7 @@
 <div class = "Background">
     <h1 class="Header">Glad you chose to join our community!</h1>
     <div class = "center-grid">
-    <b-card title="Register" style="max-width: 20rem" class="register-container">
+    <b-card title="Register" style="max-width: 20rem" class="register-container md=4 text-center">
       <form class="form-contents" @submit.prevent="registerUser">
 
         <div class="Fname-input">
@@ -19,28 +19,28 @@
         <input type="Number" class="textbox" v-model="age">
         </div>
         <div class="email-input">
-          <span class="input-tag">Email address:</span>
+          <span class="input-tag">Email address*:</span>
           <input type="text" class="textbox" v-model="email">
         </div>
 
         <div class="user-input">
-          <span class="input-tag">Username:</span>
+          <span class="input-tag">Username*:</span>
           <input type="text" class="textbox" v-model="username">
         </div>
 
         <div class="pass-input">
-          <span class="input-tag">Password:</span>
+          <span class="input-tag">Password*:</span>
           <input type="password" class="textbox" v-model="password">
         </div>
         <div class="pass-input">
-          <span class="input-tag">Re-enter Password:</span>
+          <span class="input-tag">Re-enter Password*:</span>
           <input type="password" class="textbox" v-model="redoPass">
         </div>
         <div class = "Error-Message">
           <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
-        </div>
-        <div class = "register-btn">
-        <button type="submit">Register</button>
+        </div><br/>
+        <div>
+        <b-button class = "register-btn" type="submit" >Register</b-button>
         </div>
 
       </form>
@@ -72,15 +72,10 @@ export default {
           this.errorMessage = 'The passwords do not match, please reenter the passwords correctly'
           this.password = ''
           this.redoPass = ''
-        } else if (this.age < 13 && this.age !== '') {
-          this.errorMessage = 'You need to be atleast 13 to create an account'
         } else if (this.username === '' ||
                    this.password === '' ||
                    this.redoPass === '' ||
-                   this.email === '' ||
-                   this.firstName === '' ||
-                   this.lastName === '' ||
-                   this.age === '') {
+                   this.email === '') {
           const error = new Error('Missing parameters')
           error.response = {
             status: 422
@@ -119,35 +114,57 @@ export default {
 <style scoped>
 .Background{
   color: rgb(36,124,125);
+  padding: 3%;
 }
 .Header {
   text-align: center;
   font-size: 50px;
+  padding-top: 3%;
+  padding-bottom: 5%;
+  margin-bottom: 2%;
 }
 .center-grid{
 display:flex;
 align-items: center;
 justify-content: center;
-height: 50vh;
 }
 .register-container {
   align-items: center;
-  margin-top:20%;
+  margin-top: 0%;
   margin-left:2%;
-}
-.input-tag {
-  margin-left: 0%;
-  margin-right: 10%;
-}
-.register-btn{
-margin-left:25%;
-margin-top:10%
+  margin-bottom:2%;
+  padding: 1%;
+  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 1%;
+  border: none;
 }
 .form-contents{
-margin-left:10%;
+margin-left:15%;
+margin-right:15%;
 }
 .error-text{
 color:red;
+}
+.register-btn {
+  display: inline-block;
+  padding: 1% 4%;
+  font-size: 1.1em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: rgb(80, 151, 165);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px #338f8919;
+}
+.register-btn:hover {background-color: var(--primary-dark); color: #fff;}
+.register-btn:active {
+  background-color: var(--primary-dark);;
+  box-shadow: 0 4px #666;
+  transform: translateY(4px);
 }
 
 </style>
