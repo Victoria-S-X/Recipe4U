@@ -2,7 +2,7 @@
     <div>
       <b-card
         :title="truncatedPostName"
-        :img-src="`http://localhost:3000/api/v1/posts/image/${post._id}`"
+        :img-src="`http://localhost:3000/api/v1/posts/images/${post._id}`"
         img-alt="Food Image"
         img-top
         tag="article"
@@ -21,7 +21,6 @@ export default ({
   props: ['post'],
   computed: {
     truncatedPostName: function () {
-      console.log(`http://localhost:3000/api/v1/posts/image/${this.post._id}`)
       if (this.post.postName.length < 18) {
         return this.post.postName
       }

@@ -72,7 +72,7 @@ router.get('/', async (req, res) => {
 })
 
 // Get a particular post's image
-router.get('/image/:id', async (req, res) => {
+router.get('/images/:id', async (req, res) => {
   try {
     const post = await controller.getImage(req.params.id)
 

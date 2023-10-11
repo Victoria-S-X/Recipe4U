@@ -116,7 +116,7 @@ export default ({
   },
   mounted() {
     this.inputs = this.value.ingredients
-    this.imgSRC = `http://localhost:3000/api/v1/posts/image/${this.$route.params.id}`
+    this.imgSRC = `http://localhost:3000/api/v1/posts/images/${this.$route.params.id}`
   },
   methods: {
     checkForm: function () {
