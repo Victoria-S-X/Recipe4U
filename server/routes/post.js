@@ -77,7 +77,7 @@ router.get('/image/:id', async (req, res) => {
     const post = await controller.getImage(req.params.id)
 
     if (!post || !post.postImage) {
-      res.redirect('http://localhost:8080/tableware.svg')
+      res.redirect('http://localhost:8080/default-post.svg')
     } else {
       res.type(post.postImageType).send(post.postImage)
     }
