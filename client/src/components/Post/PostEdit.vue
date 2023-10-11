@@ -55,6 +55,19 @@
                       <label class="form-label">Recipe</label>
                       <textarea class="form-control" rows="3" ref="recipe" :value="value.recipe" @input="updatePost()"></textarea>
                     </div>
+                    <file-pond
+                      class="file-pond"
+                      name="image"
+                      ref="pond"
+                      class-name="my-pond"
+                      label-idle="Drag & Drop your image or Browse"
+                      allow-multiple="false"
+                      accepted-file-types="image/jpeg, image/png, image/jpg"
+                      v-bind:file="postImage"
+                      v-on:init="handleFilePondInit"
+                      @addfile="onAddFile"
+                      v-on:updatefiles="handleFilePondUpdateFile()"
+                    /><br/>
                     <div class="form-group">
                       <b-row align-h="center">
                         <b-col md="3" cols="auto" class="pb-2"><b-button variant="outline-info" type="submit">Save Post</b-button></b-col>
@@ -71,7 +84,20 @@
 </template>
 
 <script>
+import vueFilePond from 'vue-filepond'
+// Import plugins
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import FilePondPluginFileEncode from 'filepond-plugin-file-encode'
 
+import 'filepond/dist/filepond.min.css'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
+// Create component
+const FilePond = vueFilePond(
+  FilePondPluginFileValidateType,
+  FilePondPluginImagePreview,
+  FilePondPluginFileEncode
+)
 export default ({
   props: ['value'],
   data() {
@@ -81,8 +107,12 @@ export default ({
         ingredient: ''
       }],
       imgSRC: '',
+      postImage: '',
       errors: []
     }
+  },
+  components: {
+    FilePond
   },
   mounted() {
     this.inputs = this.value.ingredients
@@ -107,12 +137,14 @@ export default ({
     save() {
       if (this.checkForm() === true) {
         const ingredients = this.inputs
+        const newImage = this.postImage
         this.$emit('savePost', {
           postName: this.$refs.postNameInput.value,
           cookingTime: this.$refs.cookingTime.value,
           ingredients,
           description: this.$refs.description.value,
-          recipe: this.$refs.recipe.value
+          recipe: this.$refs.recipe.value,
+          newImage
         })
       }
     },
@@ -136,6 +168,16 @@ export default ({
     },
     remove(index) {
       this.inputs.splice(index, 1)
+    },
+    handleFilePondUpdateFile() {
+      this.postImage = this.$refs.pond.getFile().file
+      console.log(this.postImage)
+    },
+    handleFilePondInit: function () {
+      console.log('FilePond has initialized')
+    },
+    onAddFile(error, file) {
+      console.log('file added', { error, file })
     }
   }
 })

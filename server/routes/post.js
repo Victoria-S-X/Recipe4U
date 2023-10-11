@@ -104,7 +104,7 @@ router.get('/:id', getPost, (req, res) => {
 })
 
 // Update partially one post
-router.patch('/:id', upload.single(), auth, async (req, res) => {
+router.patch('/:id', upload.single('postImage'), auth, async (req, res) => {
   const result = await controller.patch(
     req.params.id,
     req.body.postName,
@@ -112,7 +112,8 @@ router.patch('/:id', upload.single(), auth, async (req, res) => {
     req.body.ingredients,
     req.body.description,
     req.body.recipe,
-    req.userID
+    req.userID,
+    req.file
   )
 
   switch (result.resCode) {

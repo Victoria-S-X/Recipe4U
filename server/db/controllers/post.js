@@ -91,14 +91,18 @@ exports.getImage = (postID) => Post.findById(postID, { postImage: 1, postImageTy
 
 exports.findByUser = (userID) => Post.find({ user: userID })
 
-exports.patch = async (postID, postName, cookingTime, ingredients, description, recipe, userID) => {
+exports.patch = async (postID, postName, cookingTime, ingredients, description, recipe, userID, image) => {
   const update = {}
-
+  const isValidMimeType = exports.isValidMimeType(image?.mimetype)
   if (postName !== undefined) update['postName'] = postName
   if (cookingTime !== undefined) update['cookingTime'] = cookingTime
   if (ingredients !== undefined) update['ingredients'] = ingredients
   if (description !== undefined) update['description'] = description
   if (recipe !== undefined) update['recipe'] = recipe
+  if (image !== undefined && isValidMimeType) {
+    update['postImage'] = image.buffer
+    update['postImageType'] = image.mimetype
+  }
 
   try {
     const item = await Post.findOneAndUpdate(
