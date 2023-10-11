@@ -175,6 +175,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # Public folder
-public
+public/*
+!/client/public/default-post.svg
 
 # End of https://www.gitignore.io/api/node,vuejs,visualstudiocode,linux,macos,windows
