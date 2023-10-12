@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
 import PostEdit from '../components/Post/PostEdit.vue'
 import PostView from '../components/Post/PostView.vue'
+import controller from '@/controllers/post'
 
 export default ({
   name: 'postManager',
@@ -60,7 +60,7 @@ export default ({
         const ingre = updatedPost.ingredients[i]
         formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
       }
-      Api.patch(`/posts/${this.$route.params.id}`, formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
+      this.updatePostController(this.$route.params.id, formData).then(_ => {
         this.isSuccessful = true
         setTimeout(() => {
           this.isSuccessful = false
@@ -77,6 +77,7 @@ export default ({
   components: {
     PostEdit,
     PostView
-  }
+  },
+  mixins: [controller]
 })
 </script>

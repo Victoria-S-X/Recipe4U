@@ -1,62 +1,63 @@
 <template>
 <div class ="Wallpaper">
-<div class = "Background">
-  <h1 class = "Header-border">Glad you could join our community</h1>
-  <div class = "center-grid">
-    <div class = "column-container">
-    <b-card title="Register" style="max-width: 20rem" class="register-container md=4 text-center">
-      <form class="form-contents" @submit.prevent="registerUser">
+  <div class = "Background">
+    <div class = "center-grid">
+      <div class = "column-container">
+      <b-card title="Register" style="max-width: 20rem" class="register-container md=4 text-center">
+        <form class="form-contents" @submit.prevent="registerUser">
 
-        <div class="Fname-input">
-          <span class="input-tag">First Name:</span>
-          <input type="text" class="textbox" v-model="firstName">
-        </div>
+          <div class="Fname-input">
+            <span class="input-tag">First Name:</span>
+            <input type="text" class="textbox" v-model="firstName">
+          </div>
 
-        <div class="Lname-input">
-          <span class="input-tag">Last Name:</span>
-          <input type="text" class="textbox" v-model="lastName">
-        </div>
-        <div class="Age-input">
-        <span class="input-tag">Your age:</span>
-        <input type="Number" class="textbox" v-model="age">
-        </div>
-        <div class="email-input">
-          <span class="input-tag">Email address*:</span>
-          <input type="text" class="textbox" v-model="email">
-        </div>
+          <div class="Lname-input">
+            <span class="input-tag">Last Name:</span>
+            <input type="text" class="textbox" v-model="lastName">
+          </div>
+          <div class="Age-input">
+          <span class="input-tag">Your age:</span>
+          <input type="Number" class="textbox" v-model="age">
+          </div>
+          <div class="email-input">
+            <span class="input-tag">Email address*:</span>
+            <input type="text" class="textbox" v-model="email">
+          </div>
 
-        <div class="user-input">
-          <span class="input-tag">Username*:</span>
-          <input type="text" class="textbox" v-model="username">
-        </div>
+          <div class="user-input">
+            <span class="input-tag">Username*:</span>
+            <input type="text" class="textbox" v-model="username">
+          </div>
 
-        <div class="pass-input">
-          <span class="input-tag">Password*:</span>
-          <input type="password" class="textbox" v-model="password">
-        </div>
-        <div class="pass-input">
-          <span class="input-tag">Re-enter Password*:</span>
-          <input type="password" class="textbox" v-model="redoPass">
-        </div>
-        <div class = "Error-Message">
-          <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
-        </div><br/>
-        <div>
-        <b-button class = "register-btn" type="submit" >Register</b-button>
-        </div>
+          <div class="pass-input">
+            <span class="input-tag">Password*:</span>
+            <input type="password" class="textbox" v-model="password">
+          </div>
+          <div class="pass-input">
+            <span class="input-tag">Re-enter Password*:</span>
+            <input type="password" class="textbox" v-model="redoPass">
+          </div>
+          <div class = "Error-Message">
+            <div v-if="errorMessage" class="error-text">{{this.errorMessage}}*</div>
+          </div><br/>
+          <div>
+          <b-button class = "register-btn" type="submit" >Register</b-button>
+          </div>
 
-      </form>
-    </b-card>
+        </form>
+      </b-card>
+    </div>
+    </div>
   </div>
-  </div>
-</div>
 </div>
 
 </template>
 <script>
-import { Api } from '@/Api'
+import controller from '@/controllers/user'
+
 export default {
   name: 'Register',
+  mixins: [controller],
   data() {
     return {
       username: '',
@@ -86,14 +87,14 @@ export default {
           }
           throw error
         } else {
-          await Api.post('/users', {
-            username: this.username,
-            password: this.password,
-            email: this.email,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            age: this.age
-          })
+          await this.createUser(
+            this.username,
+            this.password,
+            this.email,
+            this.firstName,
+            this.lastName,
+            this.age
+          )
           const redirect = confirm('Account created! Would you like to go to the login?')
           if (redirect) {
             this.$router.push('/')
@@ -121,23 +122,23 @@ export default {
   padding: 3%;
 }
 .center-grid{
-display:flex;
-align-items: center;
-justify-content: center;
-height: 50vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  height: min-content;
+  margin-top: 5em;
 }
 .Header-border{
-color: #005900;
-text-shadow: #FFFCA8 2px 2px 0px, #9C9C9C 4px 4px 0px;
-font-weight: bolder;
-background-color: white;
-text-align: center;
+  color: #005900;
+  text-shadow: #FFFCA8 2px 2px 0px, #9C9C9C 4px 4px 0px;
+  font-weight: bolder;
+  background-color: white;
+  text-align: center;
 }
 .column-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top:30%;
 }
 .register-container {
   align-items: center;

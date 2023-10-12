@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import { Api } from '@/Api'
 import router from '../router'
+import controller from '@/controllers/post'
 // Import FilePond
 import vueFilePond from 'vue-filepond'
 // Import plugins
@@ -147,7 +147,7 @@ export default {
             formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
           }
         }
-        Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
+        this.createPost(formData).then(response => {
           this.isSuccessful = true
           const postId = response.data._id
           router.push({ path: `/posts/${postId}` })
@@ -176,7 +176,8 @@ export default {
   },
   components: {
     FilePond
-  }
+  },
+  mixins: [controller]
 }
 
 </script>

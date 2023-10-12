@@ -14,7 +14,7 @@
     <h3>Credits</h3>
     <b-container>
       <p>tableware by James Gordon from <a href="https://thenounproject.com/browse/icons/term/tableware/" target="_blank" title="tableware Icons">Noun Project</a> (CC BY 3.0)</p>
-
+      <p><a target="_blank" href="https://icons8.com/icon/20876/pie">Pie</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></p>
     </b-container>
 
   </div>
