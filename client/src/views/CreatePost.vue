@@ -143,14 +143,13 @@ export default {
         formData.append('cookingTime', this.cookingTime)
         for (let i = 0; i < this.inputs.length; i++) {
           const ingre = this.inputs[i]
-          if (!ingre) {
+          if (ingre.ingredient !== '') {
             formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
           }
         }
         Api.post('/posts', formData, { Headers: { 'Content-Type': 'multipart/form-data' } }).then(response => {
           this.isSuccessful = true
           const postId = response.data._id
-          console.log(postId)
           router.push({ path: `/posts/${postId}` })
         }).catch(error => {
           console.log(error)
@@ -161,6 +160,7 @@ export default {
       this.inputs.push({
         ingredient: ''
       })
+      console.log(this.inputs)
     },
     remove(index) {
       this.inputs.splice(index, 1)
