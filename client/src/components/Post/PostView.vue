@@ -240,7 +240,7 @@ p {
   background-color: rgb(80, 151, 165);
   border: none;
   border-radius: 5px;
-  box-shadow: 0 4px #d7d6d6;
+  box-shadow: 0 4px #338f8919;
 }
 .btn-edit:hover {background-color: var(--primary-dark); color: #fff;}
 
