@@ -10,9 +10,21 @@ const getPost = async (postID) => {
   return post.data
 }
 
+const createPost = (formData) =>
+  Api.post('/posts', formData, {
+    Headers: { 'Content-Type': 'multipart/form-data' }
+  })
+
+const updatePostController = (postID, formData) =>
+  Api.patch(`/posts/${postID}`, formData, {
+    Headers: { 'Content-Type': 'multipart/form-data' }
+  })
+
 export default {
   methods: {
     getPosts,
-    getPost
+    getPost,
+    createPost,
+    updatePostController
   }
 }

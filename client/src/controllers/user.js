@@ -37,12 +37,24 @@ function getUser() {
   return userObj
 }
 
+function createUser(username, password, email, firstName, lastName, age) {
+  return Api.post('/users', {
+    username,
+    password,
+    email,
+    firstName,
+    lastName,
+    age
+  })
+}
+
 export default {
   methods: {
     isAttendingAsync,
     ownsCourse,
     loadUser,
     removeUserFromStorage,
-    getUser
+    getUser,
+    createUser
   }
 }
