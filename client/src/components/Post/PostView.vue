@@ -4,7 +4,7 @@
         <b-card no-body class="food-card">
           <b-row no-gutters>
             <b-col md="4">
-              <b-card-img id="image" alt="Food Image" :src="imgSRC" class="image-box"></b-card-img>
+            <b-card-img id="image" alt="Food Image" :src="this.imageFileBase64 || imgSRC" class="image-box"></b-card-img>
             </b-col>
             <b-col md="6">
               <b-card-body class="text-part" :title="post.postName">
@@ -71,7 +71,11 @@ import timerIcon from '@/assets/Timer.png'
 
 export default {
   name: 'viewPost',
-  props: ['viewPost'],
+  // props: ['viewPost'],
+  props: ['imageFileBase64'],
+  // props: {
+  //   imageFileBase64: String
+  // },
   data() {
     return {
       post: '',
@@ -90,7 +94,8 @@ export default {
       },
       ingredientsIcon: '',
       cookingBookIcon: '',
-      timerIcon: ''
+      timerIcon: '',
+      imgFile: null
     }
   },
   created() {
@@ -98,6 +103,7 @@ export default {
     this.ingredientsIcon = ingredientsIcon
     this.cookingBookIcon = cookingBookIcon
     this.timerIcon = timerIcon
+    this.imgFile = this.imageFileBase64
   },
   computed: {
     descriptionContent: function () {
@@ -114,9 +120,7 @@ export default {
       this.getPost(this.postID)
         .then(post => {
           this.post = post
-          // this.imgSRC = post._links.image.href
           this.imgSRC = `http://localhost:3000/api/v1/posts/images/${this.postID}`
-          console.log('after got post', this.imgSRC)
           for (let i = 0; i < post.ingredients.length; i++) {
             const ingre = JSON.parse(post.ingredients[i]).ingredient
             this.ingres[i] = ingre
