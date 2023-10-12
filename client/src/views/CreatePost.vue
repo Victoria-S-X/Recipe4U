@@ -166,7 +166,7 @@ export default {
       this.inputs.splice(index, 1)
     },
     handleFilePondUpdateFile() {
-      this.postImage = this.$refs.pond.getFile().file
+      this.postImage = this.$refs.pond?.getFile().file
       console.log(this.postImage)
     },
     handleFilePondInit: function () {

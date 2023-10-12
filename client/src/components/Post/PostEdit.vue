@@ -138,13 +138,15 @@ export default ({
       if (this.checkForm() === true) {
         const ingredients = this.inputs
         const newImage = this.postImage
+        const base64DATA = this.$refs.pond?.getFile()?.getFileEncodeDataURL()
         this.$emit('savePost', {
           postName: this.$refs.postNameInput.value,
           cookingTime: this.$refs.cookingTime.value,
           ingredients,
           description: this.$refs.description.value,
           recipe: this.$refs.recipe.value,
-          newImage
+          newImage,
+          base64DATA
         })
       }
     },

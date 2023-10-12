@@ -2,7 +2,7 @@
     <div>
         <div class="alert alert-success" v-if="isSuccessful">Post Edited Successfully</div>
         <div v-if="isEditingModeOn == false">
-            <post-view v-on:edit="edit($event)"></post-view>
+            <post-view v-on:edit="edit($event)" :imageFileBase64="imageFileBase64"></post-view>
         </div>
         <div v-else>
             <post-edit v-model="editedPost" v-on:savePost="updatePost($event)" v-on:cancel="cancel()"></post-edit>
@@ -27,7 +27,8 @@ export default ({
         ingredients: null,
         description: null,
         recipe: null
-      }
+      },
+      imageFileBase64: null
     }
   },
   methods: {
@@ -48,14 +49,13 @@ export default ({
       }
     },
     updatePost(updatedPost) {
-      console.log('updated post: ', updatedPost.newImage)
+      this.imageFileBase64 = updatedPost.base64DATA
       const formData = new FormData()
       formData.append('postName', updatedPost.postName)
       formData.append('description', updatedPost.description)
       formData.append('recipe', updatedPost.recipe)
       formData.append('cookingTime', updatedPost.cookingTime)
       formData.append('postImage', updatedPost.newImage)
-
       for (let i = 0; i < updatedPost.ingredients.length; i++) {
         const ingre = updatedPost.ingredients[i]
         formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
