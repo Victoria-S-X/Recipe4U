@@ -57,7 +57,7 @@ export default ({
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 1%;
   border: none;
-  margin:10px;
+  margin:0.063 rem;
 }
 
 .User{
