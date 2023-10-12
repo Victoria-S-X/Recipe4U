@@ -1,7 +1,9 @@
 <template>
+  <div class ="Wallpaper">
   <div class="Background">
-    <h1 class="Header">Recipes4U</h1>
     <div class = "center-grid">
+    <div class = "column-container">
+    <h1 class = "Header-border">Recipes4U</h1>
     <b-card title="Log in" style="max-width: 20rem" class="login-container md=4 text-center">
       <form class="form-contents" @submit.prevent="logInUser">
         <div class="user-input">
@@ -23,6 +25,8 @@
     </b-card>
   </div>
   </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -68,18 +72,25 @@ export default {
 </script>
 
 <style scoped>
-.Header {
-  text-align: center;
-  font-size: 50px;
-  padding-top: 3%;
-  padding-bottom: 5%;
-  font-size: 50px;
+.Header-border{
+  color: #005900;
+  text-shadow: #FFFCA8 2px 2px 0px, #9C9C9C 4px 4px 0px;
+  font-weight: bold;
+  flex-direction: column;
+  font-size:50px;
+  background-color: white;
 }
 .center-grid{
 display:flex;
 align-items: center;
 justify-content: center;
 height: 50vh;
+}
+.column-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:30%;
 }
 .login-container {
   align-items: center;
@@ -137,7 +148,10 @@ margin-top:5%;
 margin-left:15%;
 margin-right:15%;
 }
-.Background{
-color: rgb(36,124,125);
+
+.Wallpaper{
+background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-with-vegetarian-food_73378-545.jpg?w=1060');
+min-height: 100vh;
+min-width: 100vw;
 }
 </style>
