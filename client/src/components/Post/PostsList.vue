@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="pagination">
+    <div v-if="doPaginate" class="pagination">
         <a :href="previous">Previous</a>
         <a :href="next">Next</a>
       </div>
@@ -51,7 +51,6 @@ export default ({
           this.posts = result.posts
           this.next = result._links.next?.href
           this.previous = result._links.prev?.href
-          console.log(result, this.next, this.previous, 'horse')
         })
         .catch(error => { errorHandler(error) })
     },
@@ -64,7 +63,7 @@ export default ({
       this.populatePosts()
     }
   },
-  props: { getFrom: String },
+  props: { getFrom: String, doPaginate: Boolean },
   mixins: [userController, postController]
 })
 </script>
