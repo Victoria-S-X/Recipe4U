@@ -3,7 +3,7 @@
   <div class="Background">
     <div class = "center-grid">
     <div class = "column-container">
-    <h1 class = "Header-border">Reciepes4U</h1>
+    <h1 class = "Header-border">Recipes4U</h1>
     <b-card title="Log in" style="max-width: 20rem" class="login-container md=4 text-center">
       <form class="form-contents" @submit.prevent="logInUser">
         <div class="user-input">
