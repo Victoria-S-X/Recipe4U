@@ -13,7 +13,7 @@
         </b-card>
         </b-col>
       </b-row>
-    </div>
+    </div><br/>
     <div class="container md=4 outer-container translate-middle text-center">
       <br/>
         <div class="alert alert-success" v-if="isSuccessful">Post Created Successfully</div>
@@ -160,14 +160,12 @@ export default {
       this.inputs.push({
         ingredient: ''
       })
-      console.log(this.inputs)
     },
     remove(index) {
       this.inputs.splice(index, 1)
     },
     handleFilePondUpdateFile() {
       this.postImage = this.$refs.pond?.getFile().file
-      console.log(this.postImage)
     },
     handleFilePondInit: function () {
       console.log('FilePond has initialized')
@@ -187,7 +185,7 @@ export default {
 .box {
   background-image: linear-gradient(to bottom left, #ecece9 , rgb(253, 253, 250));
   color: var(--primary-dark);
-  padding-bottom: 5%;
+  margin-bottom: 1%;
 }
 .outer-container {
   position: relative;
@@ -196,7 +194,7 @@ export default {
   font-weight: 600;
   padding: 10%;
   padding-top: 2%;
-  padding-bottom: 4%;
+  margin-bottom: 0%;
   background: rgb(253, 253, 253);
   background-image: linear-gradient(to bottom right, #f8f6f574 , #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 40px 0 rgba(0, 0, 0, 0.19);
@@ -216,6 +214,8 @@ export default {
   padding-bottom: 20%;
   padding-right: 30%;
   background-color: #277c7d00;
+  min-width: 9em;
+  min-height: 3em;
   max-width: 30em;
   max-height: 20em;
   border: none;
@@ -267,9 +267,15 @@ p {
   color: rgb(181, 92, 25);
   text-shadow: -0.5px 0 black, 0 0.5px rgba(0, 0, 0, 0), 0.5px 0 rgba(0, 0, 0, 0), 0 -0.5px rgba(0, 0, 0, 0.075);
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 48em) {
   p {
     font-size: 1.5em;
   }
 }
+@media only screen and (max-width: 20.625em) {
+  #backImg {
+    display: none;
+  }
+}
+
 </style>
