@@ -82,7 +82,7 @@ export default {
 
 .keyValues strong {
   text-align: right;
-  padding-right: 10px;
+  padding-right: 0.063rem ;
 }
 
 .keyValues input:invalid {

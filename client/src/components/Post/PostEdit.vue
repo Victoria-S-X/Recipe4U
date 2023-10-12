@@ -211,7 +211,7 @@ export default ({
   margin-bottom: 5%;
   margin: 8%;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 48rem) {
   #image {
     position: relative;
     max-width: 24em;

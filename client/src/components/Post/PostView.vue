@@ -187,7 +187,7 @@ export default {
   max-width: 20em;
   max-height: 28em;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 48rem) {
   #image {
     position: relative;
     max-width: 14em;
@@ -254,7 +254,7 @@ p {
   transform: translateY(4px);
 }
 .scroll-container{
-height:500px;
+height:31.25rem;
 overflow-y:scroll;
 border:1px solid;
 }
