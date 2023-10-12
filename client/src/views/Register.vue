@@ -1,7 +1,9 @@
 <template>
+<div class ="Wallpaper">
 <div class = "Background">
-    <h1 class="Header">Glad you chose to join our community!</h1>
-    <div class = "center-grid">
+  <h1 class = "Header-border">Glad you could join our community</h1>
+  <div class = "center-grid">
+    <div class = "column-container">
     <b-card title="Register" style="max-width: 20rem" class="register-container md=4 text-center">
       <form class="form-contents" @submit.prevent="registerUser">
 
@@ -47,6 +49,8 @@
     </b-card>
   </div>
   </div>
+</div>
+</div>
 
 </template>
 <script>
@@ -116,17 +120,24 @@ export default {
   color: rgb(36,124,125);
   padding: 3%;
 }
-.Header {
-  text-align: center;
-  font-size: 50px;
-  padding-top: 3%;
-  padding-bottom: 5%;
-  margin-bottom: 2%;
-}
 .center-grid{
 display:flex;
 align-items: center;
 justify-content: center;
+height: 50vh;
+}
+.Header-border{
+color: #005900;
+text-shadow: #FFFCA8 2px 2px 0px, #9C9C9C 4px 4px 0px;
+font-weight: bolder;
+background-color: white;
+text-align: center;
+}
+.column-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:30%;
 }
 .register-container {
   align-items: center;
@@ -166,5 +177,9 @@ color:red;
   box-shadow: 0 4px #666;
   transform: translateY(4px);
 }
-
+.Wallpaper{
+background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-with-vegetarian-food_73378-545.jpg?w=1060');
+min-height: 100vh;
+min-width: 100vw;
+}
 </style>

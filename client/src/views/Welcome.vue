@@ -3,9 +3,7 @@
   <div class="Background">
     <div class = "center-grid">
     <div class = "column-container">
-    <b-card class ="Header-border" style="max-width: 20rem">
-    <p class="Title-text">Recipe4U</p>
-    </b-card>
+    <h1 class = "Header-border">Reciepes4U</h1>
     <b-card title="Log in" style="max-width: 20rem" class="login-container md=4 text-center">
       <form class="form-contents" @submit.prevent="logInUser">
         <div class="user-input">
@@ -80,7 +78,7 @@ export default {
   font-weight: bold;
   flex-direction: column;
   font-size:50px;
-  border: 5px solid black;
+  background-color: white;
 }
 .center-grid{
 display:flex;
