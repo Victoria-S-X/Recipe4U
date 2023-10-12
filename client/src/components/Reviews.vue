@@ -3,7 +3,7 @@
         <div class="comment-box" v-for="(review, index) in reviews" :key="index">
           <div class="user-rating">
           <span class="User">{{review.username}} </span>
-          <span class="Rate">{{ review.rating }}/5</span>
+          <span class="Rate">{{populateRating(review.rating)}}</span>
           </div>
           <p  class="Comment">{{review.text}}</p>
         </div>
@@ -29,6 +29,25 @@ export default ({
       this.getReviews(this.postID)
         .then(reviews => { this.reviews = reviews })
         .catch(errorHandler)
+    },
+    populateRating(rating) {
+      let stars = ''
+      let emptyStars = ''
+      const emptyStarCount = 5 - rating
+      if (emptyStarCount === 0) {
+        for (let i = 0; i < rating; i++) {
+          stars = stars + '\u2B50'
+        }
+        return stars
+      } else {
+        for (let i = 0; i < rating; i++) {
+          stars = stars + '\u2B50'
+        }
+        for (let i = 0; i < emptyStarCount; i++) {
+          emptyStars = emptyStars + '\u2606'
+        }
+        return stars + emptyStars
+      }
     }
   },
   props: {
@@ -57,15 +76,10 @@ export default ({
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 1%;
   border: none;
-  margin:0.063 rem;
+  margin:10px;
 }
 
 .User{
   font-weight:bold;
-}
-
-.Rate{
-  font-weight: bold;
-  color: mediumaquamarine;
 }
 </style>
