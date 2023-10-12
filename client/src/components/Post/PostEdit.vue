@@ -1,7 +1,7 @@
 <template>
   <b-card no-body class="overflow-hidden outer-box" >
-    <b-card no-body class="food-card">
-          <b-row no-gutters>
+    <b-card class="food-card">
+          <b-row class="text-center" align-h="around">
             <b-col md="6">
               <b-card-img id="image" alt="Food Image" :src="imgSRC" class="rounded-0"></b-card-img>
             </b-col>
@@ -69,9 +69,9 @@
                       v-on:updatefiles="handleFilePondUpdateFile()"
                     /><br/>
                     <div class="form-group">
-                      <b-row align-h="center">
-                        <b-col md="3" cols="auto" class="pb-2"><b-button variant="outline-info" type="submit">Save Post</b-button></b-col>
-                        <b-col md="2" cols="auto" class="pb-2"><b-button variant="outline-secondary" @click="cancel()">Cancel</b-button></b-col>
+                      <b-row class="text-center" align-h="center">
+                        <b-col md="6" cols="auto" class="pb-2"><b-button variant="outline-info" type="submit">Save Post</b-button></b-col>
+                        <b-col md="6" cols="auto" class="pb-2"><b-button variant="outline-secondary" @click="cancel()">Cancel</b-button></b-col>
                       </b-row>
                     </div>
                   </form>
@@ -209,19 +209,29 @@ export default ({
   max-height: 38em;
   margin-top: 4%;
   margin-bottom: 5%;
-  margin: 8%;
+  margin-left: 8%;
+  margin-right: 8%;
 }
-@media only screen and (max-width: 48rem) {
+@media only screen and (max-width: 48em) {
   #image {
     position: relative;
     max-width: 24em;
     max-height: 29em;
     margin-top: -3%;
+    margin-right: 11%;
     margin-left: 11%;
+  }
+}
+@media only screen and (max-width: 37.5em) {
+  #image {
+    position: relative;
+    margin-right: 1%;
+    margin-left: 1%;
   }
 }
 .edit-container {
   font-weight: 600;
+  margin: 5%;
 }
 .form-control {
   font-weight: 600;
