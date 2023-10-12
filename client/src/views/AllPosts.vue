@@ -1,5 +1,5 @@
 <template>
-  <PostsList getFrom="every"></PostsList>
+  <PostsList getFrom="every" :doPaginate="true"></PostsList>
 </template>
 
 <script>

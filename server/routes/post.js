@@ -56,6 +56,7 @@ router.get('/', async (req, res) => {
     if (reviews != null) query.reviews = reviews
 
     let result = await controller.find(query)
+    const total = result.length
 
     // Paging with offset and limit
     let currentOffset = 0
@@ -65,7 +66,25 @@ router.get('/', async (req, res) => {
       }
       result = result.slice(currentOffset, Number(currentOffset) + Number(req.query.limit))
     }
-    res.status(200).json(result)
+
+    let prevOffset = Number(currentOffset) - Number(limit)
+    if (prevOffset < 0) prevOffset = 0
+    const prev = currentOffset == 0 ? null : links.getPostsPageOffset(prevOffset, limit)
+
+    const nextOffset = Number(currentOffset) + Number(limit)
+    const next = nextOffset >= total ? null : links.getPostsPageOffset(nextOffset, limit)
+
+    let returnData = {
+      posts: result,
+      _links: {
+        self: links.getPosts(),
+        selfPage: links.getPostsPage(offset, limit),
+        prev: prev,
+        next: next
+      }
+    }
+
+    res.status(200).json(returnData)
   } catch (err) {
     res.status(500).json({ message: err.message })
   }

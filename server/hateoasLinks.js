@@ -65,6 +65,14 @@ exports.getPostsPage = () => {
   }
 }
 
+exports.getPostsPageOffset = (offset) => {
+  return {
+    description: 'Get posts page with offset',
+    href: `/posts?offset=${offset}`,
+    method: 'GET'
+  }
+}
+
 exports.getCourse = (courseID) => {
   return {
     description: 'Get course',
