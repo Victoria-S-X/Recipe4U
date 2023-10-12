@@ -48,11 +48,13 @@ export default ({
       }
     },
     updatePost(updatedPost) {
+      console.log('updated post: ', updatedPost.newImage)
       const formData = new FormData()
       formData.append('postName', updatedPost.postName)
       formData.append('description', updatedPost.description)
       formData.append('recipe', updatedPost.recipe)
       formData.append('cookingTime', updatedPost.cookingTime)
+      formData.append('postImage', updatedPost.newImage)
 
       for (let i = 0; i < updatedPost.ingredients.length; i++) {
         const ingre = updatedPost.ingredients[i]

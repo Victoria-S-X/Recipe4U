@@ -93,7 +93,7 @@ export default {
       timerIcon: ''
     }
   },
-  mounted() {
+  created() {
     this.populatePost()
     this.ingredientsIcon = ingredientsIcon
     this.cookingBookIcon = cookingBookIcon
@@ -111,11 +111,12 @@ export default {
   methods: {
     populatePost() {
       this.postID = this.$route.params.id
-
       this.getPost(this.postID)
         .then(post => {
           this.post = post
-          this.imgSRC = post._links.image.href
+          // this.imgSRC = post._links.image.href
+          this.imgSRC = `http://localhost:3000/api/v1/posts/images/${this.postID}`
+          console.log('after got post', this.imgSRC)
           for (let i = 0; i < post.ingredients.length; i++) {
             const ingre = JSON.parse(post.ingredients[i]).ingredient
             this.ingres[i] = ingre

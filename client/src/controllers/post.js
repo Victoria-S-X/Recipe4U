@@ -7,6 +7,7 @@ const getPosts = async (filter) => {
 
 const getPost = async (postID) => {
   const post = await Api.get(`/posts/${postID}`)
+  await Api.get(`http://localhost:3000/api/v1/posts/images/${postID}`)
   return post.data
 }
 
