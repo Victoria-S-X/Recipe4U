@@ -67,10 +67,14 @@ The system provides a recipe sharing platform. People can post recipes on the si
 
 ### Pages
 
-* Home : Acts as a place holder for the website,contains simple illustration with the heading(Website name)
+* Home : User can view all posts and have the option to create their own posts 
+* View All Posts : User can view all global posts
+* Create Post : User can make a new post which will appear on their profile
 * User : This page shows the courses the user has published and the courses he has enrolled for.
+* Edit post : User can edit their recipe post 
 * Login-in : User can log in to their account 
-* Recipe post : User can enroll for a course and check reviews or write their own.
+* Register : User can create a new account with a unique username
+* Recipe post : User can enroll for a course , view the recipe and check reviews or write their own.
 
 ### Entity-Relationship (ER) Diagram
 
