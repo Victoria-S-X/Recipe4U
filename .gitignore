@@ -174,8 +174,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Public folder
-public/*
-!/client/public/default-post.svg
-
 # End of https://www.gitignore.io/api/node,vuejs,visualstudiocode,linux,macos,windows
