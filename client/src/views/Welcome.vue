@@ -8,7 +8,7 @@
       <form class="form-contents" @submit.prevent="logInUser">
         <div class="user-input">
           <span class="input-tag">Username:</span>
-          <input type="text" class="textbox" v-model="username">
+          <input type="text" class="textbox" placeholder="E.g: user200" v-model="username">
         </div>
         <div class="pass-input">
           <span class="input-tag">Password:</span>
@@ -150,6 +150,7 @@ margin-right:15%;
 }
 
 .Wallpaper{
+/* Image used from freepik.com */
 background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-with-vegetarian-food_73378-545.jpg?w=1060');
 min-height: 100vh;
 min-width: 100vw;

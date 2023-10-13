@@ -26,11 +26,11 @@
           </p>
           <div class="form-group">
                 <label class="form-label">Post Name *</label>
-                <input type="text" class="form-control" v-model="postName"/>
+                <input type="text" class="form-control" placeholder="E.g: Spagetti" v-model="postName"/>
             </div>
             <div class="form-group">
                 <label class="form-label">Cooking Time</label>
-                <input type="text" class="form-control" v-model="cookingTime"/>
+                <input type="text" class="form-control" placeholder="E.g: 2hrs" v-model="cookingTime"/>
             </div><br/>
             <div>
               <label class="form-label">Ingredients *</label>
@@ -51,12 +51,14 @@
               </div><br/>
             </div>
             <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" rows="3" v-model="description"></textarea>
+                <label class="form-label">Description</label> <!--description placeholder generated using chatGPT -->
+                <textarea class="form-control" rows="3" v-model="description"
+                placeholder="E.g: Indulge your senses in the culinary charm of our Classic Spaghetti Carbonara, a timeless Italian masterpiece that transcends generations.">
+              </textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Recipe *</label>
-                <textarea class="form-control" rows="3" v-model="recipe"></textarea>
+                <label class="form-label">Instructions *</label>
+                <textarea class="form-control" rows="3" placeholder="Instructions for the recipe" v-model="recipe"></textarea>
             </div><br/>
             <file-pond
               class="file-pond"

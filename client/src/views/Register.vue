@@ -8,25 +8,25 @@
 
           <div class="Fname-input">
             <span class="input-tag">First Name:</span>
-            <input type="text" class="textbox" v-model="firstName">
+            <input type="text" class="textbox" placeholder="E.g: Peter" v-model="firstName">
           </div>
 
           <div class="Lname-input">
             <span class="input-tag">Last Name:</span>
-            <input type="text" class="textbox" v-model="lastName">
+            <input type="text" class="textbox"  placeholder="E.g: Andersson"  v-model="lastName">
           </div>
           <div class="Age-input">
           <span class="input-tag">Your age:</span>
-          <input type="Number" class="textbox" v-model="age">
+          <input type="Number" class="textbox" placeholder="E.g: 20" v-model="age">
           </div>
           <div class="email-input">
             <span class="input-tag">Email address*:</span>
-            <input type="text" class="textbox" v-model="email">
+            <input type="text" class="textbox"  placeholder="E.g: something@gmail.com" v-model="email">
           </div>
 
           <div class="user-input">
             <span class="input-tag">Username*:</span>
-            <input type="text" class="textbox" v-model="username">
+            <input type="text" class="textbox"  placeholder="E.g: user200"  v-model="username">
           </div>
 
           <div class="pass-input">
@@ -179,6 +179,7 @@ color:red;
   transform: translateY(4px);
 }
 .Wallpaper{
+/* Image used from freepik.com */
 background-image: url('https://img.freepik.com/premium-vector/seamless-pattern-with-vegetarian-food_73378-545.jpg?w=1060');
 min-height: 100vh;
 min-width: 100vw;
