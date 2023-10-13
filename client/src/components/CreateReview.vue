@@ -3,11 +3,11 @@
 <b-card style="max-width: 20rem" class="review-container">
 <form class="form-content" @submit.prevent="submitReview">
   <div class="review-text-input">
-          <span class="input-tag" style="color:rgb(36,124,125)">Leave a review</span>
-          <input type="text" class="text-textbox" v-model="text">
+          <span class="input-tag">Leave a review</span>
+          <input type="text" class="text-textbox" placeholder="E.g: Good food!" v-model="text">
   </div>
   <div class="rating-input">
-          <span class="input-tag" style="color:rgb(36,124,125)">Rate this receipe out of 5</span>
+          <span class="input-tag" >Rate this receipe out of 5</span>
           <input type="number" class="rate-textbox" v-model="rating" @input="isRatingValid">
   </div>
   <div class = "Error-Message">
@@ -86,6 +86,7 @@ export default {
 }
 .input-tag{
   margin-left: 10%;
+  color:rgb(36,124,125);
 }
 .text-textbox{
   margin-left:10%;
