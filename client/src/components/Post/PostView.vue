@@ -29,8 +29,9 @@
             </div>
            <hr class="my-4">
             <h5>
-              <img :src="timerIcon"> Cooking time: {{ post.cookingTime }}
+              <img :src="timerIcon"> Cooking time:
             </h5>
+            <p>{{ post.cookingTime }}</p>
             <hr class="my-4">
             <div>
               <h4>Recipe: <img class="cooking-book" :src="cookingBookIcon"></h4><br/>
