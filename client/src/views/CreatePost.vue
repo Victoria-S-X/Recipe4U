@@ -51,7 +51,7 @@
               </div><br/>
             </div>
             <div class="form-group">
-                <label class="form-label">Description</label>
+                <label class="form-label">Description</label> <!--description placeholder generated using chatGPT -->
                 <textarea class="form-control" rows="3" v-model="description"
                 placeholder="E.g: Indulge your senses in the culinary charm of our Classic Spaghetti Carbonara, a timeless Italian masterpiece that transcends generations.">
               </textarea>
