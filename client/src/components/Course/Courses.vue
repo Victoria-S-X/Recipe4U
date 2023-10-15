@@ -1,8 +1,18 @@
 <template>
   <div class="root" ref="root">
     <div v-for="course in courses" :key="course._id" class="course-item">
-      <CourseEdit v-if="course.editing" :course="course" @save="reloadCourseList()" @delete="removeCourseFromList(course)"/>
-      <CourseView v-else :course="course" @onEdit="reloadCourseList()" :showCourseName="showCourseName"/>
+      <CourseEdit
+        v-if="course.editing"
+        :course="course"
+        @save="reloadCourseList()"
+        @delete="removeCourseFromList(course)"
+      />
+      <CourseView
+        v-else
+        :course="course"
+        @onEdit="reloadCourseList()"
+        :showCourseName="showCourseName"
+      />
     </div>
     <div v-if="!courses.length" class="no-courses-container">
       <p v-if="userOwnsPost() || getFrom === 'user'">No courses posted</p>
@@ -10,12 +20,23 @@
     </div>
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
-        <button class="round-btn courses-action-button" @click="addCourseToLocalList()">+</button>
+        <button
+          class="round-btn courses-action-button"
+          @click="addCourseToLocalList()"
+        >
+          +
+        </button>
       </div>
     </div>
-    <div v-else-if="getFrom === 'user' && courses.length !== 0" class="button-container">
+    <div
+      v-else-if="getFrom === 'user' && courses.length !== 0"
+      class="button-container"
+    >
       <div class="btn-white-block">
-        <button class="round-btn courses-action-button" @click="onDeleteCoursesPressed()">
+        <button
+          class="round-btn courses-action-button"
+          @click="onDeleteCoursesPressed()"
+        >
           <b-icon icon="trash"></b-icon>
         </button>
       </div>
@@ -24,7 +45,6 @@
 </template>
 
 <script>
-
 import { errorHandler } from '@/Api'
 import roundBtnStyle from '@/styles/roundBtn.css'
 /* ------------------------------- CONTROLLERS ------------------------------ */
@@ -41,16 +61,18 @@ export default {
   data() {
     return {
       courses: [],
-      showCourseName: this.getFrom === 'user' || this.getFrom === 'userAttendance'
+      showCourseName:
+        this.getFrom === 'user' || this.getFrom === 'userAttendance'
     }
   },
   methods: {
-
     /* ------------------------------ SETUP METHODS ----------------------------- */
     loadCourses() {
-      this.getCourses(this.getFrom, this.postID).then((response) => {
-        this.courses = response.data
-      }).catch(errorHandler)
+      this.getCourses(this.getFrom, this.postID)
+        .then((response) => {
+          this.courses = response.data
+        })
+        .catch(errorHandler)
     },
 
     userOwnsPost() {
@@ -102,23 +124,21 @@ export default {
     postID: String
   }
 }
-
 </script>
 
 <style scoped>
-
 .root {
   margin-top: 1.3em;
   text-align: center;
 }
 
-.no-courses-container{
+.no-courses-container {
   margin: 2em;
 }
 
 /* --------------------------- END OF LIST BUTTON --------------------------- */
 .button-container {
-  border-bottom: .1em solid var(--primary-dark);
+  border-bottom: 0.1em solid var(--primary-dark);
   max-width: 30em;
   margin: 0 auto 3em auto;
 }
@@ -128,7 +148,7 @@ export default {
   width: 5em;
   margin: 0 auto;
   transform: translateY(1.5em);
-  display: grid
+  display: grid;
 }
 
 .courses-action-button {
@@ -138,5 +158,4 @@ export default {
   font-weight: 500;
   background-color: var(--soft-white);
 }
-
 </style>

@@ -1,12 +1,27 @@
 <template>
   <div>
-    <button class="course-action-btn course-edit-btn" @click="onSaveCoursePressed(course)">SAVE</button>
-    <button class="course-action-btn course-save-btn" @click="onDeleteCoursePressed(course)">DELETE</button>
+    <button
+      class="course-action-btn course-edit-btn"
+      @click="onSaveCoursePressed(course)"
+    >
+      SAVE
+    </button>
+    <button
+      class="course-action-btn course-save-btn"
+      @click="onDeleteCoursePressed(course)"
+    >
+      DELETE
+    </button>
 
     <!-- I know about v-model, it doesn't allow me to use it in this specific case -->
     <p class="keyValues">
       <strong>Max Attendees* :</strong>
-      <input type="number" ref="maxAttendees" :value="course.maxAttendees" required/>
+      <input
+        type="number"
+        ref="maxAttendees"
+        :value="course.maxAttendees"
+        required
+      />
 
       <strong>Meeting Link :</strong>
       <input type="text" ref="meetingLink" :value="course.meetingLink" />
@@ -18,7 +33,12 @@
       <input type="text" ref="address" :value="course.address" />
 
       <strong>Start* :</strong>
-      <input type="datetime-local" ref="start" :value="this.myFormatDate(course.start, 'T')" required/>
+      <input
+        type="datetime-local"
+        ref="start"
+        :value="this.myFormatDate(course.start, 'T')"
+        required
+      />
 
       <strong>Duration :</strong>
       <input type="number" ref="duration" :value="course.duration" />
@@ -48,11 +68,13 @@ export default {
 
       const method = course._id ? this.putCourse : this.postCourse
 
-      method(course).then((response) => {
-        course._id = response?.data._id
-        course.editing = false
-        this.$emit('save')
-      }).catch(errorHandler)
+      method(course)
+        .then((response) => {
+          course._id = response?.data._id
+          course.editing = false
+          this.$emit('save')
+        })
+        .catch(errorHandler)
     },
 
     onDeleteCoursePressed(course) {
@@ -60,9 +82,11 @@ export default {
         this.$emit('delete')
         return
       }
-      this.deleteCourse(course).then(() => {
-        this.$emit('delete')
-      }).catch(errorHandler)
+      this.deleteCourse(course)
+        .then(() => {
+          this.$emit('delete')
+        })
+        .catch(errorHandler)
     }
   },
   mixins: [courseController, helpers, courseItemStyle]
@@ -70,23 +94,23 @@ export default {
 </script>
 
 <style scoped>
-.keyValues{
+.keyValues {
   display: grid;
   grid-template-columns: max-content 1fr;
   align-content: center;
   justify-content: center;
-  row-gap: .4em;
+  row-gap: 0.4em;
   margin: 1em 10%;
   color: #0e4647;
 }
 
 .keyValues strong {
   text-align: right;
-  padding-right: 0.063rem ;
+  padding-right: 0.063rem;
 }
 
 .keyValues input:invalid {
-  border: .15em solid var(--primary-color);
+  border: 0.15em solid var(--primary-color);
 }
 
 /* ----------------------------- ACTION BUTTONS ----------------------------- */
@@ -94,17 +118,17 @@ export default {
 .course-action-btn {
   font-size: 1.4em;
   border: none;
-  top: .5em;
+  top: 0.5em;
   background-color: transparent;
   color: var(--primary-color);
   position: absolute;
 }
 
 .course-edit-btn {
-  right: .5em;
+  right: 0.5em;
 }
 
 .course-save-btn {
-  left: .5em;
+  left: 0.5em;
 }
 </style>

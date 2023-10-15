@@ -1,59 +1,80 @@
 <template>
-    <div class="outer-container">
-      <div style="padding-top: 3%;">
-        <b-card no-body class="food-card">
-          <b-row no-gutters>
-            <b-col md="4">
-            <b-card-img id="image" alt="Food Image" :src="this.imageFileBase64 || imgSRC" class="image-box"></b-card-img>
-            </b-col>
-            <b-col md="6">
-              <b-card-body class="text-part" :title="post.postName">
-                <b-card-text>
-                  {{ descriptionContent }}
-                </b-card-text>
-                <div v-if="isPostOwner()">
-                  <b-button class="btn-edit" @click="goToEditPostPage()" variant="info">Edit</b-button>
-                </div>
-              </b-card-body>
-            </b-col>
-          </b-row>
-        </b-card>
-        <div>
-          <b-jumbotron class="recipe-box" bg-variant="light" text-variant="dark" border-variant="light">
-            <h3>Recipe</h3>
-            <h4><img :src="ingredientsIcon"/> Ingredients:</h4>
-            <div class="ingredients-list">
-              <ul v-for="(ingre) in ingres" :key="ingre">
-                 <li><span>{{ ingre + '\n'}}</span></li>
-              </ul>
-            </div>
-           <hr class="my-4">
-            <h5>
-              <img :src="timerIcon"> Cooking time:
-            </h5>
-            <p>{{ post.cookingTime }}</p>
-            <hr class="my-4">
-            <div>
-              <h4>Recipe: <img class="cooking-book" :src="cookingBookIcon"></h4><br/>
-              <p>
-                {{ post.recipe }}
-              </p>
-            </div>
-          </b-jumbotron>
+  <div class="outer-container">
+    <div style="padding-top: 3%">
+      <b-card no-body class="food-card">
+        <b-row no-gutters>
+          <b-col md="4">
+            <b-card-img
+              id="image"
+              alt="Food Image"
+              :src="this.imageFileBase64 || imgSRC"
+              class="image-box"
+            ></b-card-img>
+          </b-col>
+          <b-col md="6">
+            <b-card-body class="text-part" :title="post.postName">
+              <b-card-text>
+                {{ descriptionContent }}
+              </b-card-text>
+              <div v-if="isPostOwner()">
+                <b-button
+                  class="btn-edit"
+                  @click="goToEditPostPage()"
+                  variant="info"
+                  >Edit</b-button
+                >
+              </div>
+            </b-card-body>
+          </b-col>
+        </b-row>
+      </b-card>
+      <div>
+        <b-jumbotron
+          class="recipe-box"
+          bg-variant="light"
+          text-variant="dark"
+          border-variant="light"
+        >
+          <h3>Recipe</h3>
+          <h4><img :src="ingredientsIcon" /> Ingredients:</h4>
+          <div class="ingredients-list">
+            <ul v-for="ingre in ingres" :key="ingre">
+              <li>
+                <span>{{ ingre + '\n' }}</span>
+              </li>
+            </ul>
+          </div>
+          <hr class="my-4" />
+          <h5><img :src="timerIcon" /> Cooking time:</h5>
+          <p>{{ post.cookingTime }}</p>
+          <hr class="my-4" />
+          <div>
+            <h4>Recipe: <img class="cooking-book" :src="cookingBookIcon" /></h4>
+            <br />
+            <p>
+              {{ post.recipe }}
+            </p>
+          </div>
+        </b-jumbotron>
       </div>
 
       <b-tabs>
         <b-tab title="Courses" title-link-class="tabview-tab-link">
-          <Courses v-if="postID" :postID="postID" getFrom="post" :userID="post.user"></Courses>
+          <Courses
+            v-if="postID"
+            :postID="postID"
+            getFrom="post"
+            :userID="post.user"
+          ></Courses>
         </b-tab>
 
         <b-tab title="Reviews" title-link-class="tabview-tab-link">
-          <Reviews v-if="postID" :postID="postID"/>
-          <CreateReview/>
+          <Reviews v-if="postID" :postID="postID" />
+          <CreateReview />
         </b-tab>
       </b-tabs>
-      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -83,9 +104,11 @@ export default {
       postID: '',
       ingres: [],
       imgSRC: '',
-      inputs: [{
-        ingredient: ''
-      }],
+      inputs: [
+        {
+          ingredient: ''
+        }
+      ],
       editedPost: {
         postName: null,
         cookingTime: null,
@@ -119,7 +142,7 @@ export default {
     populatePost() {
       this.postID = this.$route.params.id
       this.getPost(this.postID)
-        .then(post => {
+        .then((post) => {
           this.post = post
           this.imgSRC = `http://localhost:3000/api/v1/posts/images/${this.postID}`
           for (let i = 0; i < post.ingredients.length; i++) {
@@ -132,7 +155,7 @@ export default {
             }
           }
         })
-        .catch(error => errorHandler(error))
+        .catch((error) => errorHandler(error))
     },
     isPostOwner() {
       const user = this.getUser()
@@ -171,7 +194,7 @@ export default {
   padding: 3%;
 }
 .food-card {
-  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  background-image: linear-gradient(to bottom right, #f8f6f5, #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 1%;
   border: none;
@@ -208,9 +231,13 @@ export default {
   text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 }
 .recipe-box {
-  background-image: linear-gradient(to bottom right, #f8f6f5 , rgb(245, 243, 240));
+  background-image: linear-gradient(
+    to bottom right,
+    #f8f6f5,
+    rgb(245, 243, 240)
+  );
 }
-h4{
+h4 {
   margin-top: 2%;
 }
 ul {
@@ -222,10 +249,10 @@ ul li:before {
   padding-right: 1em;
 }
 li {
-  color: var(--primary-dark)
+  color: var(--primary-dark);
 }
 li span {
-  color: black
+  color: black;
 }
 .ingredients-list {
   font-size: 1.2em;
@@ -247,19 +274,21 @@ p {
   border-radius: 5px;
   box-shadow: 0 4px #338f8919;
 }
-.btn-edit:hover {background-color: var(--primary-dark); color: #fff;}
+.btn-edit:hover {
+  background-color: var(--primary-dark);
+  color: #fff;
+}
 
 .btn-edit:active {
-  background-color: var(--primary-dark);;
+  background-color: var(--primary-dark);
   box-shadow: 0 4px #666;
   transform: translateY(4px);
 }
-.scroll-container{
-height:31.25rem;
-overflow-y:scroll;
-border:1px solid;
+.scroll-container {
+  height: 31.25rem;
+  overflow-y: scroll;
+  border: 1px solid;
 }
-
 </style>
 
 <style>
