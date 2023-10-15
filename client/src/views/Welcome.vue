@@ -12,12 +12,7 @@
             <form class="form-contents" @submit.prevent="logInUser">
               <div class="user-input">
                 <span class="input-tag">Username:</span>
-                <input
-                  type="text"
-                  class="textbox"
-                  placeholder="E.g: user200"
-                  v-model="username"
-                />
+                <input type="text" class="textbox" v-model="username" />
               </div>
               <div class="pass-input">
                 <span class="input-tag">Password:</span>
