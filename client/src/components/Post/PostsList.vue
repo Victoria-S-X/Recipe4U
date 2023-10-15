@@ -2,18 +2,17 @@
   <div>
     <div class="postList">
       <div v-for="(post, index) in posts" :key="index">
-            <b-container class="post-container" @click="goToViewPost(post._id)">
-              <post :post="post"/>
-            </b-container>
+        <b-container class="post-container" @click="goToViewPost(post._id)">
+          <post :post="post" />
+        </b-container>
       </div>
     </div>
 
     <div v-if="doPaginate" class="pagination">
-        <a :href="previous">Previous</a>
-        <a :href="next">Next</a>
-      </div>
+      <a :href="previous">Previous</a>
+      <a :href="next">Next</a>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -23,7 +22,7 @@ import Post from '@/components/Post/PostListItem.vue'
 import userController from '@/controllers/user'
 import postController from '@/controllers/post'
 
-export default ({
+export default {
   components: {
     Post
   },
@@ -42,17 +41,20 @@ export default ({
   },
   methods: {
     populatePosts() {
-      const params = this.getFrom === 'userPosted' ? { user: this.getUser()._id } : {}
+      const params =
+        this.getFrom === 'userPosted' ? { user: this.getUser()._id } : {}
       params.limit = this.DISPLAY_LIMIT
       params.offset = this.offset
 
       this.getPosts(params)
-        .then(result => {
+        .then((result) => {
           this.posts = result.posts
           this.next = result._links.next?.href
           this.previous = result._links.prev?.href
         })
-        .catch(error => { errorHandler(error) })
+        .catch((error) => {
+          errorHandler(error)
+        })
     },
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
@@ -65,11 +67,10 @@ export default ({
   },
   props: { getFrom: String, doPaginate: Boolean },
   mixins: [userController, postController]
-})
+}
 </script>
 
 <style scoped>
-
 .postList {
   margin: 1% auto; /* add horisontal percentage margin */
   padding: 0 1em;
@@ -92,7 +93,7 @@ export default ({
 
 /* ------------------------------- PAGINATION ------------------------------- */
 
-.pagination{
+.pagination {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0 auto 2em auto;
@@ -100,14 +101,14 @@ export default ({
   column-gap: 1em;
 }
 
-.pagination a{
+.pagination a {
   font-size: 1.3em;
   color: var(--primary-dark);
 }
 
-.pagination a:not([href]), .pagination a:not([href]):hover {
+.pagination a:not([href]),
+.pagination a:not([href]):hover {
   pointer-events: none;
   color: #9b9b9b;
 }
-
 </style>

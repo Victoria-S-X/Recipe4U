@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
 import PostsList from '@/components/Post/PostsList.vue'
 
 export default {
@@ -11,5 +10,4 @@ export default {
     PostsList
   }
 }
-
 </script>

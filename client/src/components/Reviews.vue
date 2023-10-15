@@ -1,20 +1,20 @@
 <template>
-    <div class="review-container">
-        <div class="comment-box" v-for="(review, index) in reviews" :key="index">
-          <div class="user-rating">
-          <span class="User">{{review.username}} </span>
-          <span class="Rate">{{populateRating(review.rating)}}</span>
-          </div>
-          <p  class="Comment">{{review.text}}</p>
-        </div>
+  <div class="review-container">
+    <div class="comment-box" v-for="(review, index) in reviews" :key="index">
+      <div class="user-rating">
+        <span class="User">{{ review.username }} </span>
+        <span class="Rate">{{ populateRating(review.rating) }}</span>
+      </div>
+      <p class="Comment">{{ review.text }}</p>
     </div>
+  </div>
 </template>
 
 <script>
 import { errorHandler } from '@/Api'
 import reviewController from '@/controllers/review'
 
-export default ({
+export default {
   name: 'Reviews',
   data() {
     return {
@@ -27,7 +27,9 @@ export default ({
   methods: {
     populateReviews() {
       this.getReviews(this.postID)
-        .then(reviews => { this.reviews = reviews })
+        .then((reviews) => {
+          this.reviews = reviews
+        })
         .catch(errorHandler)
     },
     populateRating(rating) {
@@ -57,29 +59,28 @@ export default ({
     }
   },
   mixins: [reviewController]
-})
+}
 </script>
 
 <style scoped>
-
 .review-container {
   background-color: var(--primary-background);
   max-height: 50vh;
   overflow: scroll;
 }
 
-.comment-box{
+.comment-box {
   border: 1px solid white;
   padding: 10px;
   white-space: pre-line;
-  background-image: linear-gradient(to bottom right, #f8f6f5 , #277c7d6e);
+  background-image: linear-gradient(to bottom right, #f8f6f5, #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 1%;
   border: none;
-  margin:10px;
+  margin: 10px;
 }
 
-.User{
-  font-weight:bold;
+.User {
+  font-weight: bold;
 }
 </style>

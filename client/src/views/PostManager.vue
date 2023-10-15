@@ -1,13 +1,22 @@
 <template>
-    <div>
-        <div class="alert alert-success" v-if="isSuccessful">Post Edited Successfully</div>
-        <div v-if="isEditingModeOn == false">
-            <post-view v-on:edit="edit($event)" :imageFileBase64="imageFileBase64"></post-view>
-        </div>
-        <div v-else>
-            <post-edit v-model="editedPost" v-on:savePost="updatePost($event)" v-on:cancel="cancel()"></post-edit>
-        </div>
+  <div>
+    <div class="alert alert-success" v-if="isSuccessful">
+      Post Edited Successfully
     </div>
+    <div v-if="isEditingModeOn == false">
+      <post-view
+        v-on:edit="edit($event)"
+        :imageFileBase64="imageFileBase64"
+      ></post-view>
+    </div>
+    <div v-else>
+      <post-edit
+        v-model="editedPost"
+        v-on:savePost="updatePost($event)"
+        v-on:cancel="cancel()"
+      ></post-edit>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -15,7 +24,7 @@ import PostEdit from '../components/Post/PostEdit.vue'
 import PostView from '../components/Post/PostView.vue'
 import controller from '@/controllers/post'
 
-export default ({
+export default {
   name: 'postManager',
   data() {
     return {
@@ -60,14 +69,16 @@ export default ({
         const ingre = updatedPost.ingredients[i]
         formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
       }
-      this.updatePostController(this.$route.params.id, formData).then(_ => {
-        this.isSuccessful = true
-        setTimeout(() => {
-          this.isSuccessful = false
-        }, 1000)
-      }).catch(error => {
-        console.log(error)
-      })
+      this.updatePostController(this.$route.params.id, formData)
+        .then((_) => {
+          this.isSuccessful = true
+          setTimeout(() => {
+            this.isSuccessful = false
+          }, 1000)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       this.isEditingModeOn = false
     },
     cancel() {
@@ -79,5 +90,5 @@ export default ({
     PostView
   },
   mixins: [controller]
-})
+}
 </script>

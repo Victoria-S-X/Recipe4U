@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-
     <!-- TODO: hide when not logged in -->
     <div id="nav" v-if="showNavBar()">
       <navbar></navbar>
     </div>
     <!-- Render the content of the current page view -->
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -14,7 +13,7 @@
 import Navbar from './components/Navbar.vue'
 import userController from './controllers/user.js'
 
-export default ({
+export default {
   mounted() {
     // Redirect to login page if not logged in
     if (!this.getUser() && this.$route.path !== '/') {
@@ -25,27 +24,22 @@ export default ({
     showNavBar() {
       const path = this.$route.path
 
-      return !(
-        path === '/' ||
-        path === '/register'
-      )
+      return !(path === '/' || path === '/register')
     }
   },
   components: {
     Navbar
   },
   mixins: [userController]
-})
+}
 </script>
 
 <style>
-
 :root {
-  --primary-color: #EB6A1A;
+  --primary-color: #eb6a1a;
   --primary-dark: #277c7d;
   --primary-background: #f5f3f0;
   --soft-white: #fffefe;
-
 }
 
 body {
@@ -70,7 +64,6 @@ h3 {
 
 h3::first-letter {
   color: var(--primary-dark);
-  font-size: 123%
+  font-size: 123%;
 }
-
 </style>
