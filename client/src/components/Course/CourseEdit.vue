@@ -53,9 +53,7 @@ import courseController from '@/controllers/course'
 import courseItemStyle from '@/styles/courseItem.css'
 
 export default {
-  props: {
-    course: Object
-  },
+  props: ['course'],
   methods: {
     onSaveCoursePressed(course) {
       course.maxAttendees = this.$refs.maxAttendees.value
@@ -65,9 +63,7 @@ export default {
       course.start = this.$refs.start.value
       course.duration = this.$refs.duration.value
       course.userID = this.getUser()._id
-
       const method = course._id ? this.putCourse : this.postCourse
-
       method(course)
         .then((response) => {
           course._id = response?.data._id
@@ -76,7 +72,6 @@ export default {
         })
         .catch(errorHandler)
     },
-
     onDeleteCoursePressed(course) {
       if (!course._id) {
         this.$emit('delete')
@@ -89,7 +84,8 @@ export default {
         .catch(errorHandler)
     }
   },
-  mixins: [courseController, helpers, courseItemStyle]
+  mixins: [courseController, helpers],
+  styles: [courseItemStyle]
 }
 </script>
 
@@ -100,6 +96,7 @@ export default {
   align-content: center;
   justify-content: center;
   row-gap: 0.4em;
+  column-gap: 0.2em;
   margin: 1em 10%;
   color: #0e4647;
 }
