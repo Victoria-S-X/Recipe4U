@@ -1,5 +1,5 @@
 <template>
-  <b-card style="max-width: 20rem" class="review-container">
+  <b-card class="review-container">
     <form class="form-content" @submit.prevent="submitReview">
       <div class="review-text-input">
         <span class="input-tag">Leave a review</span>
@@ -58,6 +58,7 @@ export default {
       if (this.text === '') {
         this.errorMessage = 'Missing parameters'
       } else {
+        this.errorMessage = ''
         this.$emit('createReview', {
           rating: this.rating,
           text: this.text
@@ -70,8 +71,9 @@ export default {
 
 <style scoped>
 .review-container {
+  max-width: 20em;
   align-items: center;
-  margin: 5% auto;
+  margin: 1% auto;
   background-image: linear-gradient(to bottom right, #f8f6f5, #277c7d6e);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

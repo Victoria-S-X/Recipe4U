@@ -53,8 +53,6 @@ export default {
 <style scoped>
 .review-container {
   background-color: var(--primary-background);
-  max-height: 50vh;
-  overflow: scroll;
 }
 
 .comment-box {

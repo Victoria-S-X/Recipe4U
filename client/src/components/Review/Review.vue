@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="reviewContainer">
     <CreateReview @createReview="onCreateReview($event)" />
     <ReviewList v-if="postID" :postID="postID" :reviews="reviews" />
   </div>
@@ -47,7 +47,7 @@ export default {
         review.text
       )
         .then(
-          this.reviews.push({
+          this.reviews.unshift({
             username: username,
             rating: review.rating,
             text: review.text
@@ -59,3 +59,10 @@ export default {
   mixins: [reviewController, userController]
 }
 </script>
+
+<style scoped>
+.reviewContainer {
+  max-width: 50em;
+  margin: 0 auto;
+}
+</style>
