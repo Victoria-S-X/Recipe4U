@@ -31,7 +31,6 @@
   </b-card>
 </template>
 <script>
-import { errorHandler } from '@/Api'
 /* ------------------------------- CONTROLLERS ------------------------------ */
 import userController from '@/controllers/user'
 import reviewController from '@/controllers/review'
@@ -59,17 +58,10 @@ export default {
       if (this.text === '') {
         this.errorMessage = 'Missing parameters'
       } else {
-        const username = this.getUser().username
-        this.createReview(
-          this.$route.params.id,
-          username,
-          this.rating,
-          this.text
-        )
-          .then(() => {
-            window.location.reload()
-          })
-          .catch(errorHandler)
+        this.$emit('createReview', {
+          rating: this.rating,
+          text: this.text
+        })
       }
     }
   }
