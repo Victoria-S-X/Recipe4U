@@ -89,11 +89,22 @@ exports.find = (query) => Post.find(query, { postImage: 0 })
 
 exports.getImage = (postID) => Post.findById(postID, { postImage: 1, postImageType: 1 })
 
-exports.findByUser = (userID) => Post.find({ user: userID })
+/* Does not return images */
+exports.findByUser = (userID) => Post.find({ user: userID }, { postImage: 0 })
 
-exports.patch = async (postID, postName, cookingTime, ingredients, description, recipe, userID, image) => {
-  const update = {}
+exports.patch = async (
+  postID,
+  postName,
+  cookingTime,
+  ingredients,
+  description,
+  recipe,
+  userID,
+  image
+) => {
   const isValidMimeType = exports.isValidMimeType(image?.mimetype)
+
+  const update = {}
   if (postName !== undefined) update['postName'] = postName
   if (cookingTime !== undefined) update['cookingTime'] = cookingTime
   if (ingredients !== undefined) update['ingredients'] = ingredients
@@ -127,7 +138,7 @@ exports.patch = async (postID, postName, cookingTime, ingredients, description, 
   }
 }
 
-//DOESN'T AUTHENTICATE USER
+/** DOESN'T AUTHENTICATE USER */
 exports.delete = async (post) => {
   try {
     await Review.deleteMany({ post: post.id })
