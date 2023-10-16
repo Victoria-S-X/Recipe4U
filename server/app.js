@@ -35,7 +35,6 @@ app.use((req, _, next) => {
   next()
 })
 
-// TODO: remove this
 app.get('/api/v1', function (req, res) {
   res.json({ message: 'Welcome to your DIT342 backend ExpressJS project!' })
 })

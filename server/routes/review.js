@@ -5,9 +5,6 @@ const controller = require('../db/controllers/review')
 const auth = require('../authMiddleware')
 const { ResCode } = require('../db/helpers')
 
-// const Review = require('../db/models/review')
-// const Post = require('../db/models/post')
-
 postRouter.post('/:postId/reviews', auth, async (req, res) => {
   const result = await controller.create({
     text: req.body.text,
