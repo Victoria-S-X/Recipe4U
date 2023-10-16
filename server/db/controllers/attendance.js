@@ -91,8 +91,8 @@ async function courseRemoveUser(courseID, userID) {
 
   if (course) {
     if (course.attendees.includes(userID)) return ResCode.SUCCESS
-    else return ResCode.NOT_FOUND_1 //user was never attending the course
-  } else return ResCode.NOT_FOUND //course not found
+    else return ResCode.NOT_FOUND_1 // (the user was never attending the course)
+  } else return ResCode.NOT_FOUND // (course not found)
 }
 
 // ============================ USER RECORD ===============================

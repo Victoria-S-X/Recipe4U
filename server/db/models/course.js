@@ -29,7 +29,7 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0,
-    max: 8065163397 // the current world population, I think that'll be enough
+    max: 8065163397 // the current world population, should be enough :)
   }
 })
 

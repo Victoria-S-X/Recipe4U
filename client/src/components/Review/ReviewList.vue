@@ -11,27 +11,11 @@
 </template>
 
 <script>
-import { errorHandler } from '@/Api'
 import reviewController from '@/controllers/review'
 
 export default {
   name: 'Reviews',
-  data() {
-    return {
-      reviews: []
-    }
-  },
-  created() {
-    this.populateReviews()
-  },
   methods: {
-    populateReviews() {
-      this.getReviews(this.postID)
-        .then((reviews) => {
-          this.reviews = reviews
-        })
-        .catch(errorHandler)
-    },
     populateRating(rating) {
       let stars = ''
       let emptyStars = ''
@@ -56,6 +40,10 @@ export default {
     postID: {
       type: String,
       required: true
+    },
+    reviews: {
+      type: Array,
+      required: true
     }
   },
   mixins: [reviewController]
@@ -65,8 +53,6 @@ export default {
 <style scoped>
 .review-container {
   background-color: var(--primary-background);
-  max-height: 50vh;
-  overflow: scroll;
 }
 
 .comment-box {

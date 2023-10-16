@@ -67,6 +67,7 @@ router.get('/', async (req, res) => {
       result = result.slice(currentOffset, Number(currentOffset) + Number(req.query.limit))
     }
 
+    /* ----------------- CALCULATES HATEOAS LINKS ---------------- */
     let prevOffset = Number(currentOffset) - Number(limit)
     if (prevOffset < 0) prevOffset = 0
     const prev = currentOffset == 0 ? null : links.getPostsPageOffset(prevOffset, limit)
@@ -74,6 +75,7 @@ router.get('/', async (req, res) => {
     const nextOffset = Number(currentOffset) + Number(limit)
     const next = nextOffset >= total ? null : links.getPostsPageOffset(nextOffset, limit)
 
+    /* ----------------------- RETURNS DATA ---------------------- */
     let returnData = {
       posts: result,
       _links: {

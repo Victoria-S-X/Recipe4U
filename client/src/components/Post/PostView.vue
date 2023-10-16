@@ -69,8 +69,7 @@
         </b-tab>
 
         <b-tab title="Reviews" title-link-class="tabview-tab-link">
-          <Reviews v-if="postID" :postID="postID" />
-          <CreateReview />
+          <Review :postID="postID" />
         </b-tab>
       </b-tabs>
     </div>
@@ -84,8 +83,7 @@ import userController from '@/controllers/user.js'
 import postController from '@/controllers/post.js'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import Courses from '@/components/Course/Courses.vue'
-import Reviews from '@/components/Reviews.vue'
-import CreateReview from '@/components/CreateReview.vue'
+import Review from '@/components/Review/Review.vue'
 /* --------------------------------- ICONS --------------------------------- */
 import ingredientsIcon from '@/assets/Ingredients.png'
 import cookingBookIcon from '@/assets/Cooking Book.png'
@@ -93,11 +91,7 @@ import timerIcon from '@/assets/Timer.png'
 
 export default {
   name: 'viewPost',
-  // props: ['viewPost'],
   props: ['imageFileBase64'],
-  // props: {
-  //   imageFileBase64: String
-  // },
   data() {
     return {
       post: '',
@@ -182,8 +176,7 @@ export default {
   mixins: [userController, postController],
   components: {
     Courses,
-    Reviews,
-    CreateReview
+    Review
   }
 }
 </script>

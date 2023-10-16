@@ -1,5 +1,6 @@
 <template>
   <div class="root" ref="root">
+    <!-- COURSE LIST -->
     <div v-for="course in courses" :key="course._id" class="course-item">
       <CourseEdit
         v-if="course.editing"
@@ -14,10 +15,14 @@
         :showCourseName="showCourseName"
       />
     </div>
+
+    <!-- NO COURSES MESSAGE -->
     <div v-if="!courses.length" class="no-courses-container">
       <p v-if="userOwnsPost() || getFrom === 'user'">No courses posted</p>
       <p v-else>No available courses</p>
     </div>
+
+    <!-- ADD COURSE BUTTON -->
     <div v-if="getFrom === 'post' && userOwnsPost()" class="button-container">
       <div class="btn-white-block">
         <button
@@ -28,6 +33,8 @@
         </button>
       </div>
     </div>
+
+    <!-- DELETE ALL COURSES BUTTON -->
     <div
       v-else-if="getFrom === 'user' && courses.length !== 0"
       class="button-container"

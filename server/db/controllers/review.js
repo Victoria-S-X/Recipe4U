@@ -53,7 +53,7 @@ exports.create = async ({ text, strPostID, rating, userID, username, reviewID = 
   }
 }
 
-exports.getAllFromPost = (post) => Review.find({ post: post })
+exports.getAllFromPost = (post) => Review.find({ post: post }).sort({ createdAt: -1 })
 
 exports.get = (id) => Review.findById(id)
 

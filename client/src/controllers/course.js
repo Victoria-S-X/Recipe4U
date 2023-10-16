@@ -2,8 +2,6 @@ import { Api } from '@/Api'
 import userController from '@/controllers/user'
 import postController from '@/controllers/post'
 
-/* --------------------------------- COURSE --------------------------------- */
-
 const postCourse = (course) =>
   Api.post(`/posts/${course.postID}/courses`, course)
 

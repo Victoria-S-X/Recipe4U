@@ -5,7 +5,6 @@ import Welcome from './views/Welcome.vue'
 import CreatePost from './views/CreatePost.vue'
 import Register from './views/Register.vue'
 import AllPosts from './views/AllPosts.vue'
-import CreateReview from './components/CreateReview.vue'
 import PostManager from './views/PostManager.vue'
 import User from './views/User.vue'
 
@@ -44,11 +43,6 @@ export default new Router({
       path: '/posts/:id',
       name: 'postManager',
       component: PostManager
-    },
-    {
-      path: '/posts/:id/CreateReview',
-      name: 'CreateReview',
-      component: CreateReview
     }
   ]
 })

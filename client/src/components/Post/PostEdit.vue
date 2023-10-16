@@ -199,7 +199,7 @@ export default ({
   border-radius: 1%;
   border: none;
 }
-  #image {
+#image {
   position: relative;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.372), 0 16px 20px 0 rgba(0, 0, 0, 0.475);
   border-radius: 2%;

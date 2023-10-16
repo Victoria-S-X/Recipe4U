@@ -12,7 +12,7 @@
     <div v-else>
       <post-edit
         v-model="editedPost"
-        v-on:savePost="updatePost($event)"
+        v-on:savePost="onUpdatePost($event)"
         v-on:cancel="cancel()"
       ></post-edit>
     </div>
@@ -57,19 +57,24 @@ export default {
         this.editedPost.ingredients.push({ ingredient: ingre })
       }
     },
-    updatePost(updatedPost) {
+    onUpdatePost(updatedPost) {
       this.imageFileBase64 = updatedPost.base64DATA
+
+      /* -------------------- CREATE FORM DATA -------------------- */
       const formData = new FormData()
       formData.append('postName', updatedPost.postName)
       formData.append('description', updatedPost.description)
       formData.append('recipe', updatedPost.recipe)
       formData.append('cookingTime', updatedPost.cookingTime)
       formData.append('postImage', updatedPost.newImage)
+      // INGREDIENTS
       for (let i = 0; i < updatedPost.ingredients.length; i++) {
         const ingre = updatedPost.ingredients[i]
         formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
       }
-      this.updatePostController(this.$route.params.id, formData)
+
+      /* -------------------- UPDATE ON SERVER -------------------- */
+      this.updatePost(this.$route.params.id, formData)
         .then((_) => {
           this.isSuccessful = true
           setTimeout(() => {

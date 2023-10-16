@@ -1,4 +1,4 @@
-let baseUrl = '' // not used for now
+let baseUrl = ''
 let backendUrl = ''
 
 exports.setBaseUrl = (url) => {

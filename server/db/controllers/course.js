@@ -136,7 +136,7 @@ exports.put = async ({
   const postResponse = await postValidation(userID, strPostID)
   if (postResponse.resCode !== ResCode.SUCCESS) return postResponse
 
-  //create course if it does not exist
+  //create course instead if it does not exist
   const course = await Course.findById(courseID)
   if (!course)
     return exports.create(
@@ -151,6 +151,7 @@ exports.put = async ({
       courseID
     )
 
+  //updates course
   try {
     course.meetingLink = meetingLink
     course.start = start
@@ -179,7 +180,6 @@ exports.put = async ({
 exports.deleteAllFromUser = async (userID) => {
   //has courses?
   const courses = await Course.find({ userID: userID })
-
   if (!courses || courses.length === 0)
     return {
       resCode: ResCode.NOT_FOUND,
@@ -193,7 +193,6 @@ exports.deleteAllFromUser = async (userID) => {
   for (const course of courses) {
     const resCode = await deleteObjID(course._id)
     if (resCode != ResCode.SUCCESS && resCode != ResCode.NOT_FOUND)
-      //ResCode.NOT_FOUND does not indicate error
       resCodeResult.resCode = resCode.resCode
     else resCodeResult.amtDeleted++
   }
@@ -201,9 +200,6 @@ exports.deleteAllFromUser = async (userID) => {
   return resCodeResult
 }
 
-/**
-	DOES NOT AUTHENTICATE USER
-*/
 exports.deleteAllFromPost = async (postID) => {
   try {
     await Course.deleteMany({ postID: postID })
@@ -236,8 +232,6 @@ exports.delete = async (strCourseID, userID) => {
 }
 
 async function deleteObjID(courseID) {
-  //complete deletion FIRST so that ALL users will be removed AFTER course it deleted
-  //response code does not need to be saved, if it is fails, the course has already been deleted
   const course = await Course.findByIdAndDelete(courseID)
   if (!course) return ResCode.NOT_FOUND
 

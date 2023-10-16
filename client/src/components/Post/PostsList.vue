@@ -19,6 +19,7 @@
 import { errorHandler } from '@/Api'
 import router from '@/router'
 import Post from '@/components/Post/PostListItem.vue'
+/* ------------------------------- CONTROLLERS ------------------------------ */
 import userController from '@/controllers/user'
 import postController from '@/controllers/post'
 
@@ -49,20 +50,15 @@ export default {
       this.getPosts(params)
         .then((result) => {
           this.posts = result.posts
+
+          // UPDATES PAGINATION LINKS
           this.next = result._links.next?.href
           this.previous = result._links.prev?.href
         })
-        .catch((error) => {
-          errorHandler(error)
-        })
+        .catch((error) => errorHandler(error))
     },
     goToViewPost(index) {
       router.push({ path: `/posts/${index}` })
-    },
-    onPaginationChange(direction) {
-      this.offset += Number(direction * this.DISPLAY_LIMIT)
-      this.$router.push({ query: { offset: this.offset } })
-      this.populatePosts()
     }
   },
   props: { getFrom: String, doPaginate: Boolean },

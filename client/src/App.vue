@@ -1,10 +1,9 @@
 <template>
   <div id="app">
-    <!-- TODO: hide when not logged in -->
     <div id="nav" v-if="showNavBar()">
       <navbar></navbar>
     </div>
-    <!-- Render the content of the current page view -->
+
     <router-view />
   </div>
 </template>
@@ -15,7 +14,7 @@ import userController from './controllers/user.js'
 
 export default {
   mounted() {
-    // Redirect to login page if not logged in
+    // Redirects to login page if not logged in
     if (!this.getUser() && this.$route.path !== '/') {
       this.$router.push('/')
     }
