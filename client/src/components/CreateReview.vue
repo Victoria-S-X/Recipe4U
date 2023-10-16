@@ -32,6 +32,7 @@
 </template>
 <script>
 import { errorHandler } from '@/Api'
+/* ------------------------------- CONTROLLERS ------------------------------ */
 import userController from '@/controllers/user'
 import reviewController from '@/controllers/review'
 
@@ -66,7 +67,7 @@ export default {
           this.text
         )
           .then(() => {
-            window.location.reload() // TODO: fix this
+            window.location.reload()
           })
           .catch(errorHandler)
       }

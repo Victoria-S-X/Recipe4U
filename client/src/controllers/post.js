@@ -15,7 +15,7 @@ const createPost = (formData) =>
     Headers: { 'Content-Type': 'multipart/form-data' }
   })
 
-const updatePostController = (postID, formData) =>
+const updatePost = (postID, formData) =>
   Api.patch(`/posts/${postID}`, formData, {
     Headers: { 'Content-Type': 'multipart/form-data' }
   })
@@ -25,6 +25,6 @@ export default {
     getPosts,
     getPost,
     createPost,
-    updatePostController
+    updatePost
   }
 }

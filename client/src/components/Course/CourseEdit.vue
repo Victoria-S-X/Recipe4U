@@ -56,6 +56,7 @@ export default {
   props: ['course'],
   methods: {
     onSaveCoursePressed(course) {
+      /* --------------------- UPDATE CHANGES IN COURSE OBJECT -------------------- */
       course.maxAttendees = this.$refs.maxAttendees.value
       course.meetingLink = this.$refs.meetingLink.value
       course.city = this.$refs.city.value
@@ -63,6 +64,7 @@ export default {
       course.start = this.$refs.start.value
       course.duration = this.$refs.duration.value
       course.userID = this.getUser()._id
+
       const method = course._id ? this.putCourse : this.postCourse
       method(course)
         .then((response) => {
@@ -73,15 +75,17 @@ export default {
         .catch(errorHandler)
     },
     onDeleteCoursePressed(course) {
-      if (!course._id) {
+      const courseExistsOnServer = Boolean(course._id)
+
+      if (courseExistsOnServer) {
+        this.deleteCourse(course)
+          .then(() => {
+            this.$emit('delete')
+          })
+          .catch(errorHandler)
+      } else {
         this.$emit('delete')
-        return
       }
-      this.deleteCourse(course)
-        .then(() => {
-          this.$emit('delete')
-        })
-        .catch(errorHandler)
     }
   },
   mixins: [courseController, helpers],
@@ -90,6 +94,8 @@ export default {
 </script>
 
 <style scoped>
+/* ------------------------------- KEY-VALUES ------------------------------- */
+
 .keyValues {
   display: grid;
   grid-template-columns: max-content 1fr;
