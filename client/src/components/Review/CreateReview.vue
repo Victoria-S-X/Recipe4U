@@ -63,6 +63,7 @@ export default {
           rating: this.rating,
           text: this.text
         })
+        this.text = ''
       }
     }
   }
