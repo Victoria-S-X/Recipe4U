@@ -99,11 +99,6 @@ router.get('/images/:id', async (req, res) => {
   }
 })
 
-// Get the default post image
-router.get('/default-post.svg', async (req, res) => {
-  res.sendFile('default-post.svg', { root: './public' })
-})
-
 // Get one post with its id
 router.get('/:id', getPost, (req, res) => {
   if (res.post) {
