@@ -55,8 +55,9 @@ router.get('/', async (req, res) => {
     if (postName != null) query.postName = postName
     if (reviews != null) query.reviews = reviews
 
+    if (offset && Number(offset) < 0) offset = String(0)
     let result = await controller.find(query, offset, req.query.limit)
-    const total = controller.count(query)
+    const total = await controller.count(query)
 
     /* ----------------- CALCULATES HATEOAS LINKS ---------------- */
     let prevOffset = Number(offset) - Number(limit)
