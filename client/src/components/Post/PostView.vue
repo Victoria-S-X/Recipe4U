@@ -140,6 +140,7 @@ export default {
           this.post = post
           this.imgSRC = `http://localhost:3000/api/v1/posts/images/${this.postID}`
           for (let i = 0; i < post.ingredients.length; i++) {
+            if (!post.ingredients[i]) continue
             const ingre = JSON.parse(post.ingredients[i]).ingredient
             this.ingres[i] = ingre
             if (this.inputs[0].ingredient === '') {

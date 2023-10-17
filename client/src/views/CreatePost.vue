@@ -57,7 +57,7 @@
               </textarea>
             </div>
             <div class="form-group">
-                <label class="form-label">Instructions *</label>
+                <label class="form-label">Recipe *</label>
                 <textarea class="form-control" rows="3" placeholder="Instructions for the recipe" v-model="recipe"></textarea>
             </div><br/>
             <file-pond
@@ -143,10 +143,13 @@ export default {
         formData.append('description', this.description)
         formData.append('recipe', this.recipe)
         formData.append('cookingTime', this.cookingTime)
+
+        let formDataI = 0
         for (let i = 0; i < this.inputs.length; i++) {
           const ingre = this.inputs[i]
           if (ingre.ingredient !== '') {
-            formData.append('ingredients[' + i + ']', JSON.stringify(ingre))
+            formData.append('ingredients[' + formDataI + ']', JSON.stringify(ingre))
+            formDataI++
           }
         }
         this.createPost(formData).then(response => {
