@@ -44,8 +44,10 @@ export default {
     populatePosts() {
       const params =
         this.getFrom === 'userPosted' ? { user: this.getUser()._id } : {}
-      params.limit = this.DISPLAY_LIMIT
-      params.offset = this.offset
+      if (this.doPaginate) {
+        params.limit = this.DISPLAY_LIMIT
+        params.offset = this.offset
+      }
 
       this.getPosts(params)
         .then((result) => {
