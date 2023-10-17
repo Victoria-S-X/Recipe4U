@@ -55,24 +55,15 @@ router.get('/', async (req, res) => {
     if (postName != null) query.postName = postName
     if (reviews != null) query.reviews = reviews
 
-    let result = await controller.find(query)
-    const total = result.length
-
-    // Paging with offset and limit
-    let currentOffset = 0
-    if (limit != null) {
-      if (offset != null) {
-        currentOffset = offset
-      }
-      result = result.slice(currentOffset, Number(currentOffset) + Number(req.query.limit))
-    }
+    let result = await controller.find(query, offset, req.query.limit)
+    const total = controller.count(query)
 
     /* ----------------- CALCULATES HATEOAS LINKS ---------------- */
-    let prevOffset = Number(currentOffset) - Number(limit)
+    let prevOffset = Number(offset) - Number(limit)
     if (prevOffset < 0) prevOffset = 0
-    const prev = currentOffset == 0 ? null : links.getPostsPageOffset(prevOffset, limit)
+    const prev = offset == 0 ? null : links.getPostsPageOffset(prevOffset, limit)
 
-    const nextOffset = Number(currentOffset) + Number(limit)
+    const nextOffset = Number(offset) + Number(limit)
     const next = nextOffset >= total ? null : links.getPostsPageOffset(nextOffset, limit)
 
     /* ----------------------- RETURNS DATA ---------------------- */

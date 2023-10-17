@@ -85,7 +85,14 @@ exports.create = async (postName, cookingTime, ingredients, description, recipe,
 exports.get = (postID) => Post.findById(postID, { postImage: 0 })
 
 //** Does not return images */
-exports.find = (query) => Post.find(query, { postImage: 0 })
+exports.find = (query, skip, limit) => {
+  let command = Post.find(query, { postImage: 0 })
+
+  if (skip && limit) command = command.skip(skip).limit(limit)
+  return command.exec()
+}
+
+exports.count = (query) => Post.countDocuments(query)
 
 exports.getImage = (postID) => Post.findById(postID, { postImage: 1, postImageType: 1 })
 
