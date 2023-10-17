@@ -98,13 +98,18 @@ router.get('/images/:id', async (req, res) => {
     const post = await controller.getImage(req.params.id)
 
     if (!post || !post.postImage) {
-      res.redirect('http://localhost:8080/default-post.svg')
+      res.redirect('/default-post.svg')
     } else {
       res.type(post.postImageType).send(post.postImage)
     }
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
+})
+
+// Get the default post image
+router.get('/default-post.svg', async (req, res) => {
+  res.sendFile('default-post.svg', { root: './public' })
 })
 
 // Get one post with its id
