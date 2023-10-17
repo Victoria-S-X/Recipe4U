@@ -78,7 +78,7 @@ The system provides a recipe sharing platform. People can post recipes on the si
 
 ### Entity-Relationship (ER) Diagram
 
-![ER Diagram](./images/er_diagram.png)
+![ER Diagram](./images/ER DIAGRAM.jpg)
 
 ## Teaser (MS3)
 
